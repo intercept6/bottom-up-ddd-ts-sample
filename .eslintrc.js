@@ -2,6 +2,7 @@ module.exports = {
   env: {
     es2020: true,
     node: true,
+    jest: true,
   },
   extends: ['standard', 'eslint:recommended', 'plugin:prettier/recommended'],
   parser: '@typescript-eslint/parser',
@@ -13,5 +14,8 @@ module.exports = {
   rules: {
     'no-useless-constructor': 'off',
     '@typescript-eslint/no-useless-constructor': 'error',
+
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': 'error',
   },
 };
