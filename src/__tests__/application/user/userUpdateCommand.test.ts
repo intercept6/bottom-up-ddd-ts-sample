@@ -1,10 +1,10 @@
-import { UserApplicationService } from '#/application/user/userApplicationService';
+import { UserUpdateService } from '#/application/user/update/userUpdateService';
 import { InMemoryUserRepository } from '#/repository/user/inMemory/inMemoryUserRepository';
 import { User } from '#/domain/models/user/user';
 import { UserId } from '#/domain/models/user/userId';
 import { UserName } from '#/domain/models/user/userName';
 import { MailAddress } from '#/domain/models/user/mailAddress';
-import { UserUpdateCommand } from '#/application/user/userUpdateCommand';
+import { UserUpdateCommand } from '#/application/user/update/userUpdateCommand';
 import { ArgumentException, UserDuplicateException } from '#/util/error';
 
 describe('ユーザ更新', () => {
@@ -17,12 +17,12 @@ describe('ユーザ更新', () => {
         new MailAddress('test@example.com')
       )
     );
-    const userApplicationService = new UserApplicationService(userRepository);
+    const userApplicationService = new UserUpdateService(userRepository);
     const command = new UserUpdateCommand({
       id: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
       name: '変更されたテストユーザーの名前',
     });
-    await userApplicationService.update(command);
+    await userApplicationService.handle(command);
 
     const head = userRepository.store[0];
     expect(head.getName().getValue()).toEqual('変更されたテストユーザーの名前');
@@ -37,12 +37,12 @@ describe('ユーザ更新', () => {
         new MailAddress('test@example.com')
       )
     );
-    const userApplicationService = new UserApplicationService(userRepository);
+    const userApplicationService = new UserUpdateService(userRepository);
     const command = new UserUpdateCommand({
       id: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
       mailAddress: 'changed@example.com',
     });
-    await userApplicationService.update(command);
+    await userApplicationService.handle(command);
 
     const head = userRepository.store[0];
     expect(head.getMailAddress().getValue()).toEqual('changed@example.com');
@@ -57,12 +57,12 @@ describe('ユーザ更新', () => {
         new MailAddress('test@example.com')
       )
     );
-    const userApplicationService = new UserApplicationService(userRepository);
+    const userApplicationService = new UserUpdateService(userRepository);
     const command = new UserUpdateCommand({
       id: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
       name: 'テス',
     });
-    const updateUserPromise = userApplicationService.update(command);
+    const updateUserPromise = userApplicationService.handle(command);
 
     await expect(updateUserPromise).rejects.toThrowError(
       new ArgumentException('ユーザ名は3文字以上です')
@@ -78,12 +78,12 @@ describe('ユーザ更新', () => {
         new MailAddress('test@example.com')
       )
     );
-    const userApplicationService = new UserApplicationService(userRepository);
+    const userApplicationService = new UserUpdateService(userRepository);
     const command = new UserUpdateCommand({
       id: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
       name: 'テストユーザの名前テストユーザの名前テスト',
     });
-    const updateUserPromise = userApplicationService.update(command);
+    const updateUserPromise = userApplicationService.handle(command);
 
     await expect(updateUserPromise).rejects.toThrowError(
       new ArgumentException('ユーザ名は20文字以下です')
@@ -99,12 +99,12 @@ describe('ユーザ更新', () => {
         new MailAddress('test@example.com')
       )
     );
-    const userApplicationService = new UserApplicationService(userRepository);
+    const userApplicationService = new UserUpdateService(userRepository);
     const command = new UserUpdateCommand({
       id: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
       name: 'test',
     });
-    const updateUserPromise = userApplicationService.update(command);
+    const updateUserPromise = userApplicationService.handle(command);
 
     await expect(updateUserPromise).rejects.toThrowError(
       new ArgumentException('許可されていない文字 test が使われています。')
@@ -120,12 +120,12 @@ describe('ユーザ更新', () => {
         new MailAddress('test@example.com')
       )
     );
-    const userApplicationService = new UserApplicationService(userRepository);
+    const userApplicationService = new UserUpdateService(userRepository);
     const command = new UserUpdateCommand({
       id: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
       name: 'TEST',
     });
-    const updateUserPromise = userApplicationService.update(command);
+    const updateUserPromise = userApplicationService.handle(command);
 
     await expect(updateUserPromise).rejects.toThrowError(
       new ArgumentException('許可されていない文字 TEST が使われています。')
@@ -149,12 +149,12 @@ describe('ユーザ更新', () => {
       )
     );
 
-    const userApplicationService = new UserApplicationService(userRepository);
+    const userApplicationService = new UserUpdateService(userRepository);
     const command = new UserUpdateCommand({
       id: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
       mailAddress: 'changed@example.com',
     });
-    const updatePromise = userApplicationService.update(command);
+    const updatePromise = userApplicationService.handle(command);
 
     await expect(updatePromise).rejects.toThrowError(
       new UserDuplicateException(new MailAddress('changed@example.com'))
