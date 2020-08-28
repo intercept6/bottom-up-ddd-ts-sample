@@ -1,15 +1,16 @@
 import { UserName } from '#/domain/models/user/userName';
 import { UserService } from '#/domain/models/services/userService';
-import type { UserRepository } from '#/repository/user/userRepositoryInterface';
+import type { userRepositoryInterface } from '#/repository/user/userRepositoryInterface';
 import { UserId } from '#/domain/models/user/userId';
 import { UserUpdateCommand } from '#/application/user/update/userUpdateCommand';
 import { MailAddress } from '#/domain/models/user/mailAddress';
 import { UserDuplicateException } from '#/util/error';
+import { UserUpdateServiceInterface } from '#/application/user/update/userUpdateServiceInterface';
 
-export class UserUpdateService {
+export class UserUpdateService implements UserUpdateServiceInterface {
   private readonly userService: UserService;
 
-  constructor(private readonly userRepository: UserRepository) {
+  constructor(private readonly userRepository: userRepositoryInterface) {
     this.userService = new UserService(userRepository);
   }
 
