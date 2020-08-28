@@ -1,0 +1,115 @@
+import { UserId } from '#/domain/models/user/userId';
+import { UserName } from '#/domain/models/user/userName';
+import { MailAddress } from '#/domain/models/user/mailAddress';
+
+abstract class ExtendedError extends Error {
+  protected constructor(message: string, error?: Error) {
+    super(message);
+
+    // this.name = this.constructor.name; でも問題ないが、enumerable を false にしたほうがビルトインエラーに近い。
+    Object.defineProperty(this, 'name', {
+      configurable: true,
+      enumerable: false,
+      value: this.constructor.name,
+      writable: true,
+    });
+
+    // エラーがスローされた場所の適切なスタックトレースを維持する（V8エンジニアでのみ使用可能な為、if文でケアする）
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, this.constructor);
+    } else if (error != null) {
+      const messageLines = (this.message.match(/\n/g) || []).length + 1;
+      if (this.stack) {
+        this.stack =
+          this.stack
+            .split('\n')
+            .slice(0, messageLines + 1)
+            .join('\n') +
+          '\n' +
+          error.stack;
+      }
+    }
+  }
+}
+
+export class UserNotFoundException extends ExtendedError {
+  constructor(userId: UserId, error?: Error);
+  constructor(userName: UserName, error?: Error);
+  constructor(mailAddress: MailAddress, error?: Error);
+  constructor(identifier: UserId | UserName | MailAddress, error?: Error) {
+    if (identifier instanceof UserId) {
+      super(
+        `[UserNotFoundException] user id=${identifier.getValue()} is not found`,
+        error
+      );
+    } else if (identifier instanceof UserName) {
+      super(
+        `[UserNotFoundException] user name=${identifier.getValue()} is not found`,
+        error
+      );
+    } else {
+      super(
+        `[UserNotFoundException] user mailAddress=${identifier.getValue()} is not found`,
+        error
+      );
+    }
+  }
+}
+
+export class UserDuplicateException extends ExtendedError {
+  constructor(userId: UserId, error?: Error);
+  constructor(mailAddress: MailAddress, error?: Error);
+  constructor(identifier: UserId | MailAddress, error?: Error) {
+    if (identifier instanceof UserId) {
+      super(
+        `[UserDuplicateException] user id=${identifier.getValue()} is already exist`,
+        error
+      );
+    } else {
+      super(
+        `[UserDuplicateException] user mailAddress=${identifier.getValue()} is already exist`,
+        error
+      );
+    }
+  }
+}
+
+type PrimitiveTypes =
+  | 'undefined'
+  | 'object'
+  | 'boolean'
+  | 'number'
+  | 'bigint'
+  | 'string'
+  | 'symbol'
+  | 'function';
+
+export class TypeException extends ExtendedError {
+  constructor(
+    variableName: string,
+    expected: PrimitiveTypes,
+    got: PrimitiveTypes
+  ) {
+    super(
+      `[TypeException] ${variableName} should be ${expected} type, but it is ${got} type`
+    );
+  }
+}
+
+export class ArgumentException extends ExtendedError {
+  constructor(message: string, error?: Error) {
+    super(`[ArgumentException] ${message}`, error);
+  }
+}
+
+export class BadParameterException extends ExtendedError {
+  constructor(message: string, error?: Error) {
+    super(`[BadParameterException] ${message}`, error);
+  }
+}
+
+export class UnknownException extends ExtendedError {
+  constructor(error: Error) {
+    super('[UnknownException]', error);
+  }
+}
