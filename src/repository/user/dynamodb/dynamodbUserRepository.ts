@@ -1,4 +1,4 @@
-import type { UserRepository } from '#/repository/user/userRepositoryInterface';
+import type { userRepositoryInterface } from '#/repository/user/userRepositoryInterface';
 import type { DynamoDB } from 'aws-sdk';
 import { User } from '#/domain/models/user/user';
 import { UserName } from '#/domain/models/user/userName';
@@ -7,7 +7,7 @@ import { systemLog } from '#/util/systemLog';
 import { MailAddress } from '#/domain/models/user/mailAddress';
 import { TypeException, UserNotFoundException } from '#/util/error';
 
-export class DynamodbUserRepository implements UserRepository {
+export class DynamodbUserRepository implements userRepositoryInterface {
   constructor(
     private readonly ddb: DynamoDB,
     private readonly docClient: DynamoDB.DocumentClient,

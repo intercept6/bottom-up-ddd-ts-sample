@@ -1,9 +1,9 @@
 import { User } from '#/domain/models/user/user';
-import type { UserRepository } from '#/repository/user/userRepositoryInterface';
+import type { userRepositoryInterface } from '#/repository/user/userRepositoryInterface';
 import { UnknownException, UserNotFoundException } from '#/util/error';
 
 export class UserService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(private readonly userRepository: userRepositoryInterface) {}
 
   async exists(user: User) {
     try {
