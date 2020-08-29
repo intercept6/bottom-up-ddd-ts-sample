@@ -25,7 +25,7 @@ export class DynamodbUserRepository implements userRepositoryInterface {
         .get({
           TableName: this.tableName,
           Key: {
-            S: arg1.getValue(),
+            id: arg1.getValue(),
           },
         })
         .promise()

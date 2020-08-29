@@ -26,7 +26,7 @@
     "typescript": "3.9.6"
   },
   "dependencies": {
-    "aws-sdk": "^2.739.0"
+    "aws-sdk": "2.741.0"
   },
   "scripts": {
     "test": "jest"
