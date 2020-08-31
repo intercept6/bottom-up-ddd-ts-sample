@@ -33,6 +33,6 @@ export class UserUpdateService implements UserUpdateServiceInterface {
       }
     }
 
-    await this.userRepository.save(user);
+    await this.userRepository.update(user);
   }
 }

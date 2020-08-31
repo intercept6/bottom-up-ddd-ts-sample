@@ -18,3 +18,12 @@ export type UserRegisterRequest = {
   user_name: string;
   mail_address: string;
 };
+
+export const isUserRegisterRequest = (
+  body: object
+): body is UserRegisterRequest => {
+  return (
+    typeof (body as UserRegisterRequest).user_name === 'string' &&
+    typeof (body as UserRegisterRequest).mail_address === 'string'
+  );
+};

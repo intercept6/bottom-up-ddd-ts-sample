@@ -4,7 +4,8 @@ import { UserId } from '#/domain/models/user/userId';
 import { MailAddress } from '#/domain/models/user/mailAddress';
 
 export type userRepositoryInterface = {
-  save: (user: User) => Promise<void>;
+  create: (user: User) => Promise<void>;
+  update: (user: User) => Promise<void>;
   find: {
     (id: UserId): Promise<User>;
     (name: UserName): Promise<User>;

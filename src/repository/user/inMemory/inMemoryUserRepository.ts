@@ -44,7 +44,20 @@ export class InMemoryUserRepository implements userRepositoryInterface {
     }
   }
 
-  async save(user: User): Promise<void> {
+  async create(user: User): Promise<void> {
+    const index = this.store.findIndex((value) =>
+      value.getId().equals(user.getId())
+    );
+
+    const exist = index !== -1;
+    if (exist) {
+      this.store.splice(index, 1, this.clone(user));
+    } else {
+      this.store.push(this.clone(user));
+    }
+  }
+
+  async update(user: User): Promise<void> {
     const index = this.store.findIndex((value) =>
       value.getId().equals(user.getId())
     );

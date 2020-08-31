@@ -25,6 +25,6 @@ export class UserRegisterService implements UserRegisterServiceInterface {
       throw new UserDuplicateException(newMailAddress);
     }
 
-    await this.userRepository.save(user);
+    await this.userRepository.create(user);
   }
 }

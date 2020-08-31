@@ -34,7 +34,7 @@ export type apiGWResponse = {
   isBase64Encoded?: boolean;
   statusCode: number;
   headers?: { [key: string]: string };
-  body: string;
+  body?: string;
 };
 
 export type LambdaHandler = (event: apiGWEvent) => Promise<apiGWResponse>;

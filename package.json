@@ -7,6 +7,7 @@
   "devDependencies": {
     "@types/axios": "0.14.0",
     "@types/jest": "26.0.10",
+    "@types/luxon": "1.24.4",
     "@types/node": "14.0.23",
     "@types/uuid": "8.0.0",
     "@typescript-eslint/eslint-plugin": "^3.10.1",
@@ -26,7 +27,8 @@
     "typescript": "3.9.6"
   },
   "dependencies": {
-    "aws-sdk": "2.741.0"
+    "aws-sdk": "2.741.0",
+    "luxon": "1.25.0"
   },
   "scripts": {
     "test": "jest"

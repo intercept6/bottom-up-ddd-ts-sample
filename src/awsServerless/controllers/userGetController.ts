@@ -1,18 +1,18 @@
 import { UserGetServiceInterface } from '#/application/user/get/userGetServiceInterface';
 import { UserGetService } from '#/application/user/get/userGetService';
-import { DynamodbUserRepository } from '#/repository/user/dynamodb/dynamodbUserRepository';
 import { DynamoDB } from 'aws-sdk';
 import {
   apiGWResponse,
   LambdaHandler,
 } from '#/awsServerless/models/lambdaIntegration';
 import { UserGetCommand } from '#/application/user/get/userGetCommand';
+import { DynamoDBUserRepository } from '#/repository/user/dynamodb/dynamoDBUserRepository';
 import { isUserGetRequest } from '#/awsServerless/models/userResponse';
+import { UserNotFoundException } from '#/util/error';
 
 const region = process.env.AWS_REGION ?? 'ap-northeast-1';
 
-const ddb = new DynamoDB({ apiVersion: '2012-08-10', region });
-const docClient = new DynamoDB.DocumentClient({
+const documentClient = new DynamoDB.DocumentClient({
   apiVersion: '2012-08-10',
   region,
 });
@@ -28,7 +28,30 @@ export class UserGetController {
     }
     const { user_id: id } = reqBody;
     const command = new UserGetCommand({ id });
-    const userData = await this.userGetService.handle(command);
+    const userData = await this.userGetService
+      .handle(command)
+      .catch((error: Error) => error);
+
+    if (userData instanceof Error) {
+      const error = userData;
+      if (error instanceof UserNotFoundException) {
+        return {
+          statusCode: 404,
+          body: JSON.stringify({
+            message: `user id=${id} is not found.`,
+          }),
+        };
+      }
+
+      console.error(error);
+      return {
+        statusCode: 500,
+        body: JSON.stringify({
+          message: 'Internal Server Error.',
+        }),
+      };
+    }
+
     const resBody = JSON.stringify({
       user_id: userData.getId(),
       user_name: userData.getName(),
@@ -41,13 +64,12 @@ export class UserGetController {
   }
 }
 
-const userRepository = new DynamodbUserRepository(
-  ddb,
-  docClient,
+const userRepository = new DynamoDBUserRepository({
+  documentClient,
   tableName,
-  'gsi1',
-  'gsi2'
-);
+  gsi1Name: 'gsi1',
+  gsi2Name: 'gsi2',
+});
 const userGetService = new UserGetService(userRepository);
 const userGetController = new UserGetController(userGetService);
 
