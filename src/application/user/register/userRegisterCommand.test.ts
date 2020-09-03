@@ -91,7 +91,7 @@ describe('ユーザ新規作成', () => {
 
     const userRegisterService = new UserRegisterService(userRepository);
     const command = new UserRegisterCommand(
-      'テストユーザーの名前',
+      '重複しないユーザーの名前',
       'test@example.com'
     );
     const registerPromise = userRegisterService.handle(command);

@@ -2,10 +2,14 @@ import { Credentials, DynamoDB } from 'aws-sdk';
 import { UserGetService } from '#/application/user/get/userGetService';
 import { UserGetController } from '#/awsServerless/controllers/userGetController';
 import { DynamoDBUserRepository } from '#/repository/user/dynamodb/dynamoDBUserRepository';
+import {
+  createDynamoDBTable,
+  createUser,
+  deleteDynamoDBTable,
+} from '#/lib/tests/common';
 
 const region = 'local';
-
-const tableName = 'bottom-up-ddd';
+const tableName = 'user-get-controller-test-table';
 const documentClient = new DynamoDB.DocumentClient({
   apiVersion: '2012-08-10',
   region,
@@ -24,6 +28,18 @@ const userRepository = new DynamoDBUserRepository({
 });
 const userGetService = new UserGetService(userRepository);
 const userGetController = new UserGetController(userGetService);
+
+beforeAll(async () => {
+  await createDynamoDBTable(tableName);
+  await createUser(tableName, {
+    userId: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
+    userName: 'ユーザー１',
+    mailAddress: 'user1@example.com',
+  });
+});
+afterAll(async () => {
+  await deleteDynamoDBTable(tableName);
+});
 
 describe('ユーザー取得', () => {
   test('ユーザーを取得する', async () => {
