@@ -14,33 +14,32 @@ export class InMemoryUserRepository implements userRepositoryInterface {
     this.store = [];
   }
 
-  async find(id: UserId): Promise<User>;
-  async find(name: UserName): Promise<User>;
-  async find(mailAddress: MailAddress): Promise<User>;
-  async find(arg1: UserId | UserName | MailAddress): Promise<User> {
-    if (arg1 instanceof UserId) {
-      const target = this.store.find((value) => value.getId().equals(arg1));
+  async find(identity: UserId | UserName | MailAddress): Promise<User> {
+    if (identity instanceof UserId) {
+      const target = this.store.find((value) => value.getId().equals(identity));
 
       if (target != null) {
         return this.clone(target);
       }
-      throw new UserNotFoundException(arg1);
-    } else if (arg1 instanceof UserName) {
-      const target = this.store.find((value) => value.getName().equals(arg1));
-
-      if (target != null) {
-        return this.clone(target);
-      }
-      throw new UserNotFoundException(arg1);
-    } else {
+      throw new UserNotFoundException(identity);
+    } else if (identity instanceof UserName) {
       const target = this.store.find((value) =>
-        value.getMailAddress().equals(arg1)
+        value.getName().equals(identity)
       );
 
       if (target != null) {
         return this.clone(target);
       }
-      throw new UserNotFoundException(arg1);
+      throw new UserNotFoundException(identity);
+    } else {
+      const target = this.store.find((value) =>
+        value.getMailAddress().equals(identity)
+      );
+
+      if (target != null) {
+        return this.clone(target);
+      }
+      throw new UserNotFoundException(identity);
     }
   }
 

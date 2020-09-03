@@ -58,16 +58,22 @@ export class UserNotFoundException extends ExtendedError {
 
 export class UserDuplicateException extends ExtendedError {
   constructor(userId: UserId, error?: Error);
+  constructor(userName: UserName, error?: Error);
   constructor(mailAddress: MailAddress, error?: Error);
-  constructor(identifier: UserId | MailAddress, error?: Error) {
-    if (identifier instanceof UserId) {
+  constructor(identity: UserId | UserName | MailAddress, error?: Error) {
+    if (identity instanceof UserId) {
       super(
-        `[UserDuplicateException] user id=${identifier.getValue()} is already exist`,
+        `[UserDuplicateException] user id=${identity.getValue()} is already exist`,
+        error
+      );
+    } else if (identity instanceof UserName) {
+      super(
+        `[UserDuplicateException] user name=${identity.getValue()} is already exist`,
         error
       );
     } else {
       super(
-        `[UserDuplicateException] user mailAddress=${identifier.getValue()} is already exist`,
+        `[UserDuplicateException] user mailAddress=${identity.getValue()} is already exist`,
         error
       );
     }

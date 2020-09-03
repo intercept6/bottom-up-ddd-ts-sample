@@ -1,20 +1,20 @@
 import type { userRepositoryInterface } from '#/repository/user/userRepositoryInterface';
-import type { DynamoDB } from 'aws-sdk';
 import { User } from '#/domain/models/user/user';
 import { UserName } from '#/domain/models/user/userName';
 import { UserId } from '#/domain/models/user/userId';
 import { systemLog } from '#/util/systemLog';
 import { MailAddress } from '#/domain/models/user/mailAddress';
 import { TypeException, UserNotFoundException } from '#/util/error';
+import { DocumentClient } from 'aws-sdk/lib/dynamodb/document_client';
 
 export class DynamoDBUserRepository implements userRepositoryInterface {
-  private readonly documentClient: DynamoDB.DocumentClient;
+  private readonly documentClient: DocumentClient;
   private readonly tableName: string;
   private readonly gsi1Name: string;
   private readonly gsi2Name: string;
 
   constructor(props: {
-    documentClient: DynamoDB.DocumentClient;
+    documentClient: DocumentClient;
     tableName: string;
     gsi1Name: string;
     gsi2Name: string;
@@ -25,24 +25,21 @@ export class DynamoDBUserRepository implements userRepositoryInterface {
     this.gsi2Name = props.gsi2Name;
   }
 
-  async find(id: UserId): Promise<User>;
-  async find(name: UserName): Promise<User>;
-  async find(mailAddress: MailAddress): Promise<User>;
-  async find(arg1: UserId | UserName | MailAddress): Promise<User> {
-    if (arg1 instanceof UserId) {
+  async find(identity: UserId | UserName | MailAddress): Promise<User> {
+    if (identity instanceof UserId) {
       const response = await this.documentClient
         .get({
           TableName: this.tableName,
           Key: {
-            pk: arg1.getValue(),
+            pk: identity.getValue(),
           },
         })
         .promise()
         .catch((error: Error) => error);
       if (response instanceof Error) {
-        throw new UserNotFoundException(arg1, response);
+        throw new UserNotFoundException(identity, response);
       } else if (response.Item == null) {
-        throw new UserNotFoundException(arg1);
+        throw new UserNotFoundException(identity);
       }
 
       const id = response.Item.pk;
@@ -80,7 +77,7 @@ export class DynamoDBUserRepository implements userRepositoryInterface {
         new UserName(userName),
         new MailAddress(mailAddress)
       );
-    } else if (arg1 instanceof UserName) {
+    } else if (identity instanceof UserName) {
       const found = await this.documentClient
         .query({
           TableName: this.tableName,
@@ -89,14 +86,14 @@ export class DynamoDBUserRepository implements userRepositoryInterface {
             '#gsi1pk': 'gsi1pk',
           },
           ExpressionAttributeValues: {
-            ':gsi1pk': arg1.getValue(),
+            ':gsi1pk': identity.getValue(),
           },
           KeyConditionExpression: '#gsi1pk = :gsi1pk',
         })
         .promise();
 
       if (found.Items?.length !== 1) {
-        throw new UserNotFoundException(arg1);
+        throw new UserNotFoundException(identity);
       }
 
       const id = found.Items[0].pk;
@@ -127,14 +124,14 @@ export class DynamoDBUserRepository implements userRepositoryInterface {
             '#gsi2pk': 'gsi2pk',
           },
           ExpressionAttributeValues: {
-            ':gsi2pk': arg1.getValue(),
+            ':gsi2pk': identity.getValue(),
           },
           KeyConditionExpression: '#gsi2pk = :gsi2pk',
         })
         .promise();
 
       if (found.Items?.length !== 1) {
-        throw new UserNotFoundException(arg1);
+        throw new UserNotFoundException(identity);
       }
 
       const id = found.Items[0].pk;

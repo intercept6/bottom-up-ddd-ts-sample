@@ -18,12 +18,17 @@ export class UserRegisterService implements UserRegisterServiceInterface {
     const userName = command.getName();
     const mailAddress = command.getMailAddress();
 
-    const newMailAddress = new MailAddress(mailAddress);
-    const user = new User(new UserName(userName), newMailAddress);
+    const newUserName = new UserName(userName);
+    if (await this.userService.unique(newUserName)) {
+      throw new UserDuplicateException(newUserName);
+    }
 
-    if (await this.userService.exists(user)) {
+    const newMailAddress = new MailAddress(mailAddress);
+    if (await this.userService.unique(newMailAddress)) {
       throw new UserDuplicateException(newMailAddress);
     }
+
+    const user = new User(newUserName, newMailAddress);
 
     await this.userRepository.create(user);
   }

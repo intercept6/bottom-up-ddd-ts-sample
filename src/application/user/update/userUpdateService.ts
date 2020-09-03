@@ -22,13 +22,16 @@ export class UserUpdateService implements UserUpdateServiceInterface {
     if (name != null) {
       const newUserName = new UserName(name);
       user.changeName(newUserName);
+      if (await this.userService.unique(newUserName)) {
+        throw new UserDuplicateException(newUserName);
+      }
     }
 
     const mailAddress = command.getMailAddress();
     if (mailAddress != null) {
       const newMailAddress = new MailAddress(mailAddress);
       user.changeMailAddress(newMailAddress);
-      if (await this.userService.exists(user)) {
+      if (await this.userService.unique(newMailAddress)) {
         throw new UserDuplicateException(newMailAddress);
       }
     }
