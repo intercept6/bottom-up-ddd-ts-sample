@@ -9,7 +9,7 @@ export class UserDeleteService implements UserDeleteServiceInterface {
   constructor(private readonly userRepository: userRepositoryInterface) {}
 
   async handle(command: UserDeleteCommand) {
-    const targetId = new UserId(command.getId());
+    const targetId = new UserId(command.getUserId());
     const response = await this.userRepository
       .find(targetId)
       .catch((error: Error) => {

@@ -24,7 +24,7 @@ export type apiGWEvent = {
   };
   requestId: string;
   body: string;
-  pathParameters: { [key: string]: string };
+  pathParameters: { [key: string]: string | undefined };
   isBase64Encoded: boolean;
   stageVariables: { [key: string]: string };
 };
