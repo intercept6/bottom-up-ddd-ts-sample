@@ -11,10 +11,10 @@ describe('ユーザ新規作成', () => {
   test('ユーザを新規作成する', async () => {
     const userRepository = new InMemoryUserRepository();
     const userRegisterService = new UserRegisterService(userRepository);
-    const command = new UserRegisterCommand(
-      'テストユーザーの名前',
-      'test@example.com'
-    );
+    const command = new UserRegisterCommand({
+      userName: 'テストユーザーの名前',
+      mailAddress: 'test@example.com',
+    });
     await userRegisterService.handle(command);
 
     const head = userRepository.store[0];
@@ -24,7 +24,10 @@ describe('ユーザ新規作成', () => {
   test('ユーザ名が3文字未満', async () => {
     const userRepository = new InMemoryUserRepository();
     const userRegisterService = new UserRegisterService(userRepository);
-    const command = new UserRegisterCommand('テス', 'test@example.com');
+    const command = new UserRegisterCommand({
+      userName: 'テス',
+      mailAddress: 'test@example.com',
+    });
     const createUserPromise = userRegisterService.handle(command);
 
     await expect(createUserPromise).rejects.toThrowError(
@@ -35,10 +38,10 @@ describe('ユーザ新規作成', () => {
   test('ユーザ名が20文字超過', async () => {
     const userRepository = new InMemoryUserRepository();
     const userRegisterService = new UserRegisterService(userRepository);
-    const command = new UserRegisterCommand(
-      'テストユーザの名前テストユーザの名前テスト',
-      'test@example.com'
-    );
+    const command = new UserRegisterCommand({
+      userName: 'テストユーザの名前テストユーザの名前テスト',
+      mailAddress: 'test@example.com',
+    });
     const createUserPromise = userRegisterService.handle(command);
 
     await expect(createUserPromise).rejects.toThrowError(
@@ -49,7 +52,10 @@ describe('ユーザ新規作成', () => {
   test('ユーザ名に許可されない英語小文字が使われている', async () => {
     const userRepository = new InMemoryUserRepository();
     const userRegisterService = new UserRegisterService(userRepository);
-    const command = new UserRegisterCommand('test', 'test@example.com');
+    const command = new UserRegisterCommand({
+      userName: 'test',
+      mailAddress: 'test@example.com',
+    });
     const createUserPromise = userRegisterService.handle(command);
 
     await expect(createUserPromise).rejects.toThrowError(
@@ -60,7 +66,10 @@ describe('ユーザ新規作成', () => {
   test('ユーザ名に許可されない英語大文字が使われている', async () => {
     const userRepository = new InMemoryUserRepository();
     const userRegisterService = new UserRegisterService(userRepository);
-    const command = new UserRegisterCommand('TEST', 'test@example.com');
+    const command = new UserRegisterCommand({
+      userName: 'TEST',
+      mailAddress: 'test@example.com',
+    });
     const createUserPromise = userRegisterService.handle(command);
 
     await expect(createUserPromise).rejects.toThrowError(
@@ -71,7 +80,10 @@ describe('ユーザ新規作成', () => {
   test('ユーザ名に許可されない英語大文字が使われている', async () => {
     const userRepository = new InMemoryUserRepository();
     const userRegisterService = new UserRegisterService(userRepository);
-    const command = new UserRegisterCommand('TEST', 'test@example.com');
+    const command = new UserRegisterCommand({
+      userName: 'TEST',
+      mailAddress: 'test@example.com',
+    });
     const createUserPromise = userRegisterService.handle(command);
 
     await expect(createUserPromise).rejects.toThrowError(
@@ -90,10 +102,10 @@ describe('ユーザ新規作成', () => {
     );
 
     const userRegisterService = new UserRegisterService(userRepository);
-    const command = new UserRegisterCommand(
-      '重複しないユーザーの名前',
-      'test@example.com'
-    );
+    const command = new UserRegisterCommand({
+      userName: '重複しないユーザーの名前',
+      mailAddress: 'test@example.com',
+    });
     const registerPromise = userRegisterService.handle(command);
 
     await expect(registerPromise).rejects.toThrowError(
