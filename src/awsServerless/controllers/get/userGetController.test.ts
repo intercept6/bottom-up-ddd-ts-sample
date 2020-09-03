@@ -1,6 +1,6 @@
 import { Credentials, DynamoDB } from 'aws-sdk';
 import { UserGetService } from '#/application/user/get/userGetService';
-import { UserGetController } from '#/awsServerless/controllers/userGetController';
+import { UserGetController } from '#/awsServerless/controllers/get/userGetController';
 import { DynamoDBUserRepository } from '#/repository/user/dynamodb/dynamoDBUserRepository';
 import {
   createDynamoDBTable,
