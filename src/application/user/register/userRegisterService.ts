@@ -6,6 +6,7 @@ import { UserDuplicateException } from '#/util/error';
 import { UserService } from '#/domain/models/services/userService';
 import { userRepositoryInterface } from '#/repository/user/userRepositoryInterface';
 import { UserRegisterServiceInterface } from '#/application/user/register/userRegisterServiceInterface';
+import { UserData } from '#/application/user/userData';
 
 export class UserRegisterService implements UserRegisterServiceInterface {
   private readonly userService: UserService;
@@ -31,5 +32,6 @@ export class UserRegisterService implements UserRegisterServiceInterface {
     const user = new User(newUserName, newMailAddress);
 
     await this.userRepository.create(user);
+    return new UserData(user);
   }
 }
