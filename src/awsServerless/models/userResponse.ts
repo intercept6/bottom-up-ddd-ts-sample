@@ -1,11 +1,5 @@
 /* eslint-disable camelcase */
 
-export type UserGetResponse = {
-  user_id: string;
-  user_name: string;
-  mail_address: string;
-};
-
 export type UserGetRequest = {
   user_id: string;
 };
