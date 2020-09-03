@@ -202,7 +202,10 @@ export class DynamoDBUserRepository implements userRepositoryInterface {
       })
       .promise();
 
-    systemLog('INFO', `ユーザー${user.getId()}をDynamoDBに保存しました`);
+    systemLog(
+      'INFO',
+      `ユーザー ${user.getId().getValue()} をDynamoDBに保存しました`
+    );
   }
 
   async update(user: User) {
@@ -269,7 +272,10 @@ export class DynamoDBUserRepository implements userRepositoryInterface {
       })
       .promise();
 
-    systemLog('INFO', `ユーザー${user.getId()}をDynamoDBに更新しました`);
+    systemLog(
+      'INFO',
+      `ユーザー ${user.getId().getValue()} をDynamoDBに更新しました`
+    );
   }
 
   async delete(user: User): Promise<void> {
@@ -304,6 +310,9 @@ export class DynamoDBUserRepository implements userRepositoryInterface {
       })
       .promise();
 
-    systemLog('INFO', `ユーザー:${user.getId()}をDynamoDBから削除しました`);
+    systemLog(
+      'INFO',
+      `ユーザー ${user.getId().getValue()} をDynamoDBから削除しました`
+    );
   }
 }
