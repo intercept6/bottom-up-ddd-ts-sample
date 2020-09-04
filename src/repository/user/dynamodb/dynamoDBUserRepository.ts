@@ -1,4 +1,4 @@
-import type { userRepositoryInterface } from '#/repository/user/userRepositoryInterface';
+import type { UserRepositoryInterface } from '#/repository/user/userRepositoryInterface';
 import { User } from '#/domain/models/user/user';
 import { UserName } from '#/domain/models/user/userName';
 import { UserId } from '#/domain/models/user/userId';
@@ -7,7 +7,7 @@ import { MailAddress } from '#/domain/models/user/mailAddress';
 import { TypeException, UserNotFoundException } from '#/util/error';
 import { DocumentClient } from 'aws-sdk/lib/dynamodb/document_client';
 
-export class DynamoDBUserRepository implements userRepositoryInterface {
+export class DynamoDBUserRepository implements UserRepositoryInterface {
   private readonly documentClient: DocumentClient;
   private readonly tableName: string;
   private readonly gsi1Name: string;

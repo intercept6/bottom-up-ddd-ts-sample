@@ -1,10 +1,10 @@
-import type { userRepositoryInterface } from '#/repository/user/userRepositoryInterface';
+import type { UserRepositoryInterface } from '#/repository/user/userRepositoryInterface';
 import { UnknownException, UserNotFoundException } from '#/util/error';
 import { UserName } from '#/domain/models/user/userName';
 import { MailAddress } from '#/domain/models/user/mailAddress';
 
 export class UserService {
-  constructor(private readonly userRepository: userRepositoryInterface) {}
+  constructor(private readonly userRepository: UserRepositoryInterface) {}
 
   async unique(userName: UserName): Promise<boolean>;
   async unique(mailAddress: MailAddress): Promise<boolean>;

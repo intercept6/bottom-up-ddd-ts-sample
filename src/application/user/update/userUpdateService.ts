@@ -1,6 +1,6 @@
 import { UserName } from '#/domain/models/user/userName';
 import { UserService } from '#/domain/models/services/userService';
-import type { userRepositoryInterface } from '#/repository/user/userRepositoryInterface';
+import type { UserRepositoryInterface } from '#/repository/user/userRepositoryInterface';
 import { UserId } from '#/domain/models/user/userId';
 import { UserUpdateCommand } from '#/application/user/update/userUpdateCommand';
 import { MailAddress } from '#/domain/models/user/mailAddress';
@@ -10,7 +10,7 @@ import { UserUpdateServiceInterface } from '#/application/user/update/userUpdate
 export class UserUpdateService implements UserUpdateServiceInterface {
   private readonly userService: UserService;
 
-  constructor(private readonly userRepository: userRepositoryInterface) {
+  constructor(private readonly userRepository: UserRepositoryInterface) {
     this.userService = new UserService(userRepository);
   }
 

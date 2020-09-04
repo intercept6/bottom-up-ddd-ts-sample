@@ -2,11 +2,11 @@ import { UserDeleteCommand } from '#/application/user/delete/userDeleteCommand';
 import { UserId } from '#/domain/models/user/userId';
 import { UnknownException, UserNotFoundException } from '#/util/error';
 import { systemLog } from '#/util/systemLog';
-import { userRepositoryInterface } from '#/repository/user/userRepositoryInterface';
+import { UserRepositoryInterface } from '#/repository/user/userRepositoryInterface';
 import { UserDeleteServiceInterface } from '#/application/user/delete/userDeleteServiceInterface';
 
 export class UserDeleteService implements UserDeleteServiceInterface {
-  constructor(private readonly userRepository: userRepositoryInterface) {}
+  constructor(private readonly userRepository: UserRepositoryInterface) {}
 
   async handle(command: UserDeleteCommand) {
     const targetId = new UserId(command.getUserId());

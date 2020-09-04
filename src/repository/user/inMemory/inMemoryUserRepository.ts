@@ -1,11 +1,11 @@
 import { UserId } from '#/domain/models/user/userId';
 import { User } from '#/domain/models/user/user';
-import { userRepositoryInterface } from '#/repository/user/userRepositoryInterface';
+import { UserRepositoryInterface } from '#/repository/user/userRepositoryInterface';
 import { UserName } from '#/domain/models/user/userName';
 import { MailAddress } from '#/domain/models/user/mailAddress';
 import { UserNotFoundException } from '#/util/error';
 
-export class InMemoryUserRepository implements userRepositoryInterface {
+export class InMemoryUserRepository implements UserRepositoryInterface {
   // テストケースによってはデータを確認したいことがある
   // 確認のための操作を外部から行えるようにするためpublicにしている
   public readonly store: User[];
