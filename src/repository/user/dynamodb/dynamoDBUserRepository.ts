@@ -209,68 +209,161 @@ export class DynamoDBUserRepository implements UserRepositoryInterface {
   }
 
   async update(user: User) {
-    await this.documentClient
-      .transactWrite({
-        TransactItems: [
-          {
-            Update: {
-              TableName: this.tableName,
-              Key: { pk: user.getId().getValue() },
-              ExpressionAttributeNames: {
-                '#pk': 'pk',
-                '#gsi1pk': 'gsi1pk',
-                '#gsi2pk': 'gsi2pk',
-              },
-              ExpressionAttributeValues: {
-                ':gsi1pk': user.getName().getValue(),
-                ';gsi2pk': user.getMailAddress().getValue(),
-              },
-              UpdateExpression: [
-                'set #gsi1pk = :gsi1pk',
-                'set #gsi2pk = :gsi2pk',
-              ].join(','),
-              ConditionExpression: 'attribute_exists(#pk)',
-            },
-          },
-          {
-            Delete: {
-              TableName: this.tableName,
-              Key: { pk: `userName#${user.getName().getValue()}` },
-            },
-          },
-          {
-            Delete: {
-              TableName: this.tableName,
-              Key: { pk: `mailAddress#${user.getMailAddress().getValue()}` },
-            },
-          },
-          {
-            Put: {
-              TableName: this.tableName,
-              Item: {
-                pk: `userName#${user.getName().getValue()}`,
-              },
-              ExpressionAttributeNames: {
-                '#pk': 'pk',
-              },
-              ConditionExpression: 'attribute_not_exists(#pk)',
-            },
-          },
-          {
-            Put: {
-              TableName: this.tableName,
-              Item: {
-                pk: `mailAddress#${user.getMailAddress().getValue()}`,
-              },
-              ExpressionAttributeNames: {
-                '#pk': 'pk',
-              },
-              ConditionExpression: 'attribute_not_exists(#pk)',
-            },
-          },
-        ],
-      })
+    const response = await this.documentClient
+      .get({ TableName: this.tableName, Key: { pk: user.getId().getValue() } })
       .promise();
+
+    const oldName = response.Item?.gsi1pk;
+    const oldMailAddress = response.Item?.gsi2pk;
+
+    if (
+      user.getName().getValue() !== oldName &&
+      user.getMailAddress().getValue() !== oldMailAddress
+    ) {
+      await this.documentClient
+        .transactWrite({
+          TransactItems: [
+            {
+              Update: {
+                TableName: this.tableName,
+                Key: { pk: user.getId().getValue() },
+                ExpressionAttributeNames: {
+                  '#pk': 'pk',
+                  '#gsi1pk': 'gsi1pk',
+                  '#gsi2pk': 'gsi2pk',
+                },
+                ExpressionAttributeValues: {
+                  ':gsi1pk': user.getName().getValue(),
+                  ':gsi2pk': user.getMailAddress().getValue(),
+                },
+                UpdateExpression: 'SET #gsi1pk = :gsi1pk, #gsi2pk = :gsi2pk',
+                ConditionExpression: 'attribute_exists(#pk)',
+              },
+            },
+            {
+              Delete: {
+                TableName: this.tableName,
+                Key: { pk: `userName#${oldName}` },
+              },
+            },
+            {
+              Delete: {
+                TableName: this.tableName,
+                Key: { pk: `mailAddress#${oldMailAddress}` },
+              },
+            },
+            {
+              Put: {
+                TableName: this.tableName,
+                Item: {
+                  pk: `userName#${user.getName().getValue()}`,
+                },
+                ExpressionAttributeNames: {
+                  '#pk': 'pk',
+                },
+                ConditionExpression: 'attribute_not_exists(#pk)',
+              },
+            },
+            {
+              Put: {
+                TableName: this.tableName,
+                Item: {
+                  pk: `mailAddress#${user.getMailAddress().getValue()}`,
+                },
+                ExpressionAttributeNames: {
+                  '#pk': 'pk',
+                },
+                ConditionExpression: 'attribute_not_exists(#pk)',
+              },
+            },
+          ],
+        })
+        .promise();
+    } else if (user.getName().getValue() !== oldName) {
+      await this.documentClient
+        .transactWrite({
+          TransactItems: [
+            {
+              Update: {
+                TableName: this.tableName,
+                Key: { pk: user.getId().getValue() },
+                ExpressionAttributeNames: {
+                  '#pk': 'pk',
+                  '#gsi1pk': 'gsi1pk',
+                  '#gsi2pk': 'gsi2pk',
+                },
+                ExpressionAttributeValues: {
+                  ':gsi1pk': user.getName().getValue(),
+                  ':gsi2pk': user.getMailAddress().getValue(),
+                },
+                UpdateExpression: 'SET #gsi1pk = :gsi1pk, #gsi2pk = :gsi2pk',
+                ConditionExpression: 'attribute_exists(#pk)',
+              },
+            },
+            {
+              Delete: {
+                TableName: this.tableName,
+                Key: { pk: `userName#${oldName}` },
+              },
+            },
+            {
+              Put: {
+                TableName: this.tableName,
+                Item: {
+                  pk: `userName#${user.getName().getValue()}`,
+                },
+                ExpressionAttributeNames: {
+                  '#pk': 'pk',
+                },
+                ConditionExpression: 'attribute_not_exists(#pk)',
+              },
+            },
+          ],
+        })
+        .promise();
+    } else if (user.getMailAddress().getValue() !== oldMailAddress) {
+      await this.documentClient
+        .transactWrite({
+          TransactItems: [
+            {
+              Update: {
+                TableName: this.tableName,
+                Key: { pk: user.getId().getValue() },
+                ExpressionAttributeNames: {
+                  '#pk': 'pk',
+                  '#gsi1pk': 'gsi1pk',
+                  '#gsi2pk': 'gsi2pk',
+                },
+                ExpressionAttributeValues: {
+                  ':gsi1pk': user.getName().getValue(),
+                  ':gsi2pk': user.getMailAddress().getValue(),
+                },
+                UpdateExpression: 'SET #gsi1pk = :gsi1pk, #gsi2pk = :gsi2pk',
+                ConditionExpression: 'attribute_exists(#pk)',
+              },
+            },
+            {
+              Delete: {
+                TableName: this.tableName,
+                Key: { pk: `mailAddress#${oldMailAddress}` },
+              },
+            },
+            {
+              Put: {
+                TableName: this.tableName,
+                Item: {
+                  pk: `mailAddress#${user.getMailAddress().getValue()}`,
+                },
+                ExpressionAttributeNames: {
+                  '#pk': 'pk',
+                },
+                ConditionExpression: 'attribute_not_exists(#pk)',
+              },
+            },
+          ],
+        })
+        .promise();
+    }
 
     systemLog(
       'INFO',

@@ -5,6 +5,7 @@
   "private": true,
   "license": "UNLICENSED",
   "devDependencies": {
+    "@types/aws-lambda": "8.10.61",
     "@types/axios": "0.14.0",
     "@types/jest": "26.0.10",
     "@types/luxon": "1.24.4",
