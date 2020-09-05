@@ -44,7 +44,7 @@ export class UserGetController {
     if (userData instanceof Error) {
       const error = userData;
       if (error instanceof UserNotFoundException) {
-        throw new NotFound(`user id=${id} is not found.`);
+        throw new NotFound(error.message);
       }
       throw new InternalServerError('user get failed');
     }

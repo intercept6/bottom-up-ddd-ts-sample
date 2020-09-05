@@ -66,7 +66,7 @@ describe('ユーザー取得', () => {
       statusCode: 404,
       body: JSON.stringify({
         name: 'NotFound',
-        message: 'user id=66d73617-aa4f-46b3-bf7d-9c193f0a08d1 is not found.',
+        message: 'user id: 66d73617-aa4f-46b3-bf7d-9c193f0a08d1 is not found',
       }),
     });
   });

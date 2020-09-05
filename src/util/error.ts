@@ -38,20 +38,11 @@ export class UserNotFoundException extends ExtendedError {
   constructor(mailAddress: MailAddress, error?: Error);
   constructor(identifier: UserId | UserName | MailAddress, error?: Error) {
     if (identifier instanceof UserId) {
-      super(
-        `[UserNotFoundException] user id=${identifier.getValue()} is not found`,
-        error
-      );
+      super(`user id: ${identifier.getValue()} is not found`, error);
     } else if (identifier instanceof UserName) {
-      super(
-        `[UserNotFoundException] user name=${identifier.getValue()} is not found`,
-        error
-      );
+      super(`user name: ${identifier.getValue()} is not found`, error);
     } else {
-      super(
-        `[UserNotFoundException] user mailAddress=${identifier.getValue()} is not found`,
-        error
-      );
+      super(`user mailAddress: ${identifier.getValue()} is not found`, error);
     }
   }
 }
