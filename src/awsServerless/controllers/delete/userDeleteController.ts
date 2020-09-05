@@ -1,12 +1,15 @@
 import { DynamoDB } from 'aws-sdk';
 import { UserDeleteService } from '#/application/user/delete/userDeleteService';
-import {
-  apiGWResponse,
-  LambdaHandler,
-} from '#/awsServerless/models/lambdaIntegration';
 import { UserDeleteCommand } from '#/application/user/delete/userDeleteCommand';
 import { UserNotFoundException } from '#/util/error';
 import { DynamoDBUserRepository } from '#/repository/user/dynamodb/dynamoDBUserRepository';
+import { catchErrorDecorator } from '#/awsServerless/decorators/decorator';
+import {
+  BadRequest,
+  InternalServerError,
+  NotFound,
+} from '#/awsServerless/errors/error';
+import { APIGatewayProxyResult } from 'aws-lambda';
 
 const region = process.env.AWS_REGION ?? 'ap-northeast-1';
 const documentClient = new DynamoDB.DocumentClient({
@@ -15,18 +18,18 @@ const documentClient = new DynamoDB.DocumentClient({
 });
 const tableName = process.env.MAIN_TABLE_NAME ?? 'bottom-up-ddd';
 
+type UserDeleteEvent = {
+  pathParameters?: { userId?: string };
+};
+
 export class UserDeleteController {
   constructor(private readonly userDeleteService: UserDeleteService) {}
 
-  async handle(pathParameters: {
-    [key: string]: string | undefined;
-  }): Promise<apiGWResponse> {
-    const userId = pathParameters.userId;
+  @catchErrorDecorator
+  async handle(event: UserDeleteEvent): Promise<APIGatewayProxyResult> {
+    const userId = event?.pathParameters?.userId;
     if (userId == null) {
-      return {
-        statusCode: 500,
-        body: JSON.stringify({ message: 'Bad Request' }),
-      };
+      throw new BadRequest('user id type is not string');
     }
 
     const command = new UserDeleteCommand(userId);
@@ -36,24 +39,12 @@ export class UserDeleteController {
 
     if (error instanceof Error) {
       if (error instanceof UserNotFoundException) {
-        return {
-          statusCode: 404,
-          body: JSON.stringify({
-            message: `user id=${userId} is not found.`,
-          }),
-        };
+        throw new NotFound(`user id: ${userId} is not found`);
       }
-
-      console.error(error);
-      return {
-        statusCode: 500,
-        body: JSON.stringify({
-          message: 'Internal Server Error.',
-        }),
-      };
+      throw new InternalServerError('user gets failed');
     }
 
-    return { statusCode: 204 };
+    return { statusCode: 204, body: JSON.stringify({}) };
   }
 }
 
@@ -66,5 +57,5 @@ const userRepository = new DynamoDBUserRepository({
 const userDeleteService = new UserDeleteService(userRepository);
 const userDeleteController = new UserDeleteController(userDeleteService);
 
-export const handle: LambdaHandler = async (event) =>
-  await userDeleteController.handle(event.pathParameters);
+export const handle = async (event: UserDeleteEvent) =>
+  await userDeleteController.handle(event);

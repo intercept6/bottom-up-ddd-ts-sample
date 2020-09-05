@@ -1,5 +1,10 @@
 import { APIGatewayProxyResult } from 'aws-lambda';
 import { systemLog } from '#/util/systemLog';
+import {
+  BadRequest,
+  InternalServerError,
+  NotFound,
+} from '#/awsServerless/errors/error';
 
 export const catchErrorDecorator = (
   target: Object,
@@ -8,18 +13,25 @@ export const catchErrorDecorator = (
 ) => {
   const method = descriptor.value;
 
-  descriptor.value = async function (...args: any) {
+  descriptor.value = async function (
+    ...args: any
+  ): Promise<APIGatewayProxyResult> {
     return await method.apply(this, args).catch((error: Error) => {
-      if (error.name === 'BadRequest') {
+      if (error instanceof BadRequest) {
         return {
           statusCode: 400,
           body: JSON.stringify({ name: error.name, message: error.message }),
-        } as APIGatewayProxyResult;
-      } else if (error.name === 'InternalServerError') {
+        };
+      } else if (error instanceof NotFound) {
+        return {
+          statusCode: 404,
+          body: JSON.stringify({ name: error.name, message: error.message }),
+        };
+      } else if (error instanceof InternalServerError) {
         return {
           statusCode: 500,
           body: JSON.stringify({ name: error.name, message: error.message }),
-        } as APIGatewayProxyResult;
+        };
       } else {
         systemLog('ERROR', error.message);
         return {

@@ -33,6 +33,9 @@ abstract class ExtendedError extends Error {
 // 400 Bad Request
 export class BadRequest extends ExtendedError {}
 
+// 404 Not Found
+export class NotFound extends ExtendedError {}
+
 // 500 Internal Server Error
 export class InternalServerError extends ExtendedError {
   constructor(message: string, error?: Error) {
