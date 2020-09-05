@@ -2,6 +2,7 @@ import { APIGatewayProxyResult } from 'aws-lambda';
 import { systemLog } from '#/util/systemLog';
 import {
   BadRequest,
+  Conflict,
   InternalServerError,
   NotFound,
 } from '#/awsServerless/errors/error';
@@ -25,6 +26,11 @@ export const catchErrorDecorator = (
       } else if (error instanceof NotFound) {
         return {
           statusCode: 404,
+          body: JSON.stringify({ name: error.name, message: error.message }),
+        };
+      } else if (error instanceof Conflict) {
+        return {
+          statusCode: 409,
           body: JSON.stringify({ name: error.name, message: error.message }),
         };
       } else if (error instanceof InternalServerError) {

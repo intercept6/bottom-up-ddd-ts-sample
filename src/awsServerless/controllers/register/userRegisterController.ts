@@ -1,13 +1,15 @@
 import { DynamoDB } from 'aws-sdk';
 import { UserRegisterService } from '#/application/user/register/userRegisterService';
-import {
-  apiGWResponse,
-  LambdaHandler,
-} from '#/awsServerless/models/lambdaIntegration';
-import { isUserRegisterRequest } from '#/awsServerless/models/userResponse';
 import { UserRegisterCommand } from '#/application/user/register/userRegisterCommand';
 import { UserDuplicateException } from '#/util/error';
 import { DynamoDBUserRepository } from '#/repository/user/dynamodb/dynamoDBUserRepository';
+import { APIGatewayProxyResult } from 'aws-lambda';
+import {
+  BadRequest,
+  Conflict,
+  InternalServerError,
+} from '#/awsServerless/errors/error';
+import { catchErrorDecorator } from '#/awsServerless/decorators/decorator';
 
 const region = process.env.AWS_REGION ?? 'ap-northeast-1';
 
@@ -15,44 +17,46 @@ const documentClient = new DynamoDB.DocumentClient({
   apiVersion: '2012-08-10',
   region,
 });
-const tableName = 'bottom-up-ddd';
+const tableName = process.env.MAIN_TABLE_NAME ?? 'bottom-up-ddd';
 const rootURI = process.env.ROOT_URI! ?? '';
+
+type UserRegisterEvent = {
+  body: string;
+};
 
 export class UserRegisterController {
   constructor(private readonly userRegisterService: UserRegisterService) {}
 
-  async handle(body: string): Promise<apiGWResponse> {
-    const reqBody = JSON.parse(body);
-    if (!isUserRegisterRequest(reqBody)) {
-      throw new Error('[BadRequestException] TODO: リクエストエラー');
+  @catchErrorDecorator
+  async handle(event: UserRegisterEvent): Promise<APIGatewayProxyResult> {
+    if (event.body == null) {
+      throw new BadRequest('request body is null');
     }
-    const { user_name: userName, mail_address: mailAddress } = reqBody;
-    const command = new UserRegisterCommand({ userName, mailAddress });
-    const userData = await this.userRegisterService
-      .handle(command)
-      .catch((error: Error) => error);
 
-    if (userData instanceof Error) {
-      const error = userData;
-      if (error instanceof UserDuplicateException) {
-        return {
-          statusCode: 409,
-          body: JSON.stringify({ message: error.message }),
-        };
+    const body = JSON.parse(event.body);
+    const userName = body.user_name;
+    const mailAddress = body.mail_address;
+
+    if (typeof userName === 'string' && typeof mailAddress === 'string') {
+      const command = new UserRegisterCommand({ userName, mailAddress });
+      const userData = await this.userRegisterService
+        .handle(command)
+        .catch((error: Error) => error);
+
+      if (userData instanceof Error) {
+        const error = userData;
+        if (error instanceof UserDuplicateException) {
+          throw new Conflict(error.message);
+        }
+        throw new InternalServerError('user register failed');
       }
-
-      console.error(error);
       return {
-        statusCode: 500,
-        body: JSON.stringify({
-          message: 'Internal Server Error.',
-        }),
+        statusCode: 201,
+        body: JSON.stringify({}),
+        headers: { location: `${rootURI}/users/${userData.getId()}` },
       };
     }
-    return {
-      statusCode: 201,
-      headers: { location: `${rootURI}/users/${userData.getId()}` },
-    };
+    throw new BadRequest('user_name or mail_address is not string');
   }
 }
 
@@ -65,5 +69,5 @@ const userRepository = new DynamoDBUserRepository({
 const userRegisterService = new UserRegisterService(userRepository);
 const userRegisterController = new UserRegisterController(userRegisterService);
 
-export const handle: LambdaHandler = async (event) =>
-  await userRegisterController.handle(event.body);
+export const handle = async (event: UserRegisterEvent) =>
+  await userRegisterController.handle(event);

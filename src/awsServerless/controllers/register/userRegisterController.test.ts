@@ -47,14 +47,16 @@ afterEach(async () => {
 
 describe('ユーザー新規登録', () => {
   test('ユーザーを作成する', async () => {
-    const body = JSON.stringify({
-      user_name: 'ユーザー1',
-      mail_address: 'user1@example.com',
+    const response = await userRegisterController.handle({
+      body: JSON.stringify({
+        user_name: 'ユーザー1',
+        mail_address: 'user1@example.com',
+      }),
     });
-    const response = await userRegisterController.handle(body);
 
     expect(response).toEqual({
       statusCode: 201,
+      body: JSON.stringify({}),
       headers: {
         location: expect.stringMatching(
           /^https:\/\/api.example.com\/users\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/
@@ -64,35 +66,35 @@ describe('ユーザー新規登録', () => {
   });
 
   test('ユーザー名が重複するユーザーは作成できない', async () => {
-    const body = JSON.stringify({
-      user_name: 'ユーザー2',
-      mail_address: 'user1@example.com',
+    const response = await userRegisterController.handle({
+      body: JSON.stringify({
+        user_name: 'ユーザー2',
+        mail_address: 'user1@example.com',
+      }),
     });
-
-    const response = await userRegisterController.handle(body);
 
     expect(response).toEqual({
       statusCode: 409,
       body: JSON.stringify({
-        message:
-          '[UserDuplicateException] user name=ユーザー2 is already exist',
+        name: 'Conflict',
+        message: 'user name: ユーザー2 is already exist',
       }),
     });
   });
 
   test('メールアドレスが重複するユーザーは作成できない', async () => {
-    const body = JSON.stringify({
-      user_name: 'ユーザー1',
-      mail_address: 'user2@example.com',
+    const response = await userRegisterController.handle({
+      body: JSON.stringify({
+        user_name: 'ユーザー1',
+        mail_address: 'user2@example.com',
+      }),
     });
-
-    const response = await userRegisterController.handle(body);
 
     expect(response).toEqual({
       statusCode: 409,
       body: JSON.stringify({
-        message:
-          '[UserDuplicateException] user mailAddress=user2@example.com is already exist',
+        name: 'Conflict',
+        message: 'user mailAddress: user2@example.com is already exist',
       }),
     });
   });

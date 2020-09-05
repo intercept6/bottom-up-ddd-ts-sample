@@ -62,20 +62,11 @@ export class UserDuplicateException extends ExtendedError {
   constructor(mailAddress: MailAddress, error?: Error);
   constructor(identity: UserId | UserName | MailAddress, error?: Error) {
     if (identity instanceof UserId) {
-      super(
-        `[UserDuplicateException] user id=${identity.getValue()} is already exist`,
-        error
-      );
+      super(`user id: ${identity.getValue()} is already exist`, error);
     } else if (identity instanceof UserName) {
-      super(
-        `[UserDuplicateException] user name=${identity.getValue()} is already exist`,
-        error
-      );
+      super(`user name: ${identity.getValue()} is already exist`, error);
     } else {
-      super(
-        `[UserDuplicateException] user mailAddress=${identity.getValue()} is already exist`,
-        error
-      );
+      super(`user mailAddress: ${identity.getValue()} is already exist`, error);
     }
   }
 }

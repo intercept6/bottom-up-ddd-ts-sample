@@ -36,6 +36,9 @@ export class BadRequest extends ExtendedError {}
 // 404 Not Found
 export class NotFound extends ExtendedError {}
 
+// 409 Conflict
+export class Conflict extends ExtendedError {}
+
 // 500 Internal Server Error
 export class InternalServerError extends ExtendedError {
   constructor(message: string, error?: Error) {
