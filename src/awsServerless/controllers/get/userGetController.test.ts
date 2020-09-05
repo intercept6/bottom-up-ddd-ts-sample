@@ -43,10 +43,9 @@ afterAll(async () => {
 
 describe('ユーザー取得', () => {
   test('ユーザーを取得する', async () => {
-    const body = JSON.stringify({
-      user_id: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
+    const response = await userGetController.handle({
+      pathParameters: { userId: '203881e1-99f2-4ce6-ab6b-785fcd793c92' },
     });
-    const response = await userGetController.handle(body);
 
     expect(response).toEqual({
       statusCode: 200,
@@ -59,15 +58,43 @@ describe('ユーザー取得', () => {
   });
 
   test('ユーザーが存在しない', async () => {
-    const body = JSON.stringify({
-      user_id: '66d73617-aa4f-46b3-bf7d-9c193f0a08d1',
+    const response = await userGetController.handle({
+      pathParameters: { userId: '66d73617-aa4f-46b3-bf7d-9c193f0a08d1' },
     });
-    const response = await userGetController.handle(body);
 
     expect(response).toEqual({
       statusCode: 404,
       body: JSON.stringify({
+        name: 'NotFound',
         message: 'user id=66d73617-aa4f-46b3-bf7d-9c193f0a08d1 is not found.',
+      }),
+    });
+  });
+
+  test('ユーザーIDが指定されていない', async () => {
+    const response = await userGetController.handle({
+      pathParameters: {},
+    });
+
+    expect(response).toEqual({
+      statusCode: 400,
+      body: JSON.stringify({
+        name: 'BadRequest',
+        message: 'user id is undefined',
+      }),
+    });
+  });
+
+  test('ユーザーIDがstring型ではない', async () => {
+    const response = await userGetController.handle({
+      pathParameters: { userId: 1 },
+    } as any);
+
+    expect(response).toEqual({
+      statusCode: 400,
+      body: JSON.stringify({
+        name: 'BadRequest',
+        message: 'user id type is not string',
       }),
     });
   });
