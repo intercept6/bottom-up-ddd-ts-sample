@@ -2,8 +2,8 @@ import { UserId } from '#/domain/models/user/userId';
 import { UserName } from '#/domain/models/user/userName';
 import { MailAddress } from '#/domain/models/user/mailAddress';
 
-abstract class ExtendedError extends Error {
-  protected constructor(message: string, error?: Error) {
+export abstract class ExtendedError extends Error {
+  constructor(message: string, error?: Error) {
     super(message);
 
     // this.name = this.constructor.name; でも問題ないが、enumerable を false にしたほうがビルトインエラーに近い。
