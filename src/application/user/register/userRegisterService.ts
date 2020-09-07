@@ -4,7 +4,7 @@ import { User } from '#/domain/models/user/user';
 import { UserName } from '#/domain/models/user/userName';
 import { UserDuplicateException } from '#/util/error';
 import { UserService } from '#/domain/models/services/userService';
-import { UserRepositoryInterface } from '#/repository/user/userRepositoryInterface';
+import { UserRepositoryInterface } from '#/domain/models/user/userRepositoryInterface';
 import { UserRegisterServiceInterface } from '#/application/user/register/userRegisterServiceInterface';
 import { UserData } from '#/application/user/userData';
 

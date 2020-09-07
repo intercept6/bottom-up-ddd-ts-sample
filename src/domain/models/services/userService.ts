@@ -1,4 +1,4 @@
-import type { UserRepositoryInterface } from '#/repository/user/userRepositoryInterface';
+import { UserRepositoryInterface } from '#/domain/models/user/userRepositoryInterface';
 import { UnknownException, UserNotFoundException } from '#/util/error';
 import { UserName } from '#/domain/models/user/userName';
 import { MailAddress } from '#/domain/models/user/mailAddress';

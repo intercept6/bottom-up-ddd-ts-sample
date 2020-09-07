@@ -1,6 +1,6 @@
 import { UserId } from '#/domain/models/user/userId';
 import { User } from '#/domain/models/user/user';
-import { UserRepositoryInterface } from '#/repository/user/userRepositoryInterface';
+import { UserRepositoryInterface } from '#/domain/models/user/userRepositoryInterface';
 import { UserName } from '#/domain/models/user/userName';
 import { MailAddress } from '#/domain/models/user/mailAddress';
 import { UserNotFoundException } from '#/util/error';

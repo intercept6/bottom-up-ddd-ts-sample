@@ -1,4 +1,4 @@
-import type { UserRepositoryInterface } from '#/repository/user/userRepositoryInterface';
+import { UserRepositoryInterface } from '#/domain/models/user/userRepositoryInterface';
 import { User } from '#/domain/models/user/user';
 import { UserName } from '#/domain/models/user/userName';
 import { UserId } from '#/domain/models/user/userId';

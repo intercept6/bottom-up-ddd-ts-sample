@@ -1,6 +1,6 @@
 import { UserName } from '#/domain/models/user/userName';
 import { UserService } from '#/domain/models/services/userService';
-import type { UserRepositoryInterface } from '#/repository/user/userRepositoryInterface';
+import { UserRepositoryInterface } from '#/domain/models/user/userRepositoryInterface';
 import { UserId } from '#/domain/models/user/userId';
 import { UserUpdateCommand } from '#/application/user/update/userUpdateCommand';
 import { MailAddress } from '#/domain/models/user/mailAddress';

@@ -1,6 +1,6 @@
 import { CircleRepositoryInterface } from '#/repository/circle/circleRepositoryInterface';
 import { CircleService } from '#/domain/models/services/circleService';
-import { UserRepositoryInterface } from '#/repository/user/userRepositoryInterface';
+import { UserRepositoryInterface } from '#/domain/models/user/userRepositoryInterface';
 import { CircleRegisterCommand } from '#/application/circle/register/circleRegisterCommand';
 import { UserId } from '#/domain/models/user/userId';
 import { UserNotFoundException } from '#/util/error';

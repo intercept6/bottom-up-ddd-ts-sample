@@ -1,7 +1,7 @@
 import { CircleJoinServiceInterface } from '#/application/circle/join/circleJoinServiceInterface';
 import { CircleJoinCommand } from '#/application/circle/join/circleJoinCommand';
 import { UserId } from '#/domain/models/user/userId';
-import { UserRepositoryInterface } from '#/repository/user/userRepositoryInterface';
+import { UserRepositoryInterface } from '#/domain/models/user/userRepositoryInterface';
 import { CircleId } from '#/domain/circle/circleId';
 import { CircleRepositoryInterface } from '#/repository/circle/circleRepositoryInterface';
 import { CircleFullApplicationError } from '#/application/error/error';

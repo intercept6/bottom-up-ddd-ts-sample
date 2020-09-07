@@ -2,7 +2,7 @@ import { UserDeleteCommand } from '#/application/user/delete/userDeleteCommand';
 import { UserId } from '#/domain/models/user/userId';
 import { UnknownException, UserNotFoundException } from '#/util/error';
 import { systemLog } from '#/util/systemLog';
-import { UserRepositoryInterface } from '#/repository/user/userRepositoryInterface';
+import { UserRepositoryInterface } from '#/domain/models/user/userRepositoryInterface';
 import { UserDeleteServiceInterface } from '#/application/user/delete/userDeleteServiceInterface';
 
 export class UserDeleteService implements UserDeleteServiceInterface {
