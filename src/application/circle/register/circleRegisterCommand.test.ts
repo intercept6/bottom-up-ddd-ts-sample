@@ -43,7 +43,7 @@ describe('サークル新規作成', () => {
 
     const head = circleRepository.store[0];
     expect(head.getCircleName().getValue()).toEqual(circleName);
-    expect(head.getOwner().getId().getValue()).toEqual(
+    expect(head.getOwner().getValue()).toEqual(
       '203881e1-99f2-4ce6-ab6b-785fcd793c92'
     );
   });
@@ -94,11 +94,7 @@ describe('サークル新規作成', () => {
       new Circle(
         new CircleId('66d73617-aa4f-46b3-bf7d-9c193f0a08d1'),
         new CircleName('テストサークル名'),
-        new User(
-          new UserId('203881e1-99f2-4ce6-ab6b-785fcd793c92'),
-          new UserName('テストユーザーの名前'),
-          new MailAddress('test@example.com')
-        ),
+        new UserId('203881e1-99f2-4ce6-ab6b-785fcd793c92'),
         []
       )
     );

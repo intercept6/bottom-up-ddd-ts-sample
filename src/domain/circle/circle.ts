@@ -1,36 +1,36 @@
 import { CircleId } from '#/domain/circle/circleId';
 import { CircleName } from '#/domain/circle/circleName';
-import { User } from '#/domain/models/user/user';
 import { generateUuid } from '#/util/uuid';
 import {
   ArgumentApplicationError,
   CircleFullApplicationError,
 } from '#/application/error/error';
+import { UserId } from '#/domain/models/user/userId';
 
 export class Circle {
   private readonly circleId: CircleId;
   private readonly circleName: CircleName;
-  private readonly owner: User;
-  private readonly members: User[];
+  private readonly owner: UserId;
+  private readonly members: UserId[];
 
   constructor(
     circleId: CircleId,
     circleName: CircleName,
-    owner: User,
-    members: User[]
+    owner: UserId,
+    members: UserId[]
   );
 
-  constructor(circleName: CircleName, owner: User, members: User[]);
+  constructor(circleName: CircleName, owner: UserId, members: UserId[]);
   constructor(
     arg1: CircleId | CircleName,
-    arg2: CircleName | User,
-    arg3: User | User[],
-    arg4?: User[]
+    arg2: CircleName | UserId,
+    arg3: UserId | UserId[],
+    arg4?: UserId[]
   ) {
     if (
       arg1 instanceof CircleId &&
       arg2 instanceof CircleName &&
-      arg3 instanceof User &&
+      arg3 instanceof UserId &&
       arg4 instanceof Array
     ) {
       this.circleId = arg1;
@@ -39,7 +39,7 @@ export class Circle {
       this.members = arg4;
     } else if (
       arg1 instanceof CircleName &&
-      arg2 instanceof User &&
+      arg2 instanceof UserId &&
       arg3 instanceof Array &&
       arg4 == null
     ) {
@@ -74,11 +74,11 @@ export class Circle {
     return this.countMembers() >= 30;
   }
 
-  join(user: User) {
+  join(userId: UserId) {
     if (this.isFull()) {
       throw new CircleFullApplicationError(this.circleId);
     }
-    this.members.push(user);
+    this.members.push(userId);
   }
 
   getMembers() {

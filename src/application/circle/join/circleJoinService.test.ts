@@ -36,16 +36,10 @@ beforeAll(() => {
   );
 });
 
-const createMembers = (number: number): User[] => {
-  const users: User[] = [];
+const createMembers = (number: number): UserId[] => {
+  const users: UserId[] = [];
   for (let i = 0; i < number; i++) {
-    users.push(
-      new User(
-        new UserId(generateUuid()),
-        new UserName(`member${i + 1}`),
-        new MailAddress(`member${i + 1}@example.com`)
-      )
-    );
+    users.push(new UserId(generateUuid()));
   }
   return users;
 };
@@ -56,11 +50,8 @@ describe('サークルメンバー追加', () => {
       new Circle(
         new CircleId('66d73617-aa4f-46b3-bf7d-9c193f0a08d1'),
         new CircleName('テストサークル名'),
-        new User(
-          new UserId('203881e1-99f2-4ce6-ab6b-785fcd793c92'),
-          new UserName('テストユーザーの名前'),
-          new MailAddress('test@example.com')
-        ),
+        new UserId('203881e1-99f2-4ce6-ab6b-785fcd793c92'),
+
         []
       )
     );
@@ -72,14 +63,8 @@ describe('サークルメンバー追加', () => {
     await circleJoinService.handle(command);
 
     const head = circleRepository.store[0];
-    expect(head.getMembers()[0].getId().getValue()).toEqual(
+    expect(head.getMembers()[0].getValue()).toEqual(
       'c53f525a-2109-47b7-b468-7fff07012cce'
-    );
-    expect(head.getMembers()[0].getName().getValue()).toEqual(
-      'サークルに参加するユーザー'
-    );
-    expect(head.getMembers()[0].getMailAddress().getValue()).toEqual(
-      'join-user@example.com'
     );
   });
 
@@ -88,11 +73,7 @@ describe('サークルメンバー追加', () => {
       new Circle(
         new CircleId('238517cb-65ba-4744-bd19-0e2e94875344'),
         new CircleName('テストサークル名'),
-        new User(
-          new UserId('203881e1-99f2-4ce6-ab6b-785fcd793c92'),
-          new UserName('テストユーザーの名前'),
-          new MailAddress('test@example.com')
-        ),
+        new UserId('203881e1-99f2-4ce6-ab6b-785fcd793c92'),
         createMembers(29)
       )
     );

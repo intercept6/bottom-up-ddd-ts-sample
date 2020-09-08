@@ -29,11 +29,7 @@ export class CircleRegisterService implements CircleRegisterServiceInterface {
 
   async handle(command: CircleRegisterCommand) {
     const ownerId = new UserId(command.getUserId());
-    const owner = await this.userRepository
-      .find(ownerId)
-      .catch((error: Error) => error);
-    if (owner instanceof Error) {
-      const error = owner;
+    await this.userRepository.find(ownerId).catch((error: Error) => {
       if (error instanceof UserNotFoundException) {
         throw new UserNotFoundApplicationError(
           'user is not found for become circle owner',
@@ -41,13 +37,13 @@ export class CircleRegisterService implements CircleRegisterServiceInterface {
         );
       }
       throw new UnknownApplicationError('', error);
-    }
+    });
 
     const newCircleName = new CircleName(command.getCircleName());
     if (await this.circleService.unique(newCircleName)) {
       throw new CircleDuplicateApplicationError(newCircleName);
     }
-    const circle = new Circle(newCircleName, owner, []);
+    const circle = new Circle(newCircleName, ownerId, []);
     await this.circleRepository.create(circle);
   }
 }

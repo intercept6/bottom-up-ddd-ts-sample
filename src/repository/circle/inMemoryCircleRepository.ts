@@ -2,10 +2,7 @@ import { Circle } from '#/domain/circle/circle';
 import { CircleRepositoryInterface } from '#/repository/circle/circleRepositoryInterface';
 import { CircleId } from '#/domain/circle/circleId';
 import { CircleName } from '#/domain/circle/circleName';
-import { User } from '#/domain/models/user/user';
 import { UserId } from '#/domain/models/user/userId';
-import { UserName } from '#/domain/models/user/userName';
-import { MailAddress } from '#/domain/models/user/mailAddress';
 import { CircleNotFoundError } from '#/repository/error/error';
 
 export class InMemoryCircleRepository implements CircleRepositoryInterface {
@@ -62,11 +59,7 @@ export class InMemoryCircleRepository implements CircleRepositoryInterface {
     return new Circle(
       new CircleId(circle.getCircleId().getValue()),
       new CircleName(circle.getCircleName().getValue()),
-      new User(
-        new UserId(circle.getOwner().getId().getValue()),
-        new UserName(circle.getOwner().getName().getValue()),
-        new MailAddress(circle.getOwner().getMailAddress().getValue())
-      ),
+      new UserId(circle.getOwner().getValue()),
       [...circle.getMembers()]
     );
   }
