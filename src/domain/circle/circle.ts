@@ -2,7 +2,10 @@ import { CircleId } from '#/domain/circle/circleId';
 import { CircleName } from '#/domain/circle/circleName';
 import { User } from '#/domain/models/user/user';
 import { generateUuid } from '#/util/uuid';
-import { ArgumentApplicationError } from '#/application/error/error';
+import {
+  ArgumentApplicationError,
+  CircleFullApplicationError,
+} from '#/application/error/error';
 
 export class Circle {
   private readonly circleId: CircleId;
@@ -61,6 +64,21 @@ export class Circle {
 
   getOwner() {
     return this.owner;
+  }
+
+  private countMembers() {
+    return this.members.length + 1;
+  }
+
+  private isFull() {
+    return this.countMembers() >= 30;
+  }
+
+  join(user: User) {
+    if (this.isFull()) {
+      throw new CircleFullApplicationError(this.circleId);
+    }
+    this.members.push(user);
   }
 
   getMembers() {

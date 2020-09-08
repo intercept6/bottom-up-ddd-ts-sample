@@ -4,7 +4,6 @@ import { UserId } from '#/domain/models/user/userId';
 import { UserRepositoryInterface } from '#/domain/models/user/userRepositoryInterface';
 import { CircleId } from '#/domain/circle/circleId';
 import { CircleRepositoryInterface } from '#/repository/circle/circleRepositoryInterface';
-import { CircleFullApplicationError } from '#/application/error/error';
 
 export class CircleJoinService implements CircleJoinServiceInterface {
   private readonly userRepository: UserRepositoryInterface;
@@ -35,11 +34,7 @@ export class CircleJoinService implements CircleJoinServiceInterface {
       throw circle;
     }
 
-    if (circle.getMembers().length >= 29) {
-      throw new CircleFullApplicationError(circleId);
-    }
-
-    circle.getMembers().push(member);
+    circle.join(member);
     await this.circleRepository.update(circle);
   }
 }
