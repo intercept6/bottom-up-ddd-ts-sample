@@ -5,13 +5,23 @@ import { UserId } from '#/domain/models/user/userId';
 import { UserName } from '#/domain/models/user/userName';
 import { MailAddress } from '#/domain/models/user/mailAddress';
 import { CircleRegisterService } from '#/application/circle/register/circleRegisterService';
-import { InMemoryCircleRepository } from '#/repository/circle/inMemoryCircleRepository';
+import {
+  InMemoryCircleFactory,
+  InMemoryCircleRepository,
+} from '#/repository/circle/inMemoryCircleRepository';
 import { ArgumentApplicationError } from '#/application/error/error';
 import { Circle } from '#/domain/circle/circle';
 import { CircleId } from '#/domain/circle/circleId';
 import { CircleName } from '#/domain/circle/circleName';
 
 const userRepository = new InMemoryUserRepository();
+const circleFactory = new InMemoryCircleFactory();
+const circleRepository = new InMemoryCircleRepository();
+const circleRegisterService = new CircleRegisterService({
+  circleRepository,
+  userRepository,
+  circleFactory,
+});
 
 beforeAll(() => {
   userRepository.store.push(
@@ -22,6 +32,9 @@ beforeAll(() => {
     )
   );
 });
+afterEach(() => {
+  circleRepository.clear();
+});
 
 describe('サークル新規作成', () => {
   test.each`
@@ -29,12 +42,6 @@ describe('サークル新規作成', () => {
     ${'テスト'}
     ${'テストサークル名テストサークル名テストサ'}
   `('サークルを新規作成する', async ({ circleName }) => {
-    const circleRepository = new InMemoryCircleRepository();
-    const circleRegisterService = new CircleRegisterService({
-      circleRepository,
-      userRepository,
-    });
-
     const command = new CircleRegisterCommand({
       userId: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
       circleName,
@@ -49,12 +56,6 @@ describe('サークル新規作成', () => {
   });
 
   test('サークル名が3文字未満は作成できない', async () => {
-    const circleRepository = new InMemoryCircleRepository();
-    const circleRegisterService = new CircleRegisterService({
-      circleRepository,
-      userRepository,
-    });
-
     const command = new CircleRegisterCommand({
       userId: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
       circleName: 'テス',
@@ -67,12 +68,6 @@ describe('サークル新規作成', () => {
   });
 
   test('サークル名が20文字超過は作成できない', async () => {
-    const circleRepository = new InMemoryCircleRepository();
-    const circleRegisterService = new CircleRegisterService({
-      circleRepository,
-      userRepository,
-    });
-
     const command = new CircleRegisterCommand({
       userId: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
       circleName: 'テストサークル名テストサークル名テストサー',
@@ -85,13 +80,8 @@ describe('サークル新規作成', () => {
   });
 
   test('サークル名は重複できない', async () => {
-    const circleRepository = new InMemoryCircleRepository();
-    const circleRegisterService = new CircleRegisterService({
-      circleRepository,
-      userRepository,
-    });
     circleRepository.store.push(
-      new Circle(
+      Circle.create(
         new CircleId('66d73617-aa4f-46b3-bf7d-9c193f0a08d1'),
         new CircleName('テストサークル名'),
         new UserId('203881e1-99f2-4ce6-ab6b-785fcd793c92'),

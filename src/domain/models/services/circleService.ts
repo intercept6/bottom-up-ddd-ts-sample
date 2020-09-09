@@ -1,4 +1,4 @@
-import { CircleRepositoryInterface } from '#/repository/circle/circleRepositoryInterface';
+import { CircleRepositoryInterface } from '#/domain/circle/circleRepositoryInterface';
 import { Circle } from '#/domain/circle/circle';
 import { CircleNotFoundError, UnknownError } from '#/repository/error/error';
 import { CircleName } from '#/domain/circle/circleName';

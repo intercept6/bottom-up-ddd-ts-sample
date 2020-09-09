@@ -13,4 +13,7 @@ export class CircleNotFoundError extends ExtendedError {
     }
   }
 }
+
+export class ArgumentException extends ExtendedError {}
+
 export class UnknownError extends ExtendedError {}

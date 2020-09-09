@@ -1,4 +1,4 @@
-import { CircleRepositoryInterface } from '#/repository/circle/circleRepositoryInterface';
+import { CircleRepositoryInterface } from '#/domain/circle/circleRepositoryInterface';
 import { CircleService } from '#/domain/models/services/circleService';
 import { UserRepositoryInterface } from '#/domain/models/user/userRepositoryInterface';
 import { CircleRegisterCommand } from '#/application/circle/register/circleRegisterCommand';
@@ -10,21 +10,24 @@ import {
   UserNotFoundApplicationError,
 } from '#/application/error/error';
 import { CircleName } from '#/domain/circle/circleName';
-import { Circle } from '#/domain/circle/circle';
 import { CircleRegisterServiceInterface } from '#/application/circle/register/circleRegisterServiceInterface';
+import { CircleFactoryInterface } from '#/domain/circle/circleFactoryInterface';
 
 export class CircleRegisterService implements CircleRegisterServiceInterface {
   private readonly circleRepository: CircleRepositoryInterface;
   private readonly userRepository: UserRepositoryInterface;
   private readonly circleService: CircleService;
+  private readonly circleFactory: CircleFactoryInterface;
 
   constructor(props: {
     circleRepository: CircleRepositoryInterface;
     userRepository: UserRepositoryInterface;
+    circleFactory: CircleFactoryInterface;
   }) {
     this.circleRepository = props.circleRepository;
     this.circleService = new CircleService(props.circleRepository);
     this.userRepository = props.userRepository;
+    this.circleFactory = props.circleFactory;
   }
 
   async handle(command: CircleRegisterCommand) {
@@ -43,7 +46,7 @@ export class CircleRegisterService implements CircleRegisterServiceInterface {
     if (await this.circleService.unique(newCircleName)) {
       throw new CircleDuplicateApplicationError(newCircleName);
     }
-    const circle = new Circle(newCircleName, ownerId, []);
+    const circle = await this.circleFactory.create(newCircleName, ownerId);
     await this.circleRepository.create(circle);
   }
 }

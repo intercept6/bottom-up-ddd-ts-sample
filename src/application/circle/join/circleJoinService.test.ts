@@ -47,7 +47,7 @@ const createMembers = (number: number): UserId[] => {
 describe('サークルメンバー追加', () => {
   test('サークルメンバーを追加する', async () => {
     circleRepository.store.push(
-      new Circle(
+      Circle.create(
         new CircleId('66d73617-aa4f-46b3-bf7d-9c193f0a08d1'),
         new CircleName('テストサークル名'),
         new UserId('203881e1-99f2-4ce6-ab6b-785fcd793c92'),
@@ -70,7 +70,7 @@ describe('サークルメンバー追加', () => {
 
   test('サークルメンバー人数が超過していて追加できない', async () => {
     circleRepository.store.push(
-      new Circle(
+      Circle.create(
         new CircleId('238517cb-65ba-4744-bd19-0e2e94875344'),
         new CircleName('テストサークル名'),
         new UserId('203881e1-99f2-4ce6-ab6b-785fcd793c92'),

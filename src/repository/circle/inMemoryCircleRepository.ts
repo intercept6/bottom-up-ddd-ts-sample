@@ -1,15 +1,31 @@
 import { Circle } from '#/domain/circle/circle';
-import { CircleRepositoryInterface } from '#/repository/circle/circleRepositoryInterface';
+import { CircleRepositoryInterface } from '#/domain/circle/circleRepositoryInterface';
 import { CircleId } from '#/domain/circle/circleId';
 import { CircleName } from '#/domain/circle/circleName';
 import { UserId } from '#/domain/models/user/userId';
-import { CircleNotFoundError } from '#/repository/error/error';
+import {
+  ArgumentException,
+  CircleNotFoundError,
+} from '#/repository/error/error';
+import { CircleFactoryInterface } from '#/domain/circle/circleFactoryInterface';
+import { generateUuid } from '#/util/uuid';
+
+const store: Circle[] = [];
+
+const clone = (circle: Circle) => {
+  return Circle.create(
+    new CircleId(circle.getCircleId().getValue()),
+    new CircleName(circle.getCircleName().getValue()),
+    new UserId(circle.getOwner().getValue()),
+    [...circle.getMembers()]
+  );
+};
 
 export class InMemoryCircleRepository implements CircleRepositoryInterface {
-  public readonly store: Circle[];
+  public store: Circle[];
 
   constructor() {
-    this.store = [];
+    this.store = store;
   }
 
   save(circle: Circle) {
@@ -19,9 +35,9 @@ export class InMemoryCircleRepository implements CircleRepositoryInterface {
 
     const exist = index !== -1;
     if (exist) {
-      this.store.splice(index, 1, this.clone(circle));
+      this.store.splice(index, 1, clone(circle));
     } else {
-      this.store.push(this.clone(circle));
+      this.store.push(clone(circle));
     }
   }
 
@@ -40,7 +56,7 @@ export class InMemoryCircleRepository implements CircleRepositoryInterface {
       );
 
       if (target != null) {
-        return this.clone(target);
+        return clone(target);
       }
       throw new CircleNotFoundError(identity);
     } else {
@@ -49,18 +65,56 @@ export class InMemoryCircleRepository implements CircleRepositoryInterface {
       );
 
       if (target != null) {
-        return this.clone(target);
+        return clone(target);
       }
       throw new CircleNotFoundError(identity);
     }
   }
 
-  clone(circle: Circle) {
-    return new Circle(
-      new CircleId(circle.getCircleId().getValue()),
-      new CircleName(circle.getCircleName().getValue()),
-      new UserId(circle.getOwner().getValue()),
-      [...circle.getMembers()]
+  clear() {
+    this.store = [];
+  }
+}
+
+export class InMemoryCircleFactory implements CircleFactoryInterface {
+  public store: Circle[];
+
+  constructor() {
+    this.store = store;
+  }
+
+  async create(circleId: CircleId): Promise<Circle>;
+  async create(circleName: CircleName, owner: UserId): Promise<Circle>;
+  async create(arg1: CircleId | CircleName, arg2?: UserId): Promise<Circle> {
+    if (arg1 instanceof CircleId && arg2 == null) {
+      const target = this.store.find((value) =>
+        value.getCircleId().equals(arg1)
+      );
+
+      if (target != null) {
+        return clone(target);
+      }
+      throw new CircleNotFoundError(arg1);
+    } else if (arg1 instanceof CircleName && arg2 instanceof UserId) {
+      // 実実装ではownerが実在するかチェックする
+      return Circle.create(new CircleId(generateUuid()), arg1, arg2, []);
+    }
+    throw new ArgumentException(
+      JSON.stringify({
+        message: 'メソッドが意図せぬ引数で呼び出されました。',
+        arg1: {
+          type: typeof arg1,
+          value: arg1,
+        },
+        arg2: {
+          type: typeof arg2,
+          value: arg2,
+        },
+      })
     );
+  }
+
+  clear() {
+    this.store = [];
   }
 }
