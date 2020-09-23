@@ -43,7 +43,7 @@ export class CircleRegisterService implements CircleRegisterServiceInterface {
     });
 
     const newCircleName = new CircleName(command.getCircleName());
-    if (await this.circleService.unique(newCircleName)) {
+    if (!(await this.circleService.unique(newCircleName))) {
       throw new CircleDuplicateApplicationError(newCircleName);
     }
     const circle = await this.circleFactory.create(newCircleName, ownerId);
