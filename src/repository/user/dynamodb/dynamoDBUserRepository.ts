@@ -30,7 +30,7 @@ export class DynamoDBUserRepository implements UserRepositoryInterface {
    * @param  {UserId | UserName | MailAddress} identity ユーザー識別子
    * @throws {UserNotFoundException} ユーザーが存在しない
    */
-  async find(identity: UserId | UserName | MailAddress): Promise<User> {
+  async get(identity: UserId | UserName | MailAddress): Promise<User> {
     if (identity instanceof UserId) {
       const response = await this.documentClient
         .get({

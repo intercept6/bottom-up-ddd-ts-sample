@@ -10,7 +10,7 @@ export class UserService {
   async unique(mailAddress: MailAddress): Promise<boolean>;
   async unique(arg1: UserName | MailAddress): Promise<boolean> {
     const response = await this.userRepository
-      .find(arg1)
+      .get(arg1)
       .catch((error: Error) => error);
 
     if (response instanceof Error) {

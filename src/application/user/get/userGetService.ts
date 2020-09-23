@@ -11,14 +11,14 @@ export class UserGetService implements UserGetServiceInterface {
   async handle(command: UserGetCommand): Promise<UserData> {
     if (command.getId() != null) {
       const targetId = new UserId(command.getId() as string);
-      const user = await this.userRepository.find(targetId);
+      const user = await this.userRepository.get(targetId);
 
       return new UserData(user);
     } else {
       const targetMailAddress = new MailAddress(
         command.getMailAddress() as string
       );
-      const user = await this.userRepository.find(targetMailAddress);
+      const user = await this.userRepository.get(targetMailAddress);
 
       return new UserData(user);
     }

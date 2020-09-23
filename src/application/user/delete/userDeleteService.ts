@@ -11,7 +11,7 @@ export class UserDeleteService implements UserDeleteServiceInterface {
   async handle(command: UserDeleteCommand) {
     const targetId = new UserId(command.getUserId());
     const response = await this.userRepository
-      .find(targetId)
+      .get(targetId)
       .catch((error: Error) => {
         return error;
       });

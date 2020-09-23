@@ -8,7 +8,7 @@ export class CircleService {
 
   async unique(circleName: CircleName): Promise<boolean> {
     const response = await this.circleRepository
-      .find(circleName)
+      .get(circleName)
       .catch((error: Error) => error);
 
     if (response instanceof Error) {

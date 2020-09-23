@@ -24,7 +24,7 @@ export class CircleUpdateService implements CircleUpdateServiceInterface {
 
   async handle(command: CircleUpdateCommand): Promise<void> {
     const circleId = new CircleId(command.getCircleId());
-    const circle = await this.circleRepository.find(circleId);
+    const circle = await this.circleRepository.get(circleId);
 
     const circleName = command.getCircleName();
     if (circleName != null) {
@@ -38,7 +38,7 @@ export class CircleUpdateService implements CircleUpdateServiceInterface {
     const ownerId = command.getOwnerId();
     if (ownerId != null) {
       const newOwnerId = new UserId(ownerId);
-      await this.userRepository.find(newOwnerId);
+      await this.userRepository.get(newOwnerId);
       circle.changeOwnerId(newOwnerId);
     }
 

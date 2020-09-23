@@ -14,7 +14,7 @@ export class InMemoryUserRepository implements UserRepositoryInterface {
     this.store = [];
   }
 
-  async find(identity: UserId | UserName | MailAddress): Promise<User> {
+  async get(identity: UserId | UserName | MailAddress): Promise<User> {
     if (identity instanceof UserId) {
       const target = this.store.find((value) => value.getId().equals(identity));
 

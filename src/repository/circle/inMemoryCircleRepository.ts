@@ -49,7 +49,7 @@ export class InMemoryCircleRepository implements CircleRepositoryInterface {
     return this.save(circle);
   }
 
-  async find(identity: CircleId | CircleName): Promise<Circle> {
+  async get(identity: CircleId | CircleName): Promise<Circle> {
     if (identity instanceof CircleId) {
       const target = this.store.find((value) =>
         value.getCircleId().equals(identity)

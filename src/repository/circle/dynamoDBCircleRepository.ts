@@ -149,7 +149,7 @@ export class DynamoDBCircleRepository implements CircleRepositoryInterface {
     }
   }
 
-  async find(identifier: CircleId | CircleName): Promise<Circle> {
+  async get(identifier: CircleId | CircleName): Promise<Circle> {
     if (identifier instanceof CircleId) {
       const response = await this.documentClient
         .get({ TableName: this.tableName, Key: { pk: identifier.getValue() } })

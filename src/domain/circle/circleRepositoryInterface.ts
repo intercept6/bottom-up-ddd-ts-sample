@@ -4,6 +4,6 @@ import { CircleName } from '#/domain/circle/circleName';
 
 export type CircleRepositoryInterface = {
   create: (circle: Circle) => Promise<void>;
+  get: (identifier: CircleId | CircleName) => Promise<Circle>;
   update: (circle: Circle) => Promise<void>;
-  find: (identifier: CircleId | CircleName) => Promise<Circle>;
 };

@@ -32,7 +32,7 @@ export class CircleRegisterService implements CircleRegisterServiceInterface {
 
   async handle(command: CircleRegisterCommand) {
     const ownerId = new UserId(command.getUserId());
-    await this.userRepository.find(ownerId).catch((error: Error) => {
+    await this.userRepository.get(ownerId).catch((error: Error) => {
       if (error instanceof UserNotFoundException) {
         throw new UserNotFoundApplicationError(
           'user is not found for become circle owner',

@@ -19,13 +19,13 @@ export class CircleJoinService implements CircleJoinServiceInterface {
 
   async handle(command: CircleJoinCommand): Promise<void> {
     const memberId = new UserId(command.getUserId());
-    await this.userRepository.find(memberId).catch((error: Error) => {
+    await this.userRepository.get(memberId).catch((error: Error) => {
       throw error;
     });
 
     const circleId = new CircleId(command.getCircleId());
     const circle = await this.circleRepository
-      .find(circleId)
+      .get(circleId)
       .catch((error: Error) => {
         throw error;
       });

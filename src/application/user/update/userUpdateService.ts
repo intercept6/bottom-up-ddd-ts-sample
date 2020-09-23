@@ -16,7 +16,7 @@ export class UserUpdateService implements UserUpdateServiceInterface {
 
   async handle(command: UserUpdateCommand) {
     const targetId = new UserId(command.getId());
-    const user = await this.userRepository.find(targetId);
+    const user = await this.userRepository.get(targetId);
 
     const name = command.getName();
     if (name != null) {
