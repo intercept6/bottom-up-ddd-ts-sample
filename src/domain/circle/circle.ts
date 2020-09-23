@@ -5,19 +5,19 @@ import { UserId } from '#/domain/models/user/userId';
 
 export class Circle {
   private readonly circleId: CircleId;
-  private readonly circleName: CircleName;
-  private readonly owner: UserId;
+  private circleName: CircleName;
+  private ownerId: UserId;
   private readonly members: UserId[];
 
   private constructor(
     circleId: CircleId,
     circleName: CircleName,
-    owner: UserId,
+    ownerId: UserId,
     members: UserId[]
   ) {
     this.circleId = circleId;
     this.circleName = circleName;
-    this.owner = owner;
+    this.ownerId = ownerId;
     this.members = members;
   }
 
@@ -47,7 +47,7 @@ export class Circle {
   }
 
   getOwner() {
-    return this.owner;
+    return this.ownerId;
   }
 
   private countMembers() {
@@ -67,5 +67,13 @@ export class Circle {
 
   getMembers() {
     return this.members;
+  }
+
+  changeCircleName(newCircleName: CircleName) {
+    this.circleName = newCircleName;
+  }
+
+  changeOwnerId(newOwnerId: UserId) {
+    this.ownerId = newOwnerId;
   }
 }
