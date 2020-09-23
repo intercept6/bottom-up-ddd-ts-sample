@@ -1,6 +1,7 @@
 import { UserId } from '#/domain/models/user/userId';
 import { UserName } from '#/domain/models/user/userName';
 import { MailAddress } from '#/domain/models/user/mailAddress';
+import { isUserArray } from '#/util/typeGuard';
 
 export abstract class ExtendedError extends Error {
   constructor(message: string, error?: Error) {
@@ -36,13 +37,26 @@ export class UserNotFoundException extends ExtendedError {
   constructor(userId: UserId, error?: Error);
   constructor(userName: UserName, error?: Error);
   constructor(mailAddress: MailAddress, error?: Error);
-  constructor(identifier: UserId | UserName | MailAddress, error?: Error) {
+  constructor(userIds: UserId[], error?: Error);
+  constructor(
+    identifier: UserId | UserName | MailAddress | UserId[],
+    error?: Error
+  ) {
     if (identifier instanceof UserId) {
       super(`user id: ${identifier.getValue()} is not found`, error);
     } else if (identifier instanceof UserName) {
       super(`user name: ${identifier.getValue()} is not found`, error);
-    } else {
+    } else if (identifier instanceof MailAddress) {
       super(`user mailAddress: ${identifier.getValue()} is not found`, error);
+    } else if (isUserArray(identifier)) {
+      super(
+        `user ids: ${identifier.map((value) => value.getValue())} is not found`,
+        error
+      );
+    } else {
+      throw new ArgumentException(
+        `The method was called with unintended arguments`
+      );
     }
   }
 }

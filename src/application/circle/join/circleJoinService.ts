@@ -18,11 +18,6 @@ export class CircleJoinService implements CircleJoinServiceInterface {
   }
 
   async handle(command: CircleJoinCommand): Promise<void> {
-    const memberId = new UserId(command.getUserId());
-    await this.userRepository.get(memberId).catch((error: Error) => {
-      throw error;
-    });
-
     const circleId = new CircleId(command.getCircleId());
     const circle = await this.circleRepository
       .get(circleId)
@@ -30,7 +25,10 @@ export class CircleJoinService implements CircleJoinServiceInterface {
         throw error;
       });
 
-    circle.join(memberId);
+    const memberIds = command.getMemberIds().map((value) => new UserId(value));
+    await this.userRepository.batchGet(memberIds);
+    circle.join(memberIds);
+
     await this.circleRepository.update(circle);
   }
 }

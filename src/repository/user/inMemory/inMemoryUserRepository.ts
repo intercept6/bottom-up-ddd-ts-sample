@@ -8,7 +8,7 @@ import { UserNotFoundException } from '#/util/error';
 export class InMemoryUserRepository implements UserRepositoryInterface {
   // テストケースによってはデータを確認したいことがある
   // 確認のための操作を外部から行えるようにするためpublicにしている
-  public readonly store: User[];
+  public store: User[];
 
   constructor() {
     this.store = [];
@@ -74,11 +74,33 @@ export class InMemoryUserRepository implements UserRepositoryInterface {
     this.store.splice(index, 1);
   }
 
+  async batchGet(userIds: UserId[]): Promise<User[]> {
+    const found = userIds.filter((userId) =>
+      this.store.some((existUser) => existUser.getId().equals(userId))
+    );
+
+    if (found.length !== userIds.length) {
+      const notFound = userIds.filter(
+        (userId) =>
+          !this.store.some((existUser) => existUser.getId().equals(userId))
+      );
+      throw new UserNotFoundException(notFound);
+    }
+
+    return this.store.filter((user) =>
+      userIds.some((userId) => userId.equals(user.getId()))
+    );
+  }
+
   clone(user: User) {
     return new User(
       new UserId(user.getId().getValue()),
       new UserName(user.getName().getValue()),
       new MailAddress(user.getMailAddress().getValue())
     );
+  }
+
+  clear() {
+    this.store = [];
   }
 }

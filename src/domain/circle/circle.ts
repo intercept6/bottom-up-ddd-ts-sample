@@ -7,7 +7,7 @@ export class Circle {
   private readonly circleId: CircleId;
   private circleName: CircleName;
   private ownerId: UserId;
-  private readonly members: UserId[];
+  private members: UserId[];
 
   private constructor(
     circleId: CircleId,
@@ -54,15 +54,18 @@ export class Circle {
     return this.members.length + 1;
   }
 
-  private isFull() {
+  private isFull(addMembers?: number) {
+    if (addMembers) {
+      return this.countMembers() + addMembers >= 30;
+    }
     return this.countMembers() >= 30;
   }
 
-  join(userId: UserId) {
-    if (this.isFull()) {
+  join(userIds: UserId[]) {
+    if (this.isFull(userIds.length)) {
       throw new CircleFullApplicationError(this.circleId);
     }
-    this.members.push(userId);
+    this.members = this.members.concat(userIds);
   }
 
   getMembers() {

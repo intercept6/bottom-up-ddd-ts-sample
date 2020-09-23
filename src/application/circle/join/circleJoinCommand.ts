@@ -1,14 +1,14 @@
 export class CircleJoinCommand {
-  private readonly userId: string;
+  private readonly memberIds: string[];
   private readonly circleId: string;
 
-  constructor(props: { userId: string; circleId: string }) {
-    this.userId = props.userId;
+  constructor(props: { memberIds: string[]; circleId: string }) {
+    this.memberIds = props.memberIds;
     this.circleId = props.circleId;
   }
 
-  getUserId() {
-    return this.userId;
+  getMemberIds() {
+    return this.memberIds;
   }
 
   getCircleId() {

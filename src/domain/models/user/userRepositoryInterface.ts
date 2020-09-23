@@ -8,4 +8,5 @@ export type UserRepositoryInterface = {
   get: (identity: UserId | UserName | MailAddress) => Promise<User>;
   update: (user: User) => Promise<void>;
   delete: (user: User) => Promise<void>;
+  batchGet: (userIds: UserId[]) => Promise<User[]>;
 };
