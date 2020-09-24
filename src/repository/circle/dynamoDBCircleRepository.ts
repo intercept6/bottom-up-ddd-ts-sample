@@ -33,8 +33,10 @@ export class DynamoDBCircleRepository implements CircleRepositoryInterface {
               Item: {
                 pk: circle.getCircleId().getValue(),
                 gsi1pk: circle.getCircleName().getValue(),
-                ownerId: circle.getOwner().getValue(),
-                memberIds: circle.getMembers().map((value) => value.getValue()),
+                ownerId: circle.getOwnerId().getValue(),
+                memberIds: circle
+                  .getMemberIds()
+                  .map((value) => value.getValue()),
               },
               ExpressionAttributeNames: {
                 '#pk': 'pk',
@@ -90,9 +92,9 @@ export class DynamoDBCircleRepository implements CircleRepositoryInterface {
                 },
                 ExpressionAttributeValues: {
                   ':gsi1pk': circle.getCircleName().getValue(),
-                  ':ownerId': circle.getOwner().getValue(),
+                  ':ownerId': circle.getOwnerId().getValue(),
                   ':memberIds': circle
-                    .getMembers()
+                    .getMemberIds()
                     .map((value) => value.getValue()),
                 },
                 UpdateExpression:
@@ -133,9 +135,9 @@ export class DynamoDBCircleRepository implements CircleRepositoryInterface {
                   '#memberIds': 'memberIds',
                 },
                 ExpressionAttributeValues: {
-                  ':ownerId': circle.getOwner().getValue(),
+                  ':ownerId': circle.getOwnerId().getValue(),
                   ':memberIds': circle
-                    .getMembers()
+                    .getMemberIds()
                     .map((value) => value.getValue()),
                 },
                 UpdateExpression:

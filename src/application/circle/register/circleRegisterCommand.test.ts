@@ -50,7 +50,7 @@ describe('サークル新規作成', () => {
 
     const head = circleRepository.store[0];
     expect(head.getCircleName().getValue()).toEqual(circleName);
-    expect(head.getOwner().getValue()).toEqual(
+    expect(head.getOwnerId().getValue()).toEqual(
       '203881e1-99f2-4ce6-ab6b-785fcd793c92'
     );
   });

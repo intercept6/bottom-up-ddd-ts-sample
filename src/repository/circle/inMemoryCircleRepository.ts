@@ -16,8 +16,8 @@ const clone = (circle: Circle) => {
   return Circle.create(
     new CircleId(circle.getCircleId().getValue()),
     new CircleName(circle.getCircleName().getValue()),
-    new UserId(circle.getOwner().getValue()),
-    [...circle.getMembers()]
+    new UserId(circle.getOwnerId().getValue()),
+    [...circle.getMemberIds()]
   );
 };
 

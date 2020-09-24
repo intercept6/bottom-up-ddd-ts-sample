@@ -46,7 +46,7 @@ export class CircleUpdateService implements CircleUpdateServiceInterface {
     if (memberIds != null) {
       const newMemberIds = memberIds.map((value) => new UserId(value));
       await this.userRepository.batchGet(newMemberIds);
-      circle.join(newMemberIds);
+      circle.joinMembers(newMemberIds);
     }
 
     await this.circleRepository.update(circle);

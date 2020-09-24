@@ -93,7 +93,7 @@ describe('サークル更新', () => {
     await circleUpdateService.handle(command);
 
     const head = circleRepository.store[0];
-    expect(head.getOwner().getValue()).toEqual(
+    expect(head.getOwnerId().getValue()).toEqual(
       'a046ac45-2788-491c-aa72-80e7e114a369'
     );
   });
@@ -229,7 +229,7 @@ describe('サークル更新', () => {
       await circleUpdateService.handle(command);
 
       const head = circleRepository.store[0];
-      expect(head.getMembers().map((value) => value.getValue())).toEqual(
+      expect(head.getMemberIds().map((value) => value.getValue())).toEqual(
         expect.arrayContaining(memberIds)
       );
     }
