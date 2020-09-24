@@ -1,4 +1,4 @@
-import { InMemoryUserRepository } from '#/repository/user/inMemory/inMemoryUserRepository';
+import { InMemoryUserRepository } from '#/repository/user/inMemoryUserRepository';
 import { User } from '#/domain/models/user/user';
 import { UserName } from '#/domain/models/user/userName';
 import { MailAddress } from '#/domain/models/user/mailAddress';

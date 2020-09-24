@@ -1,5 +1,5 @@
 import { UserUpdateService } from '#/application/user/update/userUpdateService';
-import { InMemoryUserRepository } from '#/repository/user/inMemory/inMemoryUserRepository';
+import { InMemoryUserRepository } from '#/repository/user/inMemoryUserRepository';
 import { User } from '#/domain/models/user/user';
 import { UserId } from '#/domain/models/user/userId';
 import { UserName } from '#/domain/models/user/userName';

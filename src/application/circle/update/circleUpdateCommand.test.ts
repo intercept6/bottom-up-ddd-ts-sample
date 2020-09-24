@@ -1,4 +1,4 @@
-import { InMemoryUserRepository } from '#/repository/user/inMemory/inMemoryUserRepository';
+import { InMemoryUserRepository } from '#/repository/user/inMemoryUserRepository';
 import { InMemoryCircleRepository } from '#/repository/circle/inMemoryCircleRepository';
 import { User } from '#/domain/models/user/user';
 import { UserId } from '#/domain/models/user/userId';

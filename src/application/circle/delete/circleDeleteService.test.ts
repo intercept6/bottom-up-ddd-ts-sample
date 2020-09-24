@@ -6,7 +6,7 @@ import { UserId } from '#/domain/models/user/userId';
 import { UserName } from '#/domain/models/user/userName';
 import { MailAddress } from '#/domain/models/user/mailAddress';
 import { CircleName } from '#/domain/circle/circleName';
-import { InMemoryUserRepository } from '#/repository/user/inMemory/inMemoryUserRepository';
+import { InMemoryUserRepository } from '#/repository/user/inMemoryUserRepository';
 import { CircleDeleteCommand } from '#/application/circle/delete/circleDeleteCommand';
 import { CircleDeleteService } from '#/application/circle/delete/circleDeleteService';
 

@@ -3,7 +3,7 @@ import { CircleGetService } from '#/application/circle/get/circleGetService';
 import { CircleGetCommand } from '#/application/circle/get/circleGetCommand';
 import { Circle } from '#/domain/circle/circle';
 import { CircleId } from '#/domain/circle/circleId';
-import { InMemoryUserRepository } from '#/repository/user/inMemory/inMemoryUserRepository';
+import { InMemoryUserRepository } from '#/repository/user/inMemoryUserRepository';
 import { User } from '#/domain/models/user/user';
 import { UserId } from '#/domain/models/user/userId';
 import { UserName } from '#/domain/models/user/userName';

@@ -3,16 +3,11 @@ import { CircleRepositoryInterface } from '#/domain/circle/circleRepositoryInter
 import { CircleId } from '#/domain/circle/circleId';
 import { CircleName } from '#/domain/circle/circleName';
 import { UserId } from '#/domain/models/user/userId';
-import {
-  ArgumentException,
-  CircleNotFoundException,
-} from '#/repository/error/error';
-import { CircleFactoryInterface } from '#/domain/circle/circleFactoryInterface';
-import { generateUuid } from '#/util/uuid';
+import { CircleNotFoundException } from '#/repository/error/error';
 
-const store: Circle[] = [];
+export const store: Circle[] = [];
 
-const clone = (circle: Circle) => {
+export const clone = (circle: Circle) => {
   return Circle.create(
     new CircleId(circle.getCircleId().getValue()),
     new CircleName(circle.getCircleName().getValue()),
@@ -74,49 +69,6 @@ export class InMemoryCircleRepository implements CircleRepositoryInterface {
   async delete(circle: Circle): Promise<void> {
     const index = this.store.findIndex((value) => value.equals(circle));
     this.store.splice(index, 1);
-  }
-
-  clear() {
-    this.store = [];
-  }
-}
-
-export class InMemoryCircleFactory implements CircleFactoryInterface {
-  public store: Circle[];
-
-  constructor() {
-    this.store = store;
-  }
-
-  async create(circleId: CircleId): Promise<Circle>;
-  async create(circleName: CircleName, owner: UserId): Promise<Circle>;
-  async create(arg1: CircleId | CircleName, arg2?: UserId): Promise<Circle> {
-    if (arg1 instanceof CircleId && arg2 == null) {
-      const target = this.store.find((value) =>
-        value.getCircleId().equals(arg1)
-      );
-
-      if (target != null) {
-        return clone(target);
-      }
-      throw new CircleNotFoundException(arg1);
-    } else if (arg1 instanceof CircleName && arg2 instanceof UserId) {
-      // 実実装ではownerが実在するかチェックする
-      return Circle.create(new CircleId(generateUuid()), arg1, arg2, []);
-    }
-    throw new ArgumentException(
-      JSON.stringify({
-        message: 'メソッドが意図せぬ引数で呼び出されました。',
-        arg1: {
-          type: typeof arg1,
-          value: arg1,
-        },
-        arg2: {
-          type: typeof arg2,
-          value: arg2,
-        },
-      })
-    );
   }
 
   clear() {

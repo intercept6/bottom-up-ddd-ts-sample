@@ -1,18 +1,16 @@
-import { InMemoryUserRepository } from '#/repository/user/inMemory/inMemoryUserRepository';
+import { InMemoryUserRepository } from '#/repository/user/inMemoryUserRepository';
 import { CircleRegisterCommand } from '#/application/circle/register/circleRegisterCommand';
 import { User } from '#/domain/models/user/user';
 import { UserId } from '#/domain/models/user/userId';
 import { UserName } from '#/domain/models/user/userName';
 import { MailAddress } from '#/domain/models/user/mailAddress';
 import { CircleRegisterService } from '#/application/circle/register/circleRegisterService';
-import {
-  InMemoryCircleFactory,
-  InMemoryCircleRepository,
-} from '#/repository/circle/inMemoryCircleRepository';
+import { InMemoryCircleRepository } from '#/repository/circle/inMemoryCircleRepository';
 import { ArgumentApplicationError } from '#/application/error/error';
 import { Circle } from '#/domain/circle/circle';
 import { CircleId } from '#/domain/circle/circleId';
 import { CircleName } from '#/domain/circle/circleName';
+import { InMemoryCircleFactory } from '#/repository/circle/inMemoryCircleFactory';
 
 const userRepository = new InMemoryUserRepository();
 const circleFactory = new InMemoryCircleFactory();

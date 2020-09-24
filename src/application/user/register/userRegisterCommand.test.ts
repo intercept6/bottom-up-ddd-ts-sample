@@ -1,4 +1,4 @@
-import { InMemoryUserRepository } from '#/repository/user/inMemory/inMemoryUserRepository';
+import { InMemoryUserRepository } from '#/repository/user/inMemoryUserRepository';
 import { UserRegisterCommand } from '#/application/user/register/userRegisterCommand';
 import { ArgumentException, UserDuplicateException } from '#/util/error';
 import { User } from '#/domain/models/user/user';
