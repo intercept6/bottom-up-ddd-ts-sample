@@ -5,7 +5,7 @@ import { CircleName } from '#/domain/circle/circleName';
 import { UserId } from '#/domain/models/user/userId';
 import {
   ArgumentException,
-  CircleNotFoundError,
+  CircleNotFoundException,
 } from '#/repository/error/error';
 import { CircleFactoryInterface } from '#/domain/circle/circleFactoryInterface';
 import { generateUuid } from '#/util/uuid';
@@ -58,7 +58,7 @@ export class InMemoryCircleRepository implements CircleRepositoryInterface {
       if (target != null) {
         return clone(target);
       }
-      throw new CircleNotFoundError(identity);
+      throw new CircleNotFoundException(identity);
     } else {
       const target = this.store.find((value) =>
         value.getCircleName().equals(identity)
@@ -67,8 +67,13 @@ export class InMemoryCircleRepository implements CircleRepositoryInterface {
       if (target != null) {
         return clone(target);
       }
-      throw new CircleNotFoundError(identity);
+      throw new CircleNotFoundException(identity);
     }
+  }
+
+  async delete(circle: Circle): Promise<void> {
+    const index = this.store.findIndex((value) => value.equals(circle));
+    this.store.splice(index, 1);
   }
 
   clear() {
@@ -94,7 +99,7 @@ export class InMemoryCircleFactory implements CircleFactoryInterface {
       if (target != null) {
         return clone(target);
       }
-      throw new CircleNotFoundError(arg1);
+      throw new CircleNotFoundException(arg1);
     } else if (arg1 instanceof CircleName && arg2 instanceof UserId) {
       // 実実装ではownerが実在するかチェックする
       return Circle.create(new CircleId(generateUuid()), arg1, arg2, []);

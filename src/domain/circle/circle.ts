@@ -79,4 +79,12 @@ export class Circle {
   changeOwnerId(newOwnerId: UserId) {
     this.ownerId = newOwnerId;
   }
+
+  equals(other: Circle) {
+    return (
+      this.getCircleId().equals(other.getCircleId()) &&
+      this.getCircleName().equals(other.getCircleName()) &&
+      this.getOwnerId().equals(other.getOwnerId())
+    );
+  }
 }

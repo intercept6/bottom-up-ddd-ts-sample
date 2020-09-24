@@ -1,5 +1,5 @@
 import { CircleRepositoryInterface } from '#/domain/circle/circleRepositoryInterface';
-import { CircleNotFoundError } from '#/repository/error/error';
+import { CircleNotFoundException } from '#/repository/error/error';
 import { CircleName } from '#/domain/circle/circleName';
 import { UnknownApplicationError } from '#/application/error/error';
 
@@ -13,7 +13,7 @@ export class CircleService {
 
     if (response instanceof Error) {
       const error = response;
-      if (error instanceof CircleNotFoundError) {
+      if (error instanceof CircleNotFoundException) {
         return true;
       }
       throw new UnknownApplicationError(

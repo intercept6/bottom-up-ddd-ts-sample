@@ -4,7 +4,10 @@ import { DocumentClient } from 'aws-sdk/lib/dynamodb/document_client';
 import { systemLog } from '#/util/systemLog';
 import { CircleId } from '#/domain/circle/circleId';
 import { CircleName } from '#/domain/circle/circleName';
-import { CircleNotFoundError, TypeException } from '#/repository/error/error';
+import {
+  CircleNotFoundException,
+  TypeException,
+} from '#/repository/error/error';
 import { isStringArray } from '#/util/typeGuard';
 import { UserId } from '#/domain/models/user/userId';
 
@@ -159,9 +162,9 @@ export class DynamoDBCircleRepository implements CircleRepositoryInterface {
         .catch((error: Error) => error);
 
       if (response instanceof Error) {
-        throw new CircleNotFoundError(identifier, response);
+        throw new CircleNotFoundException(identifier, response);
       } else if (response.Item == null) {
-        throw new CircleNotFoundError(identifier);
+        throw new CircleNotFoundException(identifier);
       }
 
       const circleId = response.Item.pk;
@@ -226,7 +229,7 @@ export class DynamoDBCircleRepository implements CircleRepositoryInterface {
         .promise();
 
       if (found.Items?.length !== 1) {
-        throw new CircleNotFoundError(identifier);
+        throw new CircleNotFoundException(identifier);
       }
 
       const circleId = found.Items[0].pk;

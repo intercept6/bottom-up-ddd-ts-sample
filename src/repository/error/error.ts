@@ -14,7 +14,7 @@ type PrimitiveTypes =
   | 'function'
   | 'unknown';
 
-export class CircleNotFoundError extends ExtendedError {
+export class CircleNotFoundException extends ExtendedError {
   constructor(circleId: CircleId, error?: Error);
   constructor(circleName: CircleName, error?: Error);
   constructor(identifier: CircleId | CircleName, error?: Error) {
