@@ -413,4 +413,38 @@ export class DynamoDBUserRepository implements UserRepositoryInterface {
       `ユーザー ${user.getId().getValue()} をDynamoDBから削除しました`
     );
   }
+
+  /**
+   * 複数のユーザーIDからユーザーを取得する
+   * @param userIds
+   * @throws {UserNotFoundException} 1つでも指定されたユーザーが存在しない
+   */
+  async batchGet(userIds: UserId[]): Promise<User[]> {
+    const { Responses: responses } = await this.documentClient
+      .batchGet({
+        RequestItems: {
+          [this.tableName]: {
+            Keys: userIds.map((value) => ({ pk: value.getValue() })),
+          },
+        },
+      })
+      .promise();
+
+    if (
+      !responses ||
+      !responses[this.tableName] ||
+      responses[this.tableName].length !== userIds.length
+    ) {
+      throw new UserNotFoundException(userIds);
+    }
+
+    return responses[this.tableName].map(
+      (value) =>
+        new User(
+          new UserId(value.pk),
+          new UserName(value.gsi1pk),
+          new MailAddress(value.gsi2pk)
+        )
+    );
+  }
 }
