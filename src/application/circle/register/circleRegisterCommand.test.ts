@@ -41,7 +41,7 @@ describe('サークル新規作成', () => {
     ${'テストサークル名テストサークル名テストサ'}
   `('サークルを新規作成する', async ({ circleName }) => {
     const command = new CircleRegisterCommand({
-      userId: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
+      ownerId: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
       circleName,
     });
     await circleRegisterService.handle(command);
@@ -55,7 +55,7 @@ describe('サークル新規作成', () => {
 
   test('サークル名が3文字未満は作成できない', async () => {
     const command = new CircleRegisterCommand({
-      userId: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
+      ownerId: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
       circleName: 'テス',
     });
     const registerCirclePromise = circleRegisterService.handle(command);
@@ -67,7 +67,7 @@ describe('サークル新規作成', () => {
 
   test('サークル名が20文字超過は作成できない', async () => {
     const command = new CircleRegisterCommand({
-      userId: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
+      ownerId: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
       circleName: 'テストサークル名テストサークル名テストサー',
     });
     const registerCirclePromise = circleRegisterService.handle(command);
@@ -88,7 +88,7 @@ describe('サークル新規作成', () => {
     );
 
     const command = new CircleRegisterCommand({
-      userId: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
+      ownerId: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
       circleName: 'テストサークル名',
     });
     const registerCirclePromise = circleRegisterService.handle(command);

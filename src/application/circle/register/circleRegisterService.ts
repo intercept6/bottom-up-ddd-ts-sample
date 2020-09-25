@@ -12,6 +12,7 @@ import { CircleName } from '#/domain/models/circle/circleName';
 import { CircleRegisterServiceInterface } from '#/application/circle/register/circleRegisterServiceInterface';
 import { CircleFactoryInterface } from '#/domain/models/circle/circleFactoryInterface';
 import { UnknownError } from '#/util/error';
+import { CircleData } from '#/application/circle/circleData';
 
 export class CircleRegisterService implements CircleRegisterServiceInterface {
   private readonly circleRepository: CircleRepositoryInterface;
@@ -45,5 +46,7 @@ export class CircleRegisterService implements CircleRegisterServiceInterface {
     }
     const circle = await this.circleFactory.create(newCircleName, ownerId);
     await this.circleRepository.create(circle);
+
+    return new CircleData(circle);
   }
 }
