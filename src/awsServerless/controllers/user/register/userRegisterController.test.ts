@@ -5,7 +5,7 @@ process.env.ROOT_URI = rootUri;
 import { Credentials, DynamoDB } from 'aws-sdk';
 import { DynamoDBUserRepository } from '#/repository/user/dynamoDBUserRepository';
 import { UserRegisterService } from '#/application/user/register/userRegisterService';
-import { UserRegisterController } from '#/awsServerless/controllers/register/userRegisterController';
+import { UserRegisterController } from '#/awsServerless/controllers/user/register/userRegisterController';
 import {
   createDynamoDBTable,
   createUser,
