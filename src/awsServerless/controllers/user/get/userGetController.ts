@@ -20,14 +20,12 @@ export class UserGetController {
 
   @catchErrorDecorator
   async handle(event: UserGetEvent): Promise<APIGatewayProxyResult> {
-    const id = event?.pathParameters?.userId;
-    if (id == null) {
-      throw new BadRequest('user id is undefined');
-    } else if (typeof id !== 'string') {
+    const userId = event?.pathParameters?.userId;
+    if (typeof userId !== 'string') {
       throw new BadRequest('user id type is not string');
     }
 
-    const command = new UserGetCommand({ id });
+    const command = new UserGetCommand({ userId });
     const userData = await this.userGetService
       .handle(command)
       .catch((error: Error) => error);

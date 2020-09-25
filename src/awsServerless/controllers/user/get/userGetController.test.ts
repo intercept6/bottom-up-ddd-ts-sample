@@ -80,7 +80,7 @@ describe('ユーザー取得', () => {
       statusCode: 400,
       body: JSON.stringify({
         name: 'BadRequest',
-        message: 'user id is undefined',
+        message: 'user id type is not string',
       }),
     });
   });

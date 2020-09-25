@@ -27,7 +27,7 @@ export class UserGetService implements UserGetServiceInterface {
   }
 
   async handle(command: UserGetCommand): Promise<UserData> {
-    const userId = command.getId();
+    const userId = command.getUserId();
     const mailAddress = command.getMailAddress();
 
     const identifier = UserGetService.getIdentifier({ userId, mailAddress });
@@ -42,8 +42,6 @@ export class UserGetService implements UserGetServiceInterface {
       }
       throw new UnknownError('unknown error', error);
     }
-    const user = response;
-
-    return new UserData(user);
+    return new UserData(response);
   }
 }

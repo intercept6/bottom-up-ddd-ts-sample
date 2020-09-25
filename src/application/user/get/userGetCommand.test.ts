@@ -19,7 +19,7 @@ describe('ユーザー取得', () => {
     );
     const userGetService = new UserGetService(userRepository);
     const command = new UserGetCommand({
-      id: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
+      userId: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
     });
     const response = await userGetService.handle(command);
 
@@ -50,7 +50,7 @@ describe('ユーザー取得', () => {
     const userRepository = new InMemoryUserRepository();
     const userGetService = new UserGetService(userRepository);
     const command = new UserGetCommand({
-      id: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
+      userId: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
     });
     const getPromise = userGetService.handle(command);
 
