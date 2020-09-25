@@ -1,7 +1,5 @@
-import { DynamoDB } from 'aws-sdk';
 import { UserDeleteService } from '#/application/user/delete/userDeleteService';
 import { UserDeleteCommand } from '#/application/user/delete/userDeleteCommand';
-import { DynamoDBUserRepository } from '#/repository/user/dynamoDBUserRepository';
 import { catchErrorDecorator } from '#/awsServerless/decorators/decorator';
 import {
   BadRequest,
@@ -10,13 +8,7 @@ import {
 } from '#/awsServerless/errors/error';
 import { APIGatewayProxyResult } from 'aws-lambda';
 import { UserNotFoundApplicationError } from '#/application/error/error';
-
-const region = process.env.AWS_REGION ?? 'ap-northeast-1';
-const documentClient = new DynamoDB.DocumentClient({
-  apiVersion: '2012-08-10',
-  region,
-});
-const tableName = process.env.MAIN_TABLE_NAME ?? 'bottom-up-ddd';
+import { bootstrap } from '#/awsServerless/utils/bootstrap';
 
 type UserDeleteEvent = {
   pathParameters?: { userId?: string };
@@ -48,12 +40,7 @@ export class UserDeleteController {
   }
 }
 
-const userRepository = new DynamoDBUserRepository({
-  documentClient,
-  tableName,
-  gsi1Name: 'gsi1',
-  gsi2Name: 'gsi2',
-});
+const { userRepository } = bootstrap();
 const userDeleteService = new UserDeleteService(userRepository);
 const userDeleteController = new UserDeleteController(userDeleteService);
 

@@ -1,9 +1,5 @@
-import { DynamoDB } from 'aws-sdk';
 import { CircleRegisterServiceInterface } from '#/application/circle/register/circleRegisterServiceInterface';
 import { CircleRegisterService } from '#/application/circle/register/circleRegisterService';
-import { DynamoDBCircleRepository } from '#/repository/circle/dynamoDBCircleRepository';
-import { DynamoDBUserRepository } from '#/repository/user/dynamoDBUserRepository';
-import { DynamoDBCircleFactory } from '#/repository/circle/dynamoDBCircleFactory';
 import {
   BadRequest,
   Conflict,
@@ -13,21 +9,11 @@ import { CircleRegisterCommand } from '#/application/circle/register/circleRegis
 import { catchErrorDecorator } from '#/awsServerless/decorators/decorator';
 import { APIGatewayProxyResult } from 'aws-lambda';
 import { CircleDuplicateApplicationError } from '#/application/error/error';
+import { bootstrap } from '#/awsServerless/utils/bootstrap';
 
 type CircleRegisterEvent = {
   body?: string;
 };
-
-const region = process.env.AWS_REGION ?? 'ap-northeast-1';
-
-const documentClient = new DynamoDB.DocumentClient({
-  apiVersion: '2012-08-10',
-  region,
-});
-const tableName = process.env.MAIN_TABLE_NAME ?? 'bottom-up-ddd';
-const gsi1Name = process.env.MAIL_TABLE_GSI1_NAME ?? 'gsi1';
-const gsi2Name = process.env.MAIL_TABLE_GSI2_NAME ?? 'gs21';
-const rootURI = process.env.ROOT_URI! ?? '';
 
 export class CircleRegisterController {
   private readonly circleRegisterService: CircleRegisterServiceInterface;
@@ -78,27 +64,18 @@ export class CircleRegisterController {
   }
 }
 
-const userRepository = new DynamoDBUserRepository({
-  documentClient,
-  tableName,
-  gsi1Name,
-  gsi2Name,
-});
-const circleRepository = new DynamoDBCircleRepository({
-  tableName,
-  documentClient,
-  gsi1Name,
-});
-const circleFactory = new DynamoDBCircleFactory({
-  userRepository,
+const {
+  circleFactory,
   circleRepository,
-});
+  userRepository,
+  rootURI,
+} = bootstrap();
+
 const circleRegisterService = new CircleRegisterService({
   circleRepository,
   userRepository,
   circleFactory,
 });
-
 const circleRegisterController = new CircleRegisterController({
   circleRegisterService,
 });

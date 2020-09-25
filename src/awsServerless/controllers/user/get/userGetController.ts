@@ -1,8 +1,6 @@
 import { UserGetServiceInterface } from '#/application/user/get/userGetServiceInterface';
 import { UserGetService } from '#/application/user/get/userGetService';
-import { DynamoDB } from 'aws-sdk';
 import { UserGetCommand } from '#/application/user/get/userGetCommand';
-import { DynamoDBUserRepository } from '#/repository/user/dynamoDBUserRepository';
 import { UserNotFoundApplicationError } from '#/application/error/error';
 import { catchErrorDecorator } from '#/awsServerless/decorators/decorator';
 import {
@@ -11,14 +9,7 @@ import {
   NotFound,
 } from '#/awsServerless/errors/error';
 import { APIGatewayProxyResult } from 'aws-lambda';
-
-const region = process.env.AWS_REGION ?? 'ap-northeast-1';
-
-const documentClient = new DynamoDB.DocumentClient({
-  apiVersion: '2012-08-10',
-  region,
-});
-const tableName = 'bottom-up-ddd';
+import { bootstrap } from '#/awsServerless/utils/bootstrap';
 
 type UserGetEvent = {
   pathParameters?: { userId?: string };
@@ -60,12 +51,7 @@ export class UserGetController {
   }
 }
 
-const userRepository = new DynamoDBUserRepository({
-  documentClient,
-  tableName,
-  gsi1Name: 'gsi1',
-  gsi2Name: 'gsi2',
-});
+const { userRepository } = bootstrap();
 const userGetService = new UserGetService(userRepository);
 const userGetController = new UserGetController(userGetService);
 

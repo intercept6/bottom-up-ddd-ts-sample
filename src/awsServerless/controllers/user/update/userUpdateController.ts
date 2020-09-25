@@ -1,19 +1,10 @@
-import { DynamoDB } from 'aws-sdk';
 import { UserUpdateService } from '#/application/user/update/userUpdateService';
-import { DynamoDBUserRepository } from '#/repository/user/dynamoDBUserRepository';
 import { UserUpdateCommand } from '#/application/user/update/userUpdateCommand';
 import type { APIGatewayProxyResult } from 'aws-lambda';
 import { BadRequest, InternalServerError } from '#/awsServerless/errors/error';
 import { catchErrorDecorator } from '#/awsServerless/decorators/decorator';
 import { UserNotFoundApplicationError } from '#/application/error/error';
-
-const region = process.env.AWS_REGION ?? 'ap-northeast-1';
-
-const documentClient = new DynamoDB.DocumentClient({
-  apiVersion: '2012-08-10',
-  region,
-});
-const tableName = process.env.MAIN_TABLE_NAME ?? 'bottom-up-ddd';
+import { bootstrap } from '#/awsServerless/utils/bootstrap';
 
 type UserUpdateEvent = {
   pathParameters: { userId: string };
@@ -67,12 +58,7 @@ export class UserUpdateController {
   }
 }
 
-const userRepository = new DynamoDBUserRepository({
-  documentClient,
-  tableName,
-  gsi1Name: 'gsi1',
-  gsi2Name: 'gsi2',
-});
+const { userRepository } = bootstrap();
 const userUpdateService = new UserUpdateService(userRepository);
 const userUpdateController = new UserUpdateController(userUpdateService);
 
