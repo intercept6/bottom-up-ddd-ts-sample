@@ -1,4 +1,4 @@
-import { systemLog } from '#/util/systemLog';
+import { Logger } from '#/util/logger';
 import { ExtendedError } from '#/util/error';
 
 abstract class LambdaControllerError extends ExtendedError {}
@@ -15,7 +15,7 @@ export class Conflict extends LambdaControllerError {}
 // 500 Internal Server Error
 export class InternalServerError extends LambdaControllerError {
   constructor(message: string, error?: Error) {
-    systemLog('ERROR', `${error?.name}, ${error?.message}`);
+    Logger.error(error);
     super(message, error);
   }
 }

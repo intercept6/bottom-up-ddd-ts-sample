@@ -2,7 +2,7 @@ import { CircleDeleteServiceInterface } from '#/application/circle/delete/circle
 import { CircleRepositoryInterface } from '#/domain/circle/circleRepositoryInterface';
 import { CircleDeleteCommand } from '#/application/circle/delete/circleDeleteCommand';
 import { CircleId } from '#/domain/circle/circleId';
-import { systemLog } from '#/util/systemLog';
+import { Logger } from '#/util/logger';
 import { CircleNotFoundRepositoryError } from '#/repository/error/error';
 import { UnknownError } from '#/util/error';
 
@@ -22,7 +22,7 @@ export class CircleDeleteService implements CircleDeleteServiceInterface {
     // 対象が見つからなかった場合も削除成功とする
     if (circle instanceof Error) {
       if (circle instanceof CircleNotFoundRepositoryError) {
-        systemLog('DEBUG', circle.message);
+        Logger.debug(circle);
         return;
       }
       throw new UnknownError('unknown error', circle);

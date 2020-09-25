@@ -1,5 +1,5 @@
 import { APIGatewayProxyResult } from 'aws-lambda';
-import { systemLog } from '#/util/systemLog';
+import { Logger } from '#/util/logger';
 import {
   BadRequest,
   Conflict,
@@ -39,7 +39,7 @@ export const catchErrorDecorator = (
           body: JSON.stringify({ name: error.name, message: error.message }),
         };
       } else {
-        systemLog('ERROR', error.message);
+        Logger.error(error);
         return {
           statusCode: 500,
           body: JSON.stringify({

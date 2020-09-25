@@ -2,7 +2,7 @@ import { UserRepositoryInterface } from '#/domain/models/user/userRepositoryInte
 import { User } from '#/domain/models/user/user';
 import { UserName } from '#/domain/models/user/userName';
 import { UserId } from '#/domain/models/user/userId';
-import { systemLog } from '#/util/systemLog';
+import { Logger } from '#/util/logger';
 import { MailAddress } from '#/domain/models/user/mailAddress';
 import { DocumentClient } from 'aws-sdk/lib/dynamodb/document_client';
 import {
@@ -246,10 +246,7 @@ export class DynamoDBUserRepository implements UserRepositoryInterface {
       })
       .promise();
 
-    systemLog(
-      'INFO',
-      `ユーザー ${user.getId().getValue()} をDynamoDBに保存しました`
-    );
+    Logger.info(`saved user ${user.getId().getValue()}`);
   }
 
   async update(user: User) {
@@ -409,10 +406,7 @@ export class DynamoDBUserRepository implements UserRepositoryInterface {
         .promise();
     }
 
-    systemLog(
-      'INFO',
-      `ユーザー ${user.getId().getValue()} をDynamoDBに更新しました`
-    );
+    Logger.info(`updated user ${user.getId().getValue()}`);
   }
 
   async delete(user: User): Promise<void> {
@@ -447,10 +441,7 @@ export class DynamoDBUserRepository implements UserRepositoryInterface {
       })
       .promise();
 
-    systemLog(
-      'INFO',
-      `ユーザー ${user.getId().getValue()} をDynamoDBから削除しました`
-    );
+    Logger.info(`deleted user ${user.getId().getValue()}`);
   }
 
   /**

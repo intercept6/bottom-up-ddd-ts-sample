@@ -1,4 +1,4 @@
-import { systemLog } from '#/util/systemLog';
+import { Logger } from '#/util/logger';
 
 export abstract class ExtendedError extends Error {
   constructor(message: string, error?: Error) {
@@ -32,7 +32,7 @@ export abstract class ExtendedError extends Error {
 
 export class UnknownError extends ExtendedError {
   constructor(message: string, error?: Error) {
-    systemLog('ERROR', `${error?.name}, ${error?.message}`);
+    Logger.error(error);
     super(message, error);
   }
 }

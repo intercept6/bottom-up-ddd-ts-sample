@@ -1,7 +1,7 @@
 import { CircleRepositoryInterface } from '#/domain/circle/circleRepositoryInterface';
 import { Circle } from '#/domain/circle/circle';
 import { DocumentClient } from 'aws-sdk/lib/dynamodb/document_client';
-import { systemLog } from '#/util/systemLog';
+import { Logger } from '#/util/logger';
 import { CircleId } from '#/domain/circle/circleId';
 import { CircleName } from '#/domain/circle/circleName';
 import {
@@ -63,10 +63,7 @@ export class DynamoDBCircleRepository implements CircleRepositoryInterface {
       })
       .promise();
 
-    systemLog(
-      'INFO',
-      `サークル ${circle.getCircleName().getValue()} をDynamoDBに保存しました`
-    );
+    Logger.info(`saved circle ${circle.getCircleName().getValue()}`);
   }
 
   async update(circle: Circle): Promise<void> {
@@ -204,7 +201,7 @@ export class DynamoDBCircleRepository implements CircleRepositoryInterface {
         });
       }
 
-      systemLog('INFO', `サークル ${circleName} を更新しました`);
+      Logger.info(`updated circle ${circleName}`);
 
       return Circle.create(
         new CircleId(circleId),
@@ -269,7 +266,7 @@ export class DynamoDBCircleRepository implements CircleRepositoryInterface {
         });
       }
 
-      systemLog('INFO', `サークル ${circleName} を更新しました`);
+      Logger.info(`updated circle ${circleName}`);
 
       return Circle.create(
         new CircleId(circleId),
@@ -300,9 +297,6 @@ export class DynamoDBCircleRepository implements CircleRepositoryInterface {
       })
       .promise();
 
-    systemLog(
-      'INFO',
-      `サークル ${circle.getCircleName().getValue()} を削除しました`
-    );
+    Logger.info(`deleted circle ${circle.getCircleName().getValue()}`);
   }
 }
