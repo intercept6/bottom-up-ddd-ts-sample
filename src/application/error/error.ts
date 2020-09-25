@@ -33,6 +33,17 @@ export class UserNotFoundApplicationError extends ApplicationError {
     }
   }
 }
+
+export class CircleNotFoundApplicationError extends ApplicationError {
+  constructor(identifier: CircleId | CircleName, error?: Error) {
+    if (identifier instanceof CircleId) {
+      super(`circle id: ${identifier.getValue()} is not found`, error);
+    } else {
+      super(`circle name: ${identifier.getValue()} is not found`, error);
+    }
+  }
+}
+
 export class UserDuplicateApplicationError extends ApplicationError {
   constructor(identity: UserId | UserName | MailAddress, error?: Error) {
     if (identity instanceof UserId) {

@@ -1,7 +1,7 @@
 import { User } from '#/domain/models/user/user';
 
 function isArray(array: any): array is any[] {
-  return array.isArray();
+  return Object.prototype.toString.call(array) === '[object Array]';
 }
 
 export function isStringArray(array: any): array is string[] {
