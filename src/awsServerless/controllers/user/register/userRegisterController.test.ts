@@ -1,4 +1,6 @@
 /* eslint-disable import/first */
+import { DynamoDBHelper } from '#/lib/tests/dynamoDBHelper';
+
 const rootUri = 'https://api.example.com';
 process.env.ROOT_URI = rootUri;
 
@@ -6,14 +8,18 @@ import { Credentials, DynamoDB } from 'aws-sdk';
 import { DynamoDBUserRepository } from '#/repository/user/dynamoDBUserRepository';
 import { UserRegisterService } from '#/application/user/register/userRegisterService';
 import { UserRegisterController } from '#/awsServerless/controllers/user/register/userRegisterController';
-import {
-  createDynamoDBTable,
-  createUser,
-  deleteDynamoDBTable,
-} from '#/lib/tests/common';
 
 const region = 'local';
 const tableName = 'user-register-controller-test-table';
+const ddb = new DynamoDB({
+  apiVersion: '2012-08-10',
+  region,
+  endpoint: 'http://localhost:8000',
+  credentials: new Credentials({
+    secretAccessKey: 'dummy',
+    accessKeyId: 'dummy',
+  }),
+});
 const documentClient = new DynamoDB.DocumentClient({
   apiVersion: '2012-08-10',
   region,
@@ -33,16 +39,22 @@ const userRepository = new DynamoDBUserRepository({
 const userRegisterService = new UserRegisterService(userRepository);
 const userRegisterController = new UserRegisterController(userRegisterService);
 
+let dynamoDBHelper: DynamoDBHelper;
+
 beforeEach(async () => {
-  await createDynamoDBTable(tableName);
-  await createUser(tableName, {
+  dynamoDBHelper = await DynamoDBHelper.create({
+    tableName,
+    ddb,
+    documentClient,
+  });
+  await dynamoDBHelper.createUser({
     userId: '66d73617-aa4f-46b3-bf7d-9c193f0a08d1',
     userName: 'ユーザー2',
     mailAddress: 'user2@example.com',
   });
 });
 afterEach(async () => {
-  await deleteDynamoDBTable(tableName);
+  await dynamoDBHelper.destructor();
 });
 
 describe('ユーザー新規登録', () => {

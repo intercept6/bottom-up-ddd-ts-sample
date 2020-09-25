@@ -2,14 +2,20 @@ import { Credentials, DynamoDB } from 'aws-sdk';
 import { UserDeleteService } from '#/application/user/delete/userDeleteService';
 import { UserDeleteController } from '#/awsServerless/controllers/user/delete/userDeleteController';
 import { DynamoDBUserRepository } from '#/repository/user/dynamoDBUserRepository';
-import {
-  createDynamoDBTable,
-  createUser,
-  deleteDynamoDBTable,
-} from '#/lib/tests/common';
+import { DynamoDBHelper } from '#/lib/tests/dynamoDBHelper';
 
 const region = 'local';
 const tableName = 'user-delete-controller-test-table';
+const ddb = new DynamoDB({
+  apiVersion: '2012-08-10',
+  region,
+  endpoint: 'http://localhost:8000',
+  credentials: new Credentials({
+    secretAccessKey: 'dummy',
+    accessKeyId: 'dummy',
+  }),
+});
+
 const documentClient = new DynamoDB.DocumentClient({
   apiVersion: '2012-08-10',
   region,
@@ -29,16 +35,23 @@ const userRepository = new DynamoDBUserRepository({
 const userDeleteService = new UserDeleteService(userRepository);
 const userDeleteController = new UserDeleteController(userDeleteService);
 
+let dynamoDBHelper: DynamoDBHelper;
+
 beforeAll(async () => {
-  await createDynamoDBTable(tableName);
-  await createUser(tableName, {
+  dynamoDBHelper = await DynamoDBHelper.create({
+    tableName,
+    ddb,
+    documentClient,
+  });
+  await dynamoDBHelper.createUser({
     userId: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
     userName: 'ユーザー１',
     mailAddress: 'user1@example.com',
   });
 });
+
 afterAll(async () => {
-  await deleteDynamoDBTable(tableName);
+  await dynamoDBHelper.destructor();
 });
 
 describe('ユーザー削除', () => {

@@ -2,14 +2,19 @@ import { Credentials, DynamoDB } from 'aws-sdk';
 import { UserGetService } from '#/application/user/get/userGetService';
 import { UserGetController } from '#/awsServerless/controllers/user/get/userGetController';
 import { DynamoDBUserRepository } from '#/repository/user/dynamoDBUserRepository';
-import {
-  createDynamoDBTable,
-  createUser,
-  deleteDynamoDBTable,
-} from '#/lib/tests/common';
+import { DynamoDBHelper } from '#/lib/tests/dynamoDBHelper';
 
 const region = 'local';
 const tableName = 'user-get-controller-test-table';
+const ddb = new DynamoDB({
+  apiVersion: '2012-08-10',
+  region,
+  endpoint: 'http://localhost:8000',
+  credentials: new Credentials({
+    secretAccessKey: 'dummy',
+    accessKeyId: 'dummy',
+  }),
+});
 const documentClient = new DynamoDB.DocumentClient({
   apiVersion: '2012-08-10',
   region,
@@ -29,16 +34,23 @@ const userRepository = new DynamoDBUserRepository({
 const userGetService = new UserGetService(userRepository);
 const userGetController = new UserGetController(userGetService);
 
+let dynamoDBHelper: DynamoDBHelper;
+
 beforeAll(async () => {
-  await createDynamoDBTable(tableName);
-  await createUser(tableName, {
+  dynamoDBHelper = await DynamoDBHelper.create({
+    tableName,
+    ddb,
+    documentClient,
+  });
+  dynamoDBHelper.createUser({
     userId: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
     userName: 'ユーザー１',
     mailAddress: 'user1@example.com',
   });
 });
+
 afterAll(async () => {
-  await deleteDynamoDBTable(tableName);
+  await dynamoDBHelper.destructor();
 });
 
 describe('ユーザー取得', () => {
