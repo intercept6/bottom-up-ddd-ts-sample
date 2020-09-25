@@ -7,9 +7,9 @@ import { MailAddress } from '#/domain/models/user/mailAddress';
 import { CircleRegisterService } from '#/application/circle/register/circleRegisterService';
 import { InMemoryCircleRepository } from '#/repository/circle/inMemoryCircleRepository';
 import { ArgumentApplicationError } from '#/application/error/error';
-import { Circle } from '#/domain/circle/circle';
-import { CircleId } from '#/domain/circle/circleId';
-import { CircleName } from '#/domain/circle/circleName';
+import { Circle } from '#/domain/models/circle/circle';
+import { CircleId } from '#/domain/models/circle/circleId';
+import { CircleName } from '#/domain/models/circle/circleName';
 import { InMemoryCircleFactory } from '#/repository/circle/inMemoryCircleFactory';
 
 const userRepository = new InMemoryUserRepository();

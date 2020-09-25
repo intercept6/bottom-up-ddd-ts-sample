@@ -1,6 +1,6 @@
-import { CircleRepositoryInterface } from '#/domain/circle/circleRepositoryInterface';
+import { CircleRepositoryInterface } from '#/domain/models/circle/circleRepositoryInterface';
 import { CircleNotFoundRepositoryError } from '#/repository/error/error';
-import { CircleName } from '#/domain/circle/circleName';
+import { CircleName } from '#/domain/models/circle/circleName';
 import { UnknownError } from '#/util/error';
 
 export class CircleService {

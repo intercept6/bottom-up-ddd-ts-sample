@@ -1,4 +1,4 @@
-import { CircleRepositoryInterface } from '#/domain/circle/circleRepositoryInterface';
+import { CircleRepositoryInterface } from '#/domain/models/circle/circleRepositoryInterface';
 import { CircleService } from '#/domain/models/services/circleService';
 import { UserRepositoryInterface } from '#/domain/models/user/userRepositoryInterface';
 import { CircleRegisterCommand } from '#/application/circle/register/circleRegisterCommand';
@@ -8,9 +8,9 @@ import {
   CircleDuplicateApplicationError,
   UserNotFoundApplicationError,
 } from '#/application/error/error';
-import { CircleName } from '#/domain/circle/circleName';
+import { CircleName } from '#/domain/models/circle/circleName';
 import { CircleRegisterServiceInterface } from '#/application/circle/register/circleRegisterServiceInterface';
-import { CircleFactoryInterface } from '#/domain/circle/circleFactoryInterface';
+import { CircleFactoryInterface } from '#/domain/models/circle/circleFactoryInterface';
 import { UnknownError } from '#/util/error';
 
 export class CircleRegisterService implements CircleRegisterServiceInterface {

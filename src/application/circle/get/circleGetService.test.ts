@@ -1,14 +1,14 @@
 import { InMemoryCircleRepository } from '#/repository/circle/inMemoryCircleRepository';
 import { CircleGetService } from '#/application/circle/get/circleGetService';
 import { CircleGetCommand } from '#/application/circle/get/circleGetCommand';
-import { Circle } from '#/domain/circle/circle';
-import { CircleId } from '#/domain/circle/circleId';
+import { Circle } from '#/domain/models/circle/circle';
+import { CircleId } from '#/domain/models/circle/circleId';
 import { InMemoryUserRepository } from '#/repository/user/inMemoryUserRepository';
 import { User } from '#/domain/models/user/user';
 import { UserId } from '#/domain/models/user/userId';
 import { UserName } from '#/domain/models/user/userName';
 import { MailAddress } from '#/domain/models/user/mailAddress';
-import { CircleName } from '#/domain/circle/circleName';
+import { CircleName } from '#/domain/models/circle/circleName';
 import { CircleNotFoundRepositoryError } from '#/repository/error/error';
 
 const userRepository = new InMemoryUserRepository();

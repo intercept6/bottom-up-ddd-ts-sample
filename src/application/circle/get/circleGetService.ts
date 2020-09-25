@@ -1,8 +1,8 @@
 import { CircleGetServiceInterface } from '#/application/circle/get/circleGetServiceInterface';
 import { CircleGetCommand } from '#/application/circle/get/circleGetCommand';
 import { CircleData } from '#/application/circle/circleData';
-import { CircleRepositoryInterface } from '#/domain/circle/circleRepositoryInterface';
-import { CircleId } from '#/domain/circle/circleId';
+import { CircleRepositoryInterface } from '#/domain/models/circle/circleRepositoryInterface';
+import { CircleId } from '#/domain/models/circle/circleId';
 
 export class CircleGetService implements CircleGetServiceInterface {
   private readonly circleRepository: CircleRepositoryInterface;

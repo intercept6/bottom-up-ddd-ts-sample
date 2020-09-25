@@ -1,8 +1,8 @@
 import { CircleUpdateServiceInterface } from '#/application/circle/update/circleUpdateServiceInterface';
 import { CircleUpdateCommand } from '#/application/circle/update/circleUpdateCommand';
-import { CircleRepositoryInterface } from '#/domain/circle/circleRepositoryInterface';
-import { CircleId } from '#/domain/circle/circleId';
-import { CircleName } from '#/domain/circle/circleName';
+import { CircleRepositoryInterface } from '#/domain/models/circle/circleRepositoryInterface';
+import { CircleId } from '#/domain/models/circle/circleId';
+import { CircleName } from '#/domain/models/circle/circleName';
 import { CircleService } from '#/domain/models/services/circleService';
 import { CircleDuplicateApplicationError } from '#/application/error/error';
 import { UserId } from '#/domain/models/user/userId';

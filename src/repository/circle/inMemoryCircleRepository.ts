@@ -1,7 +1,7 @@
-import { Circle } from '#/domain/circle/circle';
-import { CircleRepositoryInterface } from '#/domain/circle/circleRepositoryInterface';
-import { CircleId } from '#/domain/circle/circleId';
-import { CircleName } from '#/domain/circle/circleName';
+import { Circle } from '#/domain/models/circle/circle';
+import { CircleRepositoryInterface } from '#/domain/models/circle/circleRepositoryInterface';
+import { CircleId } from '#/domain/models/circle/circleId';
+import { CircleName } from '#/domain/models/circle/circleName';
 import { UserId } from '#/domain/models/user/userId';
 import { CircleNotFoundRepositoryError } from '#/repository/error/error';
 

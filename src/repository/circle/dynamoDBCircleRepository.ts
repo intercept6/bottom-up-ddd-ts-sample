@@ -1,9 +1,9 @@
-import { CircleRepositoryInterface } from '#/domain/circle/circleRepositoryInterface';
-import { Circle } from '#/domain/circle/circle';
+import { CircleRepositoryInterface } from '#/domain/models/circle/circleRepositoryInterface';
+import { Circle } from '#/domain/models/circle/circle';
 import { DocumentClient } from 'aws-sdk/lib/dynamodb/document_client';
 import { Logger } from '#/util/logger';
-import { CircleId } from '#/domain/circle/circleId';
-import { CircleName } from '#/domain/circle/circleName';
+import { CircleId } from '#/domain/models/circle/circleId';
+import { CircleName } from '#/domain/models/circle/circleName';
 import {
   CircleNotFoundRepositoryError,
   TypeRepositoryError,

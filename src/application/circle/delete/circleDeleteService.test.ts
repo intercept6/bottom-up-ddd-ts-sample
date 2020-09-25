@@ -1,11 +1,11 @@
 import { InMemoryCircleRepository } from '#/repository/circle/inMemoryCircleRepository';
-import { Circle } from '#/domain/circle/circle';
-import { CircleId } from '#/domain/circle/circleId';
+import { Circle } from '#/domain/models/circle/circle';
+import { CircleId } from '#/domain/models/circle/circleId';
 import { User } from '#/domain/models/user/user';
 import { UserId } from '#/domain/models/user/userId';
 import { UserName } from '#/domain/models/user/userName';
 import { MailAddress } from '#/domain/models/user/mailAddress';
-import { CircleName } from '#/domain/circle/circleName';
+import { CircleName } from '#/domain/models/circle/circleName';
 import { InMemoryUserRepository } from '#/repository/user/inMemoryUserRepository';
 import { CircleDeleteCommand } from '#/application/circle/delete/circleDeleteCommand';
 import { CircleDeleteService } from '#/application/circle/delete/circleDeleteService';

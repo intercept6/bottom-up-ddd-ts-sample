@@ -1,7 +1,7 @@
 import { CircleDeleteServiceInterface } from '#/application/circle/delete/circleDeleteServiceInterface';
-import { CircleRepositoryInterface } from '#/domain/circle/circleRepositoryInterface';
+import { CircleRepositoryInterface } from '#/domain/models/circle/circleRepositoryInterface';
 import { CircleDeleteCommand } from '#/application/circle/delete/circleDeleteCommand';
-import { CircleId } from '#/domain/circle/circleId';
+import { CircleId } from '#/domain/models/circle/circleId';
 import { Logger } from '#/util/logger';
 import { CircleNotFoundRepositoryError } from '#/repository/error/error';
 import { UnknownError } from '#/util/error';

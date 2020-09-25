@@ -4,9 +4,9 @@ import { User } from '#/domain/models/user/user';
 import { UserId } from '#/domain/models/user/userId';
 import { UserName } from '#/domain/models/user/userName';
 import { MailAddress } from '#/domain/models/user/mailAddress';
-import { Circle } from '#/domain/circle/circle';
-import { CircleId } from '#/domain/circle/circleId';
-import { CircleName } from '#/domain/circle/circleName';
+import { Circle } from '#/domain/models/circle/circle';
+import { CircleId } from '#/domain/models/circle/circleId';
+import { CircleName } from '#/domain/models/circle/circleName';
 import { CircleUpdateCommand } from '#/application/circle/update/circleUpdateCommand';
 import { CircleUpdateService } from '#/application/circle/update/circleUpdateService';
 import {

@@ -1,5 +1,5 @@
-import { CircleId } from '#/domain/circle/circleId';
-import { CircleName } from '#/domain/circle/circleName';
+import { CircleId } from '#/domain/models/circle/circleId';
+import { CircleName } from '#/domain/models/circle/circleName';
 import { CircleMembersAreExceedApplicationError } from '#/application/error/error';
 import { UserId } from '#/domain/models/user/userId';
 

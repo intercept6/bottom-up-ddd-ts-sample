@@ -1,6 +1,6 @@
 import { ExtendedError } from '#/util/error';
-import { CircleName } from '#/domain/circle/circleName';
-import { CircleId } from '#/domain/circle/circleId';
+import { CircleName } from '#/domain/models/circle/circleName';
+import { CircleId } from '#/domain/models/circle/circleId';
 import { UserId } from '#/domain/models/user/userId';
 import { UserName } from '#/domain/models/user/userName';
 import { MailAddress } from '#/domain/models/user/mailAddress';
