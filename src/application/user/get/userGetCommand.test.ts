@@ -5,7 +5,7 @@ import { MailAddress } from '#/domain/models/user/mailAddress';
 import { UserGetCommand } from '#/application/user/get/userGetCommand';
 import { UserId } from '#/domain/models/user/userId';
 import { UserGetService } from '#/application/user/get/userGetService';
-import { UserNotFoundException } from '#/util/error';
+import { UserNotFoundApplicationError } from '#/application/error/error';
 
 describe('ユーザー取得', () => {
   test('ユーザーIDでユーザーを取得する', async () => {
@@ -55,7 +55,7 @@ describe('ユーザー取得', () => {
     const getPromise = userGetService.handle(command);
 
     await expect(getPromise).rejects.toThrowError(
-      new UserNotFoundException(
+      new UserNotFoundApplicationError(
         new UserId('203881e1-99f2-4ce6-ab6b-785fcd793c92')
       )
     );
@@ -68,7 +68,7 @@ describe('ユーザー取得', () => {
     const getPromise = userGetService.handle(command);
 
     await expect(getPromise).rejects.toThrowError(
-      new UserNotFoundException(new MailAddress('test@example.com'))
+      new UserNotFoundApplicationError(new MailAddress('test@example.com'))
     );
   });
 });

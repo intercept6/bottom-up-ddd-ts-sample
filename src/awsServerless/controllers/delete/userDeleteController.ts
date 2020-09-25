@@ -1,8 +1,7 @@
 import { DynamoDB } from 'aws-sdk';
 import { UserDeleteService } from '#/application/user/delete/userDeleteService';
 import { UserDeleteCommand } from '#/application/user/delete/userDeleteCommand';
-import { UserNotFoundException } from '#/util/error';
-import { DynamoDBUserRepository } from '#/repository/user/dynamodb/dynamoDBUserRepository';
+import { DynamoDBUserRepository } from '#/repository/user/dynamoDBUserRepository';
 import { catchErrorDecorator } from '#/awsServerless/decorators/decorator';
 import {
   BadRequest,
@@ -10,6 +9,7 @@ import {
   NotFound,
 } from '#/awsServerless/errors/error';
 import { APIGatewayProxyResult } from 'aws-lambda';
+import { UserNotFoundApplicationError } from '#/application/error/error';
 
 const region = process.env.AWS_REGION ?? 'ap-northeast-1';
 const documentClient = new DynamoDB.DocumentClient({
@@ -38,7 +38,7 @@ export class UserDeleteController {
       .catch((error: Error) => error);
 
     if (error instanceof Error) {
-      if (error instanceof UserNotFoundException) {
+      if (error instanceof UserNotFoundApplicationError) {
         throw new NotFound(`user id: ${userId} is not found`);
       }
       throw new InternalServerError('user gets failed');

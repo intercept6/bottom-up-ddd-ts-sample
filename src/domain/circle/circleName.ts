@@ -1,11 +1,15 @@
-import { ArgumentException } from '#/domain/error/error';
+import { ArgumentDomainError } from '#/domain/error/error';
 
 export class CircleName {
   constructor(private readonly value: string) {
     if (value.length < 3) {
-      throw new ArgumentException('Circle name must be at least 3 characters');
+      throw new ArgumentDomainError(
+        'Circle name must be at least 3 characters'
+      );
     } else if (value.length > 20) {
-      throw new ArgumentException('Circle name must be 20 characters or less');
+      throw new ArgumentDomainError(
+        'Circle name must be 20 characters or less'
+      );
     }
   }
 

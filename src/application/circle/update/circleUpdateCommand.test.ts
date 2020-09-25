@@ -11,7 +11,7 @@ import { CircleUpdateCommand } from '#/application/circle/update/circleUpdateCom
 import { CircleUpdateService } from '#/application/circle/update/circleUpdateService';
 import {
   ArgumentApplicationError,
-  CircleFullApplicationError,
+  CircleMembersAreExceedApplicationError,
 } from '#/application/error/error';
 
 const userRepository = new InMemoryUserRepository();
@@ -289,7 +289,7 @@ describe('サークル更新', () => {
     const circleUpdatePromise = circleUpdateService.handle(command);
 
     await expect(circleUpdatePromise).rejects.toThrowError(
-      new CircleFullApplicationError(
+      new CircleMembersAreExceedApplicationError(
         new CircleId('238517cb-65ba-4744-bd19-0e2e94875344')
       )
     );
@@ -355,7 +355,7 @@ describe('サークル更新', () => {
     const circleUpdatePromise = circleUpdateService.handle(command);
 
     await expect(circleUpdatePromise).rejects.toThrowError(
-      new CircleFullApplicationError(
+      new CircleMembersAreExceedApplicationError(
         new CircleId('238517cb-65ba-4744-bd19-0e2e94875344')
       )
     );

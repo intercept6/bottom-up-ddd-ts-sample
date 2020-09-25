@@ -5,8 +5,8 @@ import { systemLog } from '#/util/systemLog';
 import { CircleId } from '#/domain/circle/circleId';
 import { CircleName } from '#/domain/circle/circleName';
 import {
-  CircleNotFoundException,
-  TypeException,
+  CircleNotFoundRepositoryError,
+  TypeRepositoryError,
 } from '#/repository/error/error';
 import { isStringArray } from '#/util/typeGuard';
 import { UserId } from '#/domain/models/user/userId';
@@ -162,9 +162,9 @@ export class DynamoDBCircleRepository implements CircleRepositoryInterface {
         .catch((error: Error) => error);
 
       if (response instanceof Error) {
-        throw new CircleNotFoundException(identifier, response);
+        throw new CircleNotFoundRepositoryError(identifier, response);
       } else if (response.Item == null) {
-        throw new CircleNotFoundException(identifier);
+        throw new CircleNotFoundRepositoryError(identifier);
       }
 
       const circleId = response.Item.pk;
@@ -173,7 +173,7 @@ export class DynamoDBCircleRepository implements CircleRepositoryInterface {
       const memberIds = response.Item.memberIds;
 
       if (typeof circleId !== 'string') {
-        throw new TypeException({
+        throw new TypeRepositoryError({
           variableName: 'circleId',
           expected: 'string',
           got: typeof circleId,
@@ -181,7 +181,7 @@ export class DynamoDBCircleRepository implements CircleRepositoryInterface {
       }
 
       if (typeof circleName !== 'string') {
-        throw new TypeException({
+        throw new TypeRepositoryError({
           variableName: 'circleName',
           expected: 'string',
           got: typeof circleName,
@@ -189,7 +189,7 @@ export class DynamoDBCircleRepository implements CircleRepositoryInterface {
       }
 
       if (typeof ownerId !== 'string') {
-        throw new TypeException({
+        throw new TypeRepositoryError({
           variableName: 'ownerId',
           expected: 'string',
           got: typeof ownerId,
@@ -197,7 +197,7 @@ export class DynamoDBCircleRepository implements CircleRepositoryInterface {
       }
 
       if (!isStringArray(memberIds)) {
-        throw new TypeException({
+        throw new TypeRepositoryError({
           variableName: 'memberIds',
           expected: 'string[]',
           got: 'unknown',
@@ -229,7 +229,7 @@ export class DynamoDBCircleRepository implements CircleRepositoryInterface {
         .promise();
 
       if (found.Items?.length !== 1) {
-        throw new CircleNotFoundException(identifier);
+        throw new CircleNotFoundRepositoryError(identifier);
       }
 
       const circleId = found.Items[0].pk;
@@ -238,7 +238,7 @@ export class DynamoDBCircleRepository implements CircleRepositoryInterface {
       const memberIds = found.Items[0].memberIds;
 
       if (typeof circleId !== 'string') {
-        throw new TypeException({
+        throw new TypeRepositoryError({
           variableName: 'circleId',
           expected: 'string',
           got: typeof circleId,
@@ -246,7 +246,7 @@ export class DynamoDBCircleRepository implements CircleRepositoryInterface {
       }
 
       if (typeof circleName !== 'string') {
-        throw new TypeException({
+        throw new TypeRepositoryError({
           variableName: 'circleName',
           expected: 'string',
           got: typeof circleName,
@@ -254,7 +254,7 @@ export class DynamoDBCircleRepository implements CircleRepositoryInterface {
       }
 
       if (typeof ownerId !== 'string') {
-        throw new TypeException({
+        throw new TypeRepositoryError({
           variableName: 'ownerId',
           expected: 'string',
           got: typeof ownerId,
@@ -262,7 +262,7 @@ export class DynamoDBCircleRepository implements CircleRepositoryInterface {
       }
 
       if (!isStringArray(memberIds)) {
-        throw new TypeException({
+        throw new TypeRepositoryError({
           variableName: 'memberIds',
           expected: 'string[]',
           got: 'unknown',

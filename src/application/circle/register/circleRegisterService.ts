@@ -3,15 +3,15 @@ import { CircleService } from '#/domain/models/services/circleService';
 import { UserRepositoryInterface } from '#/domain/models/user/userRepositoryInterface';
 import { CircleRegisterCommand } from '#/application/circle/register/circleRegisterCommand';
 import { UserId } from '#/domain/models/user/userId';
-import { UserNotFoundException } from '#/util/error';
+import { UserNotFoundRepositoryError } from '#/repository/error/error';
 import {
   CircleDuplicateApplicationError,
-  UnknownApplicationError,
   UserNotFoundApplicationError,
 } from '#/application/error/error';
 import { CircleName } from '#/domain/circle/circleName';
 import { CircleRegisterServiceInterface } from '#/application/circle/register/circleRegisterServiceInterface';
 import { CircleFactoryInterface } from '#/domain/circle/circleFactoryInterface';
+import { UnknownError } from '#/util/error';
 
 export class CircleRegisterService implements CircleRegisterServiceInterface {
   private readonly circleRepository: CircleRepositoryInterface;
@@ -33,13 +33,10 @@ export class CircleRegisterService implements CircleRegisterServiceInterface {
   async handle(command: CircleRegisterCommand) {
     const ownerId = new UserId(command.getUserId());
     await this.userRepository.get(ownerId).catch((error: Error) => {
-      if (error instanceof UserNotFoundException) {
-        throw new UserNotFoundApplicationError(
-          'user is not found for become circle owner',
-          error
-        );
+      if (error instanceof UserNotFoundRepositoryError) {
+        throw new UserNotFoundApplicationError(ownerId, error);
       }
-      throw new UnknownApplicationError('', error);
+      throw new UnknownError('owner user is not found', error);
     });
 
     const newCircleName = new CircleName(command.getCircleName());

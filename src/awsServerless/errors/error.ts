@@ -1,46 +1,19 @@
 import { systemLog } from '#/util/systemLog';
+import { ExtendedError } from '#/util/error';
 
-abstract class ExtendedError extends Error {
-  constructor(message: string, error?: Error) {
-    super(message);
-
-    // this.name = this.constructor.name; でも問題ないが、enumerable を false にしたほうがビルトインエラーに近い。
-    Object.defineProperty(this, 'name', {
-      configurable: true,
-      enumerable: false,
-      value: this.constructor.name,
-      writable: true,
-    });
-
-    // エラーがスローされた場所の適切なスタックトレースを維持する（V8エンジニアでのみ使用可能な為、if文でケアする）
-    if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, this.constructor);
-    } else if (error != null) {
-      const messageLines = (this.message.match(/\n/g) || []).length + 1;
-      if (this.stack) {
-        this.stack =
-          this.stack
-            .split('\n')
-            .slice(0, messageLines + 1)
-            .join('\n') +
-          '\n' +
-          error.stack;
-      }
-    }
-  }
-}
+abstract class LambdaControllerError extends ExtendedError {}
 
 // 400 Bad Request
-export class BadRequest extends ExtendedError {}
+export class BadRequest extends LambdaControllerError {}
 
 // 404 Not Found
-export class NotFound extends ExtendedError {}
+export class NotFound extends LambdaControllerError {}
 
 // 409 Conflict
-export class Conflict extends ExtendedError {}
+export class Conflict extends LambdaControllerError {}
 
 // 500 Internal Server Error
-export class InternalServerError extends ExtendedError {
+export class InternalServerError extends LambdaControllerError {
   constructor(message: string, error?: Error) {
     systemLog('ERROR', `${error?.name}, ${error?.message}`);
     super(message, error);

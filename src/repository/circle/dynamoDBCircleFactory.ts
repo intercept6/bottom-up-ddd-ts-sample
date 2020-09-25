@@ -3,9 +3,9 @@ import { Circle } from '#/domain/circle/circle';
 import { CircleId } from '#/domain/circle/circleId';
 import { CircleName } from '#/domain/circle/circleName';
 import { UserId } from '#/domain/models/user/userId';
-import { ArgumentException } from '#/repository/error/error';
+import { ArgumentRepositoryError } from '#/repository/error/error';
 import { generateUuid } from '#/util/uuid';
-import { DynamoDBUserRepository } from '#/repository/user/dynamodb/dynamoDBUserRepository';
+import { DynamoDBUserRepository } from '#/repository/user/dynamoDBUserRepository';
 import { DynamoDBCircleRepository } from '#/repository/circle/dynamoDBCircleRepository';
 
 export class DynamoDBCircleFactory implements CircleFactoryInterface {
@@ -33,7 +33,7 @@ export class DynamoDBCircleFactory implements CircleFactoryInterface {
 
       return Circle.create(new CircleId(generateUuid()), arg1, arg2, []);
     }
-    throw new ArgumentException(
+    throw new ArgumentRepositoryError(
       JSON.stringify({
         message: 'メソッドが意図せぬ引数で呼び出されました。',
         arg1: {

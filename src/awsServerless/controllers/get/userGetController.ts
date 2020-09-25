@@ -2,8 +2,8 @@ import { UserGetServiceInterface } from '#/application/user/get/userGetServiceIn
 import { UserGetService } from '#/application/user/get/userGetService';
 import { DynamoDB } from 'aws-sdk';
 import { UserGetCommand } from '#/application/user/get/userGetCommand';
-import { DynamoDBUserRepository } from '#/repository/user/dynamodb/dynamoDBUserRepository';
-import { UserNotFoundException } from '#/util/error';
+import { DynamoDBUserRepository } from '#/repository/user/dynamoDBUserRepository';
+import { UserNotFoundApplicationError } from '#/application/error/error';
 import { catchErrorDecorator } from '#/awsServerless/decorators/decorator';
 import {
   BadRequest,
@@ -43,7 +43,7 @@ export class UserGetController {
 
     if (userData instanceof Error) {
       const error = userData;
-      if (error instanceof UserNotFoundException) {
+      if (error instanceof UserNotFoundApplicationError) {
         throw new NotFound(error.message);
       }
       throw new InternalServerError('user get failed');

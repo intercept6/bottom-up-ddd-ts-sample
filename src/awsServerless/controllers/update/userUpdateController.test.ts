@@ -1,7 +1,7 @@
 import { Credentials, DynamoDB } from 'aws-sdk';
 import { UserUpdateService } from '#/application/user/update/userUpdateService';
 import { UserUpdateController } from '#/awsServerless/controllers/update/userUpdateController';
-import { DynamoDBUserRepository } from '#/repository/user/dynamodb/dynamoDBUserRepository';
+import { DynamoDBUserRepository } from '#/repository/user/dynamoDBUserRepository';
 import {
   createDynamoDBTable,
   createUser,

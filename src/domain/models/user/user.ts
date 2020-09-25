@@ -2,7 +2,7 @@ import { UserId } from '#/domain/models/user/userId';
 import { UserName } from '#/domain/models/user/userName';
 import { generateUuid } from '#/util/uuid';
 import { MailAddress } from '#/domain/models/user/mailAddress';
-import { BadParameterException } from '#/util/error';
+import { ArgumentDomainError } from '#/domain/error/error';
 
 export class User {
   private readonly id: UserId;
@@ -29,7 +29,7 @@ export class User {
       this.name = arg2;
       this.mailAddress = arg3;
     } else {
-      throw new BadParameterException(
+      throw new ArgumentDomainError(
         'Userのコンストラクタが予期せぬ引数で呼び出されました'
       );
     }

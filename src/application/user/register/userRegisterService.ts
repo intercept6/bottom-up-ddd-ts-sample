@@ -2,7 +2,7 @@ import { UserRegisterCommand } from '#/application/user/register/userRegisterCom
 import { MailAddress } from '#/domain/models/user/mailAddress';
 import { User } from '#/domain/models/user/user';
 import { UserName } from '#/domain/models/user/userName';
-import { UserDuplicateException } from '#/util/error';
+import { UserDuplicateApplicationError } from '#/application/error/error';
 import { UserService } from '#/domain/models/services/userService';
 import { UserRepositoryInterface } from '#/domain/models/user/userRepositoryInterface';
 import { UserRegisterServiceInterface } from '#/application/user/register/userRegisterServiceInterface';
@@ -21,12 +21,12 @@ export class UserRegisterService implements UserRegisterServiceInterface {
 
     const newUserName = new UserName(userName);
     if (await this.userService.unique(newUserName)) {
-      throw new UserDuplicateException(newUserName);
+      throw new UserDuplicateApplicationError(newUserName);
     }
 
     const newMailAddress = new MailAddress(mailAddress);
     if (await this.userService.unique(newMailAddress)) {
-      throw new UserDuplicateException(newMailAddress);
+      throw new UserDuplicateApplicationError(newMailAddress);
     }
 
     const user = new User(newUserName, newMailAddress);

@@ -3,7 +3,7 @@ import { User } from '#/domain/models/user/user';
 import { UserRepositoryInterface } from '#/domain/models/user/userRepositoryInterface';
 import { UserName } from '#/domain/models/user/userName';
 import { MailAddress } from '#/domain/models/user/mailAddress';
-import { UserNotFoundException } from '#/util/error';
+import { UserNotFoundRepositoryError } from '#/repository/error/error';
 
 export class InMemoryUserRepository implements UserRepositoryInterface {
   // テストケースによってはデータを確認したいことがある
@@ -21,7 +21,7 @@ export class InMemoryUserRepository implements UserRepositoryInterface {
       if (target != null) {
         return this.clone(target);
       }
-      throw new UserNotFoundException(identity);
+      throw new UserNotFoundRepositoryError(identity);
     } else if (identity instanceof UserName) {
       const target = this.store.find((value) =>
         value.getName().equals(identity)
@@ -30,7 +30,7 @@ export class InMemoryUserRepository implements UserRepositoryInterface {
       if (target != null) {
         return this.clone(target);
       }
-      throw new UserNotFoundException(identity);
+      throw new UserNotFoundRepositoryError(identity);
     } else {
       const target = this.store.find((value) =>
         value.getMailAddress().equals(identity)
@@ -39,7 +39,7 @@ export class InMemoryUserRepository implements UserRepositoryInterface {
       if (target != null) {
         return this.clone(target);
       }
-      throw new UserNotFoundException(identity);
+      throw new UserNotFoundRepositoryError(identity);
     }
   }
 
@@ -84,7 +84,7 @@ export class InMemoryUserRepository implements UserRepositoryInterface {
         (userId) =>
           !this.store.some((existUser) => existUser.getId().equals(userId))
       );
-      throw new UserNotFoundException(notFound);
+      throw new UserNotFoundRepositoryError(notFound);
     }
 
     return this.store.filter((user) =>

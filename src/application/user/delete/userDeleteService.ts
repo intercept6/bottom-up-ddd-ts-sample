@@ -1,6 +1,7 @@
 import { UserDeleteCommand } from '#/application/user/delete/userDeleteCommand';
 import { UserId } from '#/domain/models/user/userId';
-import { UnknownException, UserNotFoundException } from '#/util/error';
+import { UnknownError } from '#/util/error';
+import { UserNotFoundRepositoryError } from '#/repository/error/error';
 import { systemLog } from '#/util/systemLog';
 import { UserRepositoryInterface } from '#/domain/models/user/userRepositoryInterface';
 import { UserDeleteServiceInterface } from '#/application/user/delete/userDeleteServiceInterface';
@@ -16,13 +17,13 @@ export class UserDeleteService implements UserDeleteServiceInterface {
         return error;
       });
 
-    // 対象が見つからなかったため退会成功とする
     if (response instanceof Error) {
-      if (response instanceof UserNotFoundException) {
+      // 対象が見つからなかった場合も削除成功とする
+      if (response instanceof UserNotFoundRepositoryError) {
         systemLog('WARN', response.message);
         return;
       }
-      throw new UnknownException(response);
+      throw new UnknownError('unknown error', response);
     }
 
     await this.userRepository.delete(response);

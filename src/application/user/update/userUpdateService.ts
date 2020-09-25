@@ -4,8 +4,13 @@ import { UserRepositoryInterface } from '#/domain/models/user/userRepositoryInte
 import { UserId } from '#/domain/models/user/userId';
 import { UserUpdateCommand } from '#/application/user/update/userUpdateCommand';
 import { MailAddress } from '#/domain/models/user/mailAddress';
-import { UserDuplicateException } from '#/util/error';
 import { UserUpdateServiceInterface } from '#/application/user/update/userUpdateServiceInterface';
+import {
+  UserDuplicateApplicationError,
+  UserNotFoundApplicationError,
+} from '#/application/error/error';
+import { UserNotFoundRepositoryError } from '#/repository/error/error';
+import { UnknownError } from '#/util/error';
 
 export class UserUpdateService implements UserUpdateServiceInterface {
   private readonly userService: UserService;
@@ -16,14 +21,26 @@ export class UserUpdateService implements UserUpdateServiceInterface {
 
   async handle(command: UserUpdateCommand) {
     const targetId = new UserId(command.getId());
-    const user = await this.userRepository.get(targetId);
+    const response = await this.userRepository
+      .get(targetId)
+      .catch((error: Error) => error);
+
+    if (response instanceof Error) {
+      const error = response;
+      if (error instanceof UserNotFoundRepositoryError) {
+        throw new UserNotFoundApplicationError(targetId, error);
+      }
+      throw new UnknownError('unknown error', error);
+    }
+
+    const user = response;
 
     const name = command.getName();
     if (name != null) {
       const newUserName = new UserName(name);
       user.changeName(newUserName);
       if (await this.userService.unique(newUserName)) {
-        throw new UserDuplicateException(newUserName);
+        throw new UserDuplicateApplicationError(newUserName);
       }
     }
 
@@ -32,7 +49,7 @@ export class UserUpdateService implements UserUpdateServiceInterface {
       const newMailAddress = new MailAddress(mailAddress);
       user.changeMailAddress(newMailAddress);
       if (await this.userService.unique(newMailAddress)) {
-        throw new UserDuplicateException(newMailAddress);
+        throw new UserDuplicateApplicationError(newMailAddress);
       }
     }
 

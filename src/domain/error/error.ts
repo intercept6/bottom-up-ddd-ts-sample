@@ -1,3 +1,5 @@
 import { ExtendedError } from '#/util/error';
 
-export class ArgumentException extends ExtendedError {}
+abstract class DomainError extends ExtendedError {}
+
+export class ArgumentDomainError extends DomainError {}

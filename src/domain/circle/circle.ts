@@ -1,6 +1,6 @@
 import { CircleId } from '#/domain/circle/circleId';
 import { CircleName } from '#/domain/circle/circleName';
-import { CircleFullApplicationError } from '#/application/error/error';
+import { CircleMembersAreExceedApplicationError } from '#/application/error/error';
 import { UserId } from '#/domain/models/user/userId';
 
 export class Circle {
@@ -63,7 +63,7 @@ export class Circle {
 
   joinMembers(userIds: UserId[]) {
     if (this.isFull(userIds.length)) {
-      throw new CircleFullApplicationError(this.circleId);
+      throw new CircleMembersAreExceedApplicationError(this.circleId);
     }
     this.memberIds = this.memberIds.concat(userIds);
   }

@@ -1,11 +1,14 @@
 import { InMemoryUserRepository } from '#/repository/user/inMemoryUserRepository';
 import { UserRegisterCommand } from '#/application/user/register/userRegisterCommand';
-import { ArgumentException, UserDuplicateException } from '#/util/error';
 import { User } from '#/domain/models/user/user';
 import { UserId } from '#/domain/models/user/userId';
 import { UserName } from '#/domain/models/user/userName';
 import { MailAddress } from '#/domain/models/user/mailAddress';
 import { UserRegisterService } from '#/application/user/register/userRegisterService';
+import {
+  ArgumentApplicationError,
+  UserDuplicateApplicationError,
+} from '#/application/error/error';
 
 describe('ユーザ新規作成', () => {
   test('ユーザを新規作成する', async () => {
@@ -31,7 +34,7 @@ describe('ユーザ新規作成', () => {
     const createUserPromise = userRegisterService.handle(command);
 
     await expect(createUserPromise).rejects.toThrowError(
-      new ArgumentException('ユーザ名は3文字以上です')
+      new ArgumentApplicationError('ユーザ名は3文字以上です')
     );
   });
 
@@ -45,7 +48,7 @@ describe('ユーザ新規作成', () => {
     const createUserPromise = userRegisterService.handle(command);
 
     await expect(createUserPromise).rejects.toThrowError(
-      new ArgumentException('ユーザ名は20文字以下です')
+      new ArgumentApplicationError('ユーザ名は20文字以下です')
     );
   });
 
@@ -59,7 +62,9 @@ describe('ユーザ新規作成', () => {
     const createUserPromise = userRegisterService.handle(command);
 
     await expect(createUserPromise).rejects.toThrowError(
-      new ArgumentException('許可されていない文字 test が使われています。')
+      new ArgumentApplicationError(
+        '許可されていない文字 test が使われています。'
+      )
     );
   });
 
@@ -73,7 +78,9 @@ describe('ユーザ新規作成', () => {
     const createUserPromise = userRegisterService.handle(command);
 
     await expect(createUserPromise).rejects.toThrowError(
-      new ArgumentException('許可されていない文字 TEST が使われています。')
+      new ArgumentApplicationError(
+        '許可されていない文字 TEST が使われています。'
+      )
     );
   });
 
@@ -87,7 +94,9 @@ describe('ユーザ新規作成', () => {
     const createUserPromise = userRegisterService.handle(command);
 
     await expect(createUserPromise).rejects.toThrowError(
-      new ArgumentException('許可されていない文字 TEST が使われています。')
+      new ArgumentApplicationError(
+        '許可されていない文字 TEST が使われています。'
+      )
     );
   });
 
@@ -109,7 +118,7 @@ describe('ユーザ新規作成', () => {
     const registerPromise = userRegisterService.handle(command);
 
     await expect(registerPromise).rejects.toThrowError(
-      new UserDuplicateException(new MailAddress('test@example.com'))
+      new UserDuplicateApplicationError(new MailAddress('test@example.com'))
     );
   });
 });

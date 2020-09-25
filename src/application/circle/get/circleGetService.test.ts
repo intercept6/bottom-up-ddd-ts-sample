@@ -9,7 +9,7 @@ import { UserId } from '#/domain/models/user/userId';
 import { UserName } from '#/domain/models/user/userName';
 import { MailAddress } from '#/domain/models/user/mailAddress';
 import { CircleName } from '#/domain/circle/circleName';
-import { CircleNotFoundException } from '#/repository/error/error';
+import { CircleNotFoundRepositoryError } from '#/repository/error/error';
 
 const userRepository = new InMemoryUserRepository();
 const circleRepository = new InMemoryCircleRepository();
@@ -67,7 +67,7 @@ describe('サークル取得', () => {
     const circleGetPromise = circleGetService.handle(command);
 
     await expect(circleGetPromise).rejects.toThrowError(
-      new CircleNotFoundException(new CircleId(notExistCircleId))
+      new CircleNotFoundRepositoryError(new CircleId(notExistCircleId))
     );
   });
 });

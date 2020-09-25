@@ -1,8 +1,7 @@
 import { DynamoDB } from 'aws-sdk';
 import { UserRegisterService } from '#/application/user/register/userRegisterService';
 import { UserRegisterCommand } from '#/application/user/register/userRegisterCommand';
-import { UserDuplicateException } from '#/util/error';
-import { DynamoDBUserRepository } from '#/repository/user/dynamodb/dynamoDBUserRepository';
+import { DynamoDBUserRepository } from '#/repository/user/dynamoDBUserRepository';
 import { APIGatewayProxyResult } from 'aws-lambda';
 import {
   BadRequest,
@@ -10,6 +9,7 @@ import {
   InternalServerError,
 } from '#/awsServerless/errors/error';
 import { catchErrorDecorator } from '#/awsServerless/decorators/decorator';
+import { UserDuplicateApplicationError } from '#/application/error/error';
 
 const region = process.env.AWS_REGION ?? 'ap-northeast-1';
 
@@ -45,7 +45,7 @@ export class UserRegisterController {
 
       if (userData instanceof Error) {
         const error = userData;
-        if (error instanceof UserDuplicateException) {
+        if (error instanceof UserDuplicateApplicationError) {
           throw new Conflict(error.message);
         }
         throw new InternalServerError('user register failed');

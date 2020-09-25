@@ -1,7 +1,4 @@
-import { UserId } from '#/domain/models/user/userId';
-import { UserName } from '#/domain/models/user/userName';
-import { MailAddress } from '#/domain/models/user/mailAddress';
-import { isUserArray } from '#/util/typeGuard';
+import { systemLog } from '#/util/systemLog';
 
 export abstract class ExtendedError extends Error {
   constructor(message: string, error?: Error) {
@@ -33,85 +30,9 @@ export abstract class ExtendedError extends Error {
   }
 }
 
-export class UserNotFoundException extends ExtendedError {
-  constructor(userId: UserId, error?: Error);
-  constructor(userName: UserName, error?: Error);
-  constructor(mailAddress: MailAddress, error?: Error);
-  constructor(userIds: UserId[], error?: Error);
-  constructor(
-    identifier: UserId | UserName | MailAddress | UserId[],
-    error?: Error
-  ) {
-    if (identifier instanceof UserId) {
-      super(`user id: ${identifier.getValue()} is not found`, error);
-    } else if (identifier instanceof UserName) {
-      super(`user name: ${identifier.getValue()} is not found`, error);
-    } else if (identifier instanceof MailAddress) {
-      super(`user mailAddress: ${identifier.getValue()} is not found`, error);
-    } else if (isUserArray(identifier)) {
-      super(
-        `user ids: ${identifier.map((value) => value.getValue())} is not found`,
-        error
-      );
-    } else {
-      throw new ArgumentException(
-        `The method was called with unintended arguments`
-      );
-    }
-  }
-}
-
-export class UserDuplicateException extends ExtendedError {
-  constructor(userId: UserId, error?: Error);
-  constructor(userName: UserName, error?: Error);
-  constructor(mailAddress: MailAddress, error?: Error);
-  constructor(identity: UserId | UserName | MailAddress, error?: Error) {
-    if (identity instanceof UserId) {
-      super(`user id: ${identity.getValue()} is already exist`, error);
-    } else if (identity instanceof UserName) {
-      super(`user name: ${identity.getValue()} is already exist`, error);
-    } else {
-      super(`user mailAddress: ${identity.getValue()} is already exist`, error);
-    }
-  }
-}
-
-type PrimitiveTypes =
-  | 'undefined'
-  | 'object'
-  | 'boolean'
-  | 'number'
-  | 'bigint'
-  | 'string'
-  | 'symbol'
-  | 'function';
-
-export class TypeException extends ExtendedError {
-  constructor(
-    variableName: string,
-    expected: PrimitiveTypes,
-    got: PrimitiveTypes
-  ) {
-    super(
-      `[TypeException] ${variableName} should be ${expected} type, but it is ${got} type`
-    );
-  }
-}
-
-export class ArgumentException extends ExtendedError {
+export class UnknownError extends ExtendedError {
   constructor(message: string, error?: Error) {
-    super(`[ArgumentException] ${message}`, error);
-  }
-}
-
-export class BadParameterException extends ExtendedError {
-  constructor(message: string, error?: Error) {
-    super(`[BadParameterException] ${message}`, error);
-  }
-}
-
-export class UnknownException extends ExtendedError {
-  constructor(error: Error) {
-    super('[UnknownException]', error);
+    systemLog('ERROR', `${error?.name}, ${error?.message}`);
+    super(message, error);
   }
 }

@@ -4,8 +4,8 @@ import { CircleId } from '#/domain/circle/circleId';
 import { CircleName } from '#/domain/circle/circleName';
 import { UserId } from '#/domain/models/user/userId';
 import {
-  ArgumentException,
-  CircleNotFoundException,
+  ArgumentRepositoryError,
+  CircleNotFoundRepositoryError,
 } from '#/repository/error/error';
 import { generateUuid } from '#/util/uuid';
 import { clone, store } from '#/repository/circle/inMemoryCircleRepository';
@@ -28,12 +28,12 @@ export class InMemoryCircleFactory implements CircleFactoryInterface {
       if (target != null) {
         return clone(target);
       }
-      throw new CircleNotFoundException(arg1);
+      throw new CircleNotFoundRepositoryError(arg1);
     } else if (arg1 instanceof CircleName && arg2 instanceof UserId) {
       // 実実装ではownerが実在するかチェックする
       return Circle.create(new CircleId(generateUuid()), arg1, arg2, []);
     }
-    throw new ArgumentException(
+    throw new ArgumentRepositoryError(
       JSON.stringify({
         message: 'メソッドが意図せぬ引数で呼び出されました。',
         arg1: {

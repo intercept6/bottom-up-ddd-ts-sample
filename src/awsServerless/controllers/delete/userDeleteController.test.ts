@@ -1,7 +1,7 @@
 import { Credentials, DynamoDB } from 'aws-sdk';
 import { UserDeleteService } from '#/application/user/delete/userDeleteService';
 import { UserDeleteController } from '#/awsServerless/controllers/delete/userDeleteController';
-import { DynamoDBUserRepository } from '#/repository/user/dynamodb/dynamoDBUserRepository';
+import { DynamoDBUserRepository } from '#/repository/user/dynamoDBUserRepository';
 import {
   createDynamoDBTable,
   createUser,

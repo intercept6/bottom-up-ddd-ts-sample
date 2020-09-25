@@ -1,11 +1,11 @@
 import { DynamoDB } from 'aws-sdk';
 import { UserUpdateService } from '#/application/user/update/userUpdateService';
-import { DynamoDBUserRepository } from '#/repository/user/dynamodb/dynamoDBUserRepository';
+import { DynamoDBUserRepository } from '#/repository/user/dynamoDBUserRepository';
 import { UserUpdateCommand } from '#/application/user/update/userUpdateCommand';
 import type { APIGatewayProxyResult } from 'aws-lambda';
 import { BadRequest, InternalServerError } from '#/awsServerless/errors/error';
-import { UserNotFoundException } from '#/util/error';
 import { catchErrorDecorator } from '#/awsServerless/decorators/decorator';
+import { UserNotFoundApplicationError } from '#/application/error/error';
 
 const region = process.env.AWS_REGION ?? 'ap-northeast-1';
 
@@ -55,7 +55,7 @@ export class UserUpdateController {
       .catch((error: Error) => error);
 
     if (error instanceof Error) {
-      if (error instanceof UserNotFoundException) {
+      if (error instanceof UserNotFoundApplicationError) {
         throw new BadRequest(`user id: ${id} is not found`, error);
       }
       throw new InternalServerError('user update is failed', error);

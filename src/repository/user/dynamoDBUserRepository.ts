@@ -4,8 +4,11 @@ import { UserName } from '#/domain/models/user/userName';
 import { UserId } from '#/domain/models/user/userId';
 import { systemLog } from '#/util/systemLog';
 import { MailAddress } from '#/domain/models/user/mailAddress';
-import { TypeException, UserNotFoundException } from '#/util/error';
 import { DocumentClient } from 'aws-sdk/lib/dynamodb/document_client';
+import {
+  TypeRepositoryError,
+  UserNotFoundRepositoryError,
+} from '#/repository/error/error';
 
 export class DynamoDBUserRepository implements UserRepositoryInterface {
   private readonly documentClient: DocumentClient;
@@ -28,7 +31,7 @@ export class DynamoDBUserRepository implements UserRepositoryInterface {
   /**
    * ユーザー識別子を用いてユーザーを検索する
    * @param  {UserId | UserName | MailAddress} identity ユーザー識別子
-   * @throws {UserNotFoundException} ユーザーが存在しない
+   * @throws {UserNotFoundRepositoryError} ユーザーが存在しない
    */
   async get(identity: UserId | UserName | MailAddress): Promise<User> {
     if (identity instanceof UserId) {
@@ -42,9 +45,9 @@ export class DynamoDBUserRepository implements UserRepositoryInterface {
         .promise()
         .catch((error: Error) => error);
       if (response instanceof Error) {
-        throw new UserNotFoundException(identity, response);
+        throw new UserNotFoundRepositoryError(identity, response);
       } else if (response.Item == null) {
-        throw new UserNotFoundException(identity);
+        throw new UserNotFoundRepositoryError(identity);
       }
 
       const id = response.Item.pk;
@@ -68,13 +71,25 @@ export class DynamoDBUserRepository implements UserRepositoryInterface {
       }
 
       if (typeof id !== 'string') {
-        throw new TypeException('userId', 'string', typeof id);
+        throw new TypeRepositoryError({
+          variableName: 'userId',
+          expected: 'string',
+          got: typeof id,
+        });
       }
       if (typeof userName !== 'string') {
-        throw new TypeException('userName', 'string', typeof userName);
+        throw new TypeRepositoryError({
+          variableName: 'userName',
+          expected: 'string',
+          got: typeof userName,
+        });
       }
       if (typeof mailAddress !== 'string') {
-        throw new TypeException('mailAddress', 'string', typeof mailAddress);
+        throw new TypeRepositoryError({
+          variableName: 'mailAddress',
+          expected: 'string',
+          got: typeof mailAddress,
+        });
       }
 
       return new User(
@@ -98,7 +113,7 @@ export class DynamoDBUserRepository implements UserRepositoryInterface {
         .promise();
 
       if (found.Items?.length !== 1) {
-        throw new UserNotFoundException(identity);
+        throw new UserNotFoundRepositoryError(identity);
       }
 
       const id = found.Items[0].pk;
@@ -106,13 +121,25 @@ export class DynamoDBUserRepository implements UserRepositoryInterface {
       const mailAddress = found.Items[0].gsi2pk;
 
       if (typeof id !== 'string') {
-        throw new TypeException('userId', 'string', typeof id);
+        throw new TypeRepositoryError({
+          variableName: 'userId',
+          expected: 'string',
+          got: typeof id,
+        });
       }
       if (typeof userName !== 'string') {
-        throw new TypeException('userName', 'string', typeof userName);
+        throw new TypeRepositoryError({
+          variableName: 'userName',
+          expected: 'string',
+          got: typeof userName,
+        });
       }
       if (typeof mailAddress !== 'string') {
-        throw new TypeException('mailAddress', 'string', typeof mailAddress);
+        throw new TypeRepositoryError({
+          variableName: 'mailAddress',
+          expected: 'string',
+          got: typeof mailAddress,
+        });
       }
 
       return new User(
@@ -136,7 +163,7 @@ export class DynamoDBUserRepository implements UserRepositoryInterface {
         .promise();
 
       if (found.Items?.length !== 1) {
-        throw new UserNotFoundException(identity);
+        throw new UserNotFoundRepositoryError(identity);
       }
 
       const id = found.Items[0].pk;
@@ -144,13 +171,25 @@ export class DynamoDBUserRepository implements UserRepositoryInterface {
       const mailAddress = found.Items[0].gsi2pk;
 
       if (typeof id !== 'string') {
-        throw new TypeException('userId', 'string', typeof id);
+        throw new TypeRepositoryError({
+          variableName: 'userId',
+          expected: 'string',
+          got: typeof id,
+        });
       }
       if (typeof userName !== 'string') {
-        throw new TypeException('userName', 'string', typeof userName);
+        throw new TypeRepositoryError({
+          variableName: 'userName',
+          expected: 'string',
+          got: typeof userName,
+        });
       }
       if (typeof mailAddress !== 'string') {
-        throw new TypeException('mailAddress', 'string', typeof mailAddress);
+        throw new TypeRepositoryError({
+          variableName: 'mailAddress',
+          expected: 'string',
+          got: typeof mailAddress,
+        });
       }
 
       return new User(
@@ -417,7 +456,7 @@ export class DynamoDBUserRepository implements UserRepositoryInterface {
   /**
    * 複数のユーザーIDからユーザーを取得する
    * @param userIds
-   * @throws {UserNotFoundException} 1つでも指定されたユーザーが存在しない
+   * @throws {UserNotFoundRepositoryError} 1つでも指定されたユーザーが存在しない
    */
   async batchGet(userIds: UserId[]): Promise<User[]> {
     const { Responses: responses } = await this.documentClient
@@ -435,7 +474,7 @@ export class DynamoDBUserRepository implements UserRepositoryInterface {
       !responses[this.tableName] ||
       responses[this.tableName].length !== userIds.length
     ) {
-      throw new UserNotFoundException(userIds);
+      throw new UserNotFoundRepositoryError(userIds);
     }
 
     return responses[this.tableName].map(

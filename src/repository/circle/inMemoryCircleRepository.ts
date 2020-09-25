@@ -3,7 +3,7 @@ import { CircleRepositoryInterface } from '#/domain/circle/circleRepositoryInter
 import { CircleId } from '#/domain/circle/circleId';
 import { CircleName } from '#/domain/circle/circleName';
 import { UserId } from '#/domain/models/user/userId';
-import { CircleNotFoundException } from '#/repository/error/error';
+import { CircleNotFoundRepositoryError } from '#/repository/error/error';
 
 export const store: Circle[] = [];
 
@@ -53,7 +53,7 @@ export class InMemoryCircleRepository implements CircleRepositoryInterface {
       if (target != null) {
         return clone(target);
       }
-      throw new CircleNotFoundException(identity);
+      throw new CircleNotFoundRepositoryError(identity);
     } else {
       const target = this.store.find((value) =>
         value.getCircleName().equals(identity)
@@ -62,7 +62,7 @@ export class InMemoryCircleRepository implements CircleRepositoryInterface {
       if (target != null) {
         return clone(target);
       }
-      throw new CircleNotFoundException(identity);
+      throw new CircleNotFoundRepositoryError(identity);
     }
   }
 
