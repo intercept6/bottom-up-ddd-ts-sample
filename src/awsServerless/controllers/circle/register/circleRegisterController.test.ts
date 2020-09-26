@@ -2,68 +2,23 @@
 const rootUri = 'https://api.example.com';
 process.env.ROOT_URI = rootUri;
 
-import { Credentials, DynamoDB } from 'aws-sdk';
-import { DynamoDBUserRepository } from '#/repository/user/dynamoDBUserRepository';
+import { BootstrapForTest } from '#/lib/tests/bootstrapForTest';
 import { DynamoDBHelper } from '#/lib/tests/dynamoDBHelper';
-import { CircleRegisterService } from '#/application/circle/register/circleRegisterService';
-import { DynamoDBCircleRepository } from '#/repository/circle/dynamoDBCircleRepository';
-import { DynamoDBCircleFactory } from '#/repository/circle/dynamoDBCircleFactory';
 import { CircleRegisterController } from '#/awsServerless/controllers/circle/register/circleRegisterController';
 
-const region = 'local';
 const tableName = 'circle-register-controller-test-table';
-const gsi1Name = 'gsi1';
 
-const ddb = new DynamoDB({
-  apiVersion: '2012-08-10',
-  region,
-  endpoint: 'http://localhost:8000',
-  credentials: new Credentials({
-    secretAccessKey: 'dummy',
-    accessKeyId: 'dummy',
-  }),
-});
-const documentClient = new DynamoDB.DocumentClient({
-  apiVersion: '2012-08-10',
-  region,
-  endpoint: 'http://localhost:8000',
-  credentials: new Credentials({
-    secretAccessKey: 'dummy',
-    accessKeyId: 'dummy',
-  }),
-});
-
-const userRepository = new DynamoDBUserRepository({
-  documentClient,
-  tableName,
-  gsi1Name: 'gsi1',
-  gsi2Name: 'gsi2',
-});
-const circleRepository = new DynamoDBCircleRepository({
-  tableName,
-  documentClient,
-  gsi1Name,
-});
-const circleFactory = new DynamoDBCircleFactory({
-  userRepository,
-  circleRepository,
-});
-const circleRegisterService = new CircleRegisterService({
-  circleRepository,
-  userRepository,
-  circleFactory,
-});
-const circleRegisterController = new CircleRegisterController({
-  circleRegisterService,
-});
-
+let circleRegisterController: CircleRegisterController;
+let bootstrap: BootstrapForTest;
 let dynamoDBHelper: DynamoDBHelper;
 
 beforeEach(async () => {
+  bootstrap = await BootstrapForTest.create();
+  circleRegisterController = bootstrap.getCircleRegisterController(tableName);
   dynamoDBHelper = await DynamoDBHelper.create({
     tableName,
-    ddb,
-    documentClient,
+    ddb: bootstrap.getDDB(),
+    documentClient: bootstrap.getDocumentClient(),
   });
   await dynamoDBHelper.createUser({
     userId: '206d7414-7072-4a98-9505-c780b5a9bdd1',

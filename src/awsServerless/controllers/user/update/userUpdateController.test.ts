@@ -1,46 +1,20 @@
-import { Credentials, DynamoDB } from 'aws-sdk';
-import { UserUpdateService } from '#/application/user/update/userUpdateService';
 import { UserUpdateController } from '#/awsServerless/controllers/user/update/userUpdateController';
-import { DynamoDBUserRepository } from '#/repository/user/dynamoDBUserRepository';
 import { DynamoDBHelper } from '#/lib/tests/dynamoDBHelper';
+import { BootstrapForTest } from '#/lib/tests/bootstrapForTest';
 
-const region = 'local';
 const tableName = 'user-update-controller-test-table';
-const ddb = new DynamoDB({
-  apiVersion: '2012-08-10',
-  region,
-  endpoint: 'http://localhost:8000',
-  credentials: new Credentials({
-    secretAccessKey: 'dummy',
-    accessKeyId: 'dummy',
-  }),
-});
-const documentClient = new DynamoDB.DocumentClient({
-  apiVersion: '2012-08-10',
-  region,
-  endpoint: 'http://localhost:8000',
-  credentials: new Credentials({
-    secretAccessKey: 'dummy',
-    accessKeyId: 'dummy',
-  }),
-});
 
-const userRepository = new DynamoDBUserRepository({
-  documentClient,
-  tableName,
-  gsi1Name: 'gsi1',
-  gsi2Name: 'gsi2',
-});
-const userUpdateService = new UserUpdateService(userRepository);
-const userUpdateController = new UserUpdateController(userUpdateService);
-
+let userUpdateController: UserUpdateController;
+let bootstrap: BootstrapForTest;
 let dynamoDBHelper: DynamoDBHelper;
 
 beforeEach(async () => {
+  bootstrap = await BootstrapForTest.create();
+  userUpdateController = bootstrap.getUserUpdateController(tableName);
   dynamoDBHelper = await DynamoDBHelper.create({
     tableName,
-    ddb,
-    documentClient,
+    ddb: bootstrap.getDDB(),
+    documentClient: bootstrap.getDocumentClient(),
   });
   await dynamoDBHelper.createUser({
     userId: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
