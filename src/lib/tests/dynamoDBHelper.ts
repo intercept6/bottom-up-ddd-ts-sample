@@ -100,6 +100,26 @@ export class DynamoDBHelper {
       .promise();
   }
 
+  private async getResource(pk: string) {
+    return await this.documentClient
+      .get({
+        TableName: this.tableName,
+        Key: { pk },
+      })
+      .promise();
+  }
+
+  async getCircle({ circleId }: { readonly circleId: string }) {
+    const response = await this.getResource(circleId);
+
+    return {
+      circleId: response.Item?.pk as string,
+      circleName: response.Item?.gsi1pk as string,
+      ownerId: response.Item?.ownerId as string,
+      memberIds: response.Item?.memberIds as string,
+    };
+  }
+
   static async create(props: Props) {
     await this.createTable({ tableName: props.tableName, ddb: props.ddb });
 
