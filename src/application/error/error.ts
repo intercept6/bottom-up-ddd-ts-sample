@@ -4,33 +4,35 @@ import { CircleId } from '#/domain/models/circle/circleId';
 import { UserId } from '#/domain/models/user/userId';
 import { UserName } from '#/domain/models/user/userName';
 import { MailAddress } from '#/domain/models/user/mailAddress';
-import { isUserArray } from '#/util/typeGuard';
 
 abstract class ApplicationError extends ExtendedError {}
 
 export class ArgumentApplicationError extends ApplicationError {}
 
 export class UserNotFoundApplicationError extends ApplicationError {
-  constructor(
-    identifier: UserId | UserName | MailAddress | UserId[],
-    error?: Error
-  ) {
+  constructor(identifier: UserId | UserName | MailAddress, error?: Error) {
     if (identifier instanceof UserId) {
       super(`user id: ${identifier.getValue()} is not found`, error);
     } else if (identifier instanceof UserName) {
       super(`user name: ${identifier.getValue()} is not found`, error);
-    } else if (identifier instanceof MailAddress) {
-      super(`user mailAddress: ${identifier.getValue()} is not found`, error);
-    } else if (isUserArray(identifier)) {
-      super(
-        `user ids: ${identifier.map((value) => value.getValue())} is not found`,
-        error
-      );
     } else {
-      throw new ArgumentApplicationError(
-        `The method was called with unintended arguments`
-      );
+      super(`user mailAddress: ${identifier.getValue()} is not found`, error);
     }
+  }
+}
+
+export class OwnerNotFoundApplicationError extends ApplicationError {
+  constructor(ownerId: UserId, error?: Error) {
+    super(`owner id: ${ownerId.getValue()} is not found`, error);
+  }
+}
+
+export class MembersNotFoundApplicationError extends ApplicationError {
+  constructor(memberIds: UserId[], error?: Error) {
+    super(
+      `member ids: ${memberIds.map((value) => value.getValue())} is not found`,
+      error
+    );
   }
 }
 

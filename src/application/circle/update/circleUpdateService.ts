@@ -4,9 +4,15 @@ import { CircleRepositoryInterface } from '#/domain/models/circle/circleReposito
 import { CircleId } from '#/domain/models/circle/circleId';
 import { CircleName } from '#/domain/models/circle/circleName';
 import { CircleService } from '#/domain/models/services/circleService';
-import { CircleDuplicateApplicationError } from '#/application/error/error';
+import {
+  CircleDuplicateApplicationError,
+  MembersNotFoundApplicationError,
+  OwnerNotFoundApplicationError,
+} from '#/application/error/error';
 import { UserId } from '#/domain/models/user/userId';
 import { UserRepositoryInterface } from '#/domain/models/user/userRepositoryInterface';
+import { UserNotFoundRepositoryError } from '#/repository/error/error';
+import { UnknownError } from '#/util/error';
 
 export class CircleUpdateService implements CircleUpdateServiceInterface {
   private readonly userRepository: UserRepositoryInterface;
@@ -38,17 +44,27 @@ export class CircleUpdateService implements CircleUpdateServiceInterface {
     const ownerId = command.getOwnerId();
     if (ownerId != null) {
       const newOwnerId = new UserId(ownerId);
-      await this.userRepository.get(newOwnerId);
+      await this.userRepository.get(newOwnerId).catch((error: Error) => {
+        if (error instanceof UserNotFoundRepositoryError) {
+          throw new OwnerNotFoundApplicationError(newOwnerId, error);
+        }
+        throw new UnknownError('unknown error', error);
+      });
       circle.changeOwnerId(newOwnerId);
     }
 
     const memberIds = command.getMemberIds();
     if (memberIds != null) {
       const newMemberIds = memberIds.map((value) => new UserId(value));
-      await this.userRepository.batchGet(newMemberIds);
+      await this.userRepository.batchGet(newMemberIds).catch((error: Error) => {
+        if (error instanceof UserNotFoundRepositoryError) {
+          throw new MembersNotFoundApplicationError(newMemberIds, error);
+        }
+        throw new UnknownError('unknown error', error);
+      });
       circle.joinMembers(newMemberIds);
     }
 
-    await this.circleRepository.update(circle);
+    await this.circleRepository.update(circle).catch((error: Error) => error);
   }
 }

@@ -14,6 +14,8 @@ import { UserRegisterController } from '#/awsServerless/controllers/user/registe
 import { UserRegisterService } from '#/application/user/register/userRegisterService';
 import { UserUpdateController } from '#/awsServerless/controllers/user/update/userUpdateController';
 import { UserUpdateService } from '#/application/user/update/userUpdateService';
+import { CircleUpdateController } from '#/awsServerless/controllers/circle/update/circleUpdateController';
+import { CircleUpdateService } from '#/application/circle/update/circleUpdateService';
 
 export class BootstrapForTest {
   private readonly region = 'local';
@@ -128,5 +130,15 @@ export class BootstrapForTest {
     const circleRepository = this.getCircleRepository(tableName);
     const circleGetService = new CircleGetService({ circleRepository });
     return new CircleGetController(circleGetService);
+  }
+
+  getCircleUpdateController(tableName: string) {
+    const userRepository = this.getUserRepository(tableName);
+    const circleRepository = this.getCircleRepository(tableName);
+    const circleUpdateService = new CircleUpdateService({
+      userRepository,
+      circleRepository,
+    });
+    return new CircleUpdateController({ circleUpdateService });
   }
 }

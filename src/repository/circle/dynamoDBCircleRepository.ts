@@ -98,7 +98,7 @@ export class DynamoDBCircleRepository implements CircleRepositoryInterface {
                     .map((value) => value.getValue()),
                 },
                 UpdateExpression:
-                  'SET #gsi1pk = :gsi1pk, #ownerId = :ownerId, #membersIds = :membersIds',
+                  'SET #gsi1pk = :gsi1pk, #ownerId = :ownerId, #memberIds = :memberIds',
                 ConditionExpression: 'attribute_exists(#pk)',
               },
             },
@@ -141,7 +141,7 @@ export class DynamoDBCircleRepository implements CircleRepositoryInterface {
                     .map((value) => value.getValue()),
                 },
                 UpdateExpression:
-                  'SET #ownerId = :ownerId, #membersIds = :membersIds',
+                  'SET #ownerId = :ownerId, #memberIds = :memberIds',
                 ConditionExpression: 'attribute_exists(#pk)',
               },
             },
