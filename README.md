@@ -2,7 +2,8 @@
 
 | 名前 | パッケージ名 | ディレクトリ |
 | --- | --- | --- | 
-| バックエンド | backend | packages/backend |  
+| AWS | aws | packages/aws |
+| バックエンド | backend | packages/backend |
 
 ## コーディング規約
 
