@@ -1,5 +1,5 @@
 /* eslint-disable import/first */
-const rootUri = 'https://api.example.com';
+const rootUri = 'https://api.example.com/';
 process.env.ROOT_URI = rootUri;
 
 import { DynamoDBHelper } from '../../../../lib/tests/dynamoDBHelper';

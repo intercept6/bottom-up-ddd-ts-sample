@@ -4,20 +4,20 @@ import { UserName } from '../../domain/models/user/userName';
 import { UserId } from '../../domain/models/user/userId';
 import { Logger } from '../../util/logger';
 import { MailAddress } from '../../domain/models/user/mailAddress';
-import { DocumentClient } from 'aws-sdk/lib/dynamodb/document_client';
+import { DynamoDB } from 'aws-sdk';
 import {
   TypeRepositoryError,
   UserNotFoundRepositoryError,
 } from '../error/error';
 
 export class DynamoDBUserRepository implements UserRepositoryInterface {
-  private readonly documentClient: DocumentClient;
+  private readonly documentClient: DynamoDB.DocumentClient;
   private readonly tableName: string;
   private readonly gsi1Name: string;
   private readonly gsi2Name: string;
 
   constructor(props: {
-    documentClient: DocumentClient;
+    documentClient: DynamoDB.DocumentClient;
     tableName: string;
     gsi1Name: string;
     gsi2Name: string;

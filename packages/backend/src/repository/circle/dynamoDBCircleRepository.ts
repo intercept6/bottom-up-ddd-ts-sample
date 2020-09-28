@@ -1,6 +1,6 @@
 import { CircleRepositoryInterface } from '../../domain/models/circle/circleRepositoryInterface';
 import { Circle } from '../../domain/models/circle/circle';
-import { DocumentClient } from 'aws-sdk/lib/dynamodb/document_client';
+import { DynamoDB } from 'aws-sdk';
 import { Logger } from '../../util/logger';
 import { CircleId } from '../../domain/models/circle/circleId';
 import { CircleName } from '../../domain/models/circle/circleName';
@@ -12,12 +12,12 @@ import { isStringArray } from '../../util/typeGuard';
 import { UserId } from '../../domain/models/user/userId';
 
 export class DynamoDBCircleRepository implements CircleRepositoryInterface {
-  private readonly documentClient: DocumentClient;
+  private readonly documentClient: DynamoDB.DocumentClient;
   private readonly tableName: string;
   private readonly gsi1Name: string;
 
   constructor(props: {
-    documentClient: DocumentClient;
+    documentClient: DynamoDB.DocumentClient;
     tableName: string;
     gsi1Name: string;
   }) {
