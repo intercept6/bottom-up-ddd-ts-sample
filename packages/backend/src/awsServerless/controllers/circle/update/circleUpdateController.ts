@@ -1,3 +1,4 @@
+import 'source-map-support/register';
 import { CircleUpdateServiceInterface } from '../../../../application/circle/update/circleUpdateServiceInterface';
 import { APIGatewayProxyResult } from 'aws-lambda';
 import { bootstrap } from '../../../utils/bootstrap';

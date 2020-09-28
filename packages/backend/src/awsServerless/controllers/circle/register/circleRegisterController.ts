@@ -1,3 +1,4 @@
+import 'source-map-support/register';
 import { CircleRegisterServiceInterface } from '../../../../application/circle/register/circleRegisterServiceInterface';
 import { CircleRegisterService } from '../../../../application/circle/register/circleRegisterService';
 import {
@@ -59,7 +60,7 @@ export class CircleRegisterController {
     return {
       statusCode: 201,
       body: JSON.stringify({}),
-      headers: { location: `${rootURI}/circles/${response.getCircleId()}` },
+      headers: { location: `${rootURI}circles/${response.getCircleId()}` },
     };
   }
 }

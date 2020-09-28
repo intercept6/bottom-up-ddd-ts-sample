@@ -1,3 +1,24 @@
+# Editor
 .idea
-node_modules
+
+# TypeScript
+*.js
+*.d.ts
+
+# Jest
+!jest.config.js
 coverage
+
+# Node.js
+node_modules
+
+# CDK asset staging directory
+.cdk.staging
+cdk.out
+
+# CDK bundle
+/packages/aws/bundle/layer/nodejs
+
+# Parcel default cache directory
+.parcel-cache
+

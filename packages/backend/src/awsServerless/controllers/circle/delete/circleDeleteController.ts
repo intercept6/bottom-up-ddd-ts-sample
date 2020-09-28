@@ -1,3 +1,4 @@
+import 'source-map-support/register';
 import { CircleDeleteService } from '../../../../application/circle/delete/circleDeleteService';
 import { catchErrorDecorator } from '../../../decorators/decorator';
 import {

@@ -6,10 +6,13 @@
   "license": "UNLICENSED",
   "devDependencies": {
     "@aws-cdk/assert": "1.64.1",
+    "@babel/plugin-proposal-decorators": "7.10.5",
+    "@babel/preset-typescript": "7.10.4",
     "@types/jest": "26.0.10",
     "@types/node": "10.17.27",
     "@typescript-eslint/eslint-plugin": "3.10.1",
     "@typescript-eslint/parser": "3.10.1",
+    "aws-cdk": "1.64.1",
     "eslint": "7.7.0",
     "eslint-config-prettier": "6.11.0",
     "eslint-config-standard": "14.1.1",
@@ -19,19 +22,25 @@
     "eslint-plugin-promise": "4.2.1",
     "eslint-plugin-standard": "4.0.1",
     "jest": "26.4.2",
+    "shx": "0.3.2",
     "ts-jest": "26.2.0",
-    "aws-cdk": "1.64.1",
     "ts-node": "8.1.0",
     "typescript": "3.9.6"
   },
   "dependencies": {
+    "@aws-cdk/aws-apigatewayv2": "1.64.1",
+    "@aws-cdk/aws-dynamodb": "1.64.1",
+    "@aws-cdk/aws-lambda": "1.64.1",
+    "@aws-cdk/aws-lambda-nodejs": "1.64.1",
     "@aws-cdk/core": "1.64.1",
     "source-map-support": "0.5.16"
   },
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
+    "bundle": "shx mkdir -p bundle/layer/nodejs && shx cp ../backend/package.json bundle/layer/nodejs && yarn --cwd bundle/layer/nodejs --production install",
     "test": "jest",
-    "cdk": "cdk"
+    "cdk": "cdk",
+    "deploy": "yarn run bundle && cdk deploy"
   }
 }

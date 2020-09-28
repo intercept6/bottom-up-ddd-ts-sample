@@ -1,3 +1,4 @@
+import 'source-map-support/register';
 import { CircleGetService } from '../../../../application/circle/get/circleGetService';
 import { CircleGetServiceInterface } from '../../../../application/circle/get/circleGetServiceInterface';
 import { APIGatewayProxyResult } from 'aws-lambda';

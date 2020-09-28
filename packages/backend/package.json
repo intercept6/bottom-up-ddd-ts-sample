@@ -29,10 +29,12 @@
   },
   "dependencies": {
     "aws-sdk": "2.741.0",
-    "luxon": "1.25.0"
+    "luxon": "1.25.0",
+    "source-map-support": "0.5.16"
   },
   "scripts": {
     "test": "jest --watch",
+    "build": "tsc",
     "ci:test": "jest"
   }
 }
