@@ -4,7 +4,7 @@ import type { APIGatewayProxyResult } from 'aws-lambda';
 import { BadRequest, InternalServerError } from '../../../errors/error';
 import { catchErrorDecorator } from '../../../decorators/decorator';
 import { UserNotFoundApplicationError } from '../../../../application/error/error';
-import { bootstrap } from '../../../utils/bootstrap';
+import { Bootstrap } from '../../../utils/bootstrap';
 
 type UserUpdateEvent = {
   pathParameters: { userId: string };
@@ -58,8 +58,10 @@ export class UserUpdateController {
   }
 }
 
-const { userRepository } = bootstrap();
-const userUpdateService = new UserUpdateService(userRepository);
+const bootstrap = new Bootstrap();
+const userUpdateService = new UserUpdateService({
+  userRepository: bootstrap.getUserRepository(),
+});
 const userUpdateController = new UserUpdateController(userUpdateService);
 
 export const handle = async (

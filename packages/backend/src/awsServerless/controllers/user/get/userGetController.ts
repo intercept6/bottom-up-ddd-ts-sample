@@ -9,7 +9,7 @@ import {
   NotFound,
 } from '../../../errors/error';
 import { APIGatewayProxyResult } from 'aws-lambda';
-import { bootstrap } from '../../../utils/bootstrap';
+import { Bootstrap } from '../../../utils/bootstrap';
 
 type UserGetEvent = {
   pathParameters?: { userId?: string };
@@ -49,8 +49,10 @@ export class UserGetController {
   }
 }
 
-const { userRepository } = bootstrap();
-const userGetService = new UserGetService(userRepository);
+const bootstrap = new Bootstrap();
+const userGetService = new UserGetService({
+  userRepository: bootstrap.getUserRepository(),
+});
 const userGetController = new UserGetController(userGetService);
 
 export const handle = async (event: UserGetEvent) =>

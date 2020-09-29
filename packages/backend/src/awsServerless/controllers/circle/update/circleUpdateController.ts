@@ -1,7 +1,7 @@
 import 'source-map-support/register';
 import { CircleUpdateServiceInterface } from '../../../../application/circle/update/circleUpdateServiceInterface';
 import { APIGatewayProxyResult } from 'aws-lambda';
-import { bootstrap } from '../../../utils/bootstrap';
+import { Bootstrap } from '../../../utils/bootstrap';
 import { CircleUpdateService } from '../../../../application/circle/update/circleUpdateService';
 import { catchErrorDecorator } from '../../../decorators/decorator';
 import { BadRequest, InternalServerError } from '../../../errors/error';
@@ -86,10 +86,10 @@ export class CircleUpdateController {
   }
 }
 
-const { userRepository, circleRepository } = bootstrap();
+const bootstrap = new Bootstrap();
 const circleUpdateService = new CircleUpdateService({
-  circleRepository,
-  userRepository,
+  circleRepository: bootstrap.getCircleRepository(),
+  userRepository: bootstrap.getUserRepository(),
 });
 const circleUpdateController = new CircleUpdateController({
   circleUpdateService,

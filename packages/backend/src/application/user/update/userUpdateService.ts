@@ -13,10 +13,12 @@ import { UserNotFoundRepositoryError } from '../../../repository/error/error';
 import { UnknownError } from '../../../util/error';
 
 export class UserUpdateService implements UserUpdateServiceInterface {
+  private readonly userRepository: UserRepositoryInterface;
   private readonly userService: UserService;
 
-  constructor(private readonly userRepository: UserRepositoryInterface) {
-    this.userService = new UserService(userRepository);
+  constructor(props: { readonly userRepository: UserRepositoryInterface }) {
+    this.userRepository = props.userRepository;
+    this.userService = new UserService(this.userRepository);
   }
 
   async handle(command: UserUpdateCommand) {

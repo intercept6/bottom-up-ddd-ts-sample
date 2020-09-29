@@ -13,7 +13,7 @@ import {
 describe('ユーザ新規作成', () => {
   test('ユーザを新規作成する', async () => {
     const userRepository = new InMemoryUserRepository();
-    const userRegisterService = new UserRegisterService(userRepository);
+    const userRegisterService = new UserRegisterService({ userRepository });
     const command = new UserRegisterCommand({
       userName: 'テストユーザーの名前',
       mailAddress: 'test@example.com',
@@ -26,7 +26,7 @@ describe('ユーザ新規作成', () => {
 
   test('ユーザ名が3文字未満', async () => {
     const userRepository = new InMemoryUserRepository();
-    const userRegisterService = new UserRegisterService(userRepository);
+    const userRegisterService = new UserRegisterService({ userRepository });
     const command = new UserRegisterCommand({
       userName: 'テス',
       mailAddress: 'test@example.com',
@@ -40,7 +40,7 @@ describe('ユーザ新規作成', () => {
 
   test('ユーザ名が20文字超過', async () => {
     const userRepository = new InMemoryUserRepository();
-    const userRegisterService = new UserRegisterService(userRepository);
+    const userRegisterService = new UserRegisterService({ userRepository });
     const command = new UserRegisterCommand({
       userName: 'テストユーザの名前テストユーザの名前テスト',
       mailAddress: 'test@example.com',
@@ -54,7 +54,7 @@ describe('ユーザ新規作成', () => {
 
   test('ユーザ名に許可されない英語小文字が使われている', async () => {
     const userRepository = new InMemoryUserRepository();
-    const userRegisterService = new UserRegisterService(userRepository);
+    const userRegisterService = new UserRegisterService({ userRepository });
     const command = new UserRegisterCommand({
       userName: 'test',
       mailAddress: 'test@example.com',
@@ -70,7 +70,7 @@ describe('ユーザ新規作成', () => {
 
   test('ユーザ名に許可されない英語大文字が使われている', async () => {
     const userRepository = new InMemoryUserRepository();
-    const userRegisterService = new UserRegisterService(userRepository);
+    const userRegisterService = new UserRegisterService({ userRepository });
     const command = new UserRegisterCommand({
       userName: 'TEST',
       mailAddress: 'test@example.com',
@@ -86,7 +86,7 @@ describe('ユーザ新規作成', () => {
 
   test('ユーザ名に許可されない英語大文字が使われている', async () => {
     const userRepository = new InMemoryUserRepository();
-    const userRegisterService = new UserRegisterService(userRepository);
+    const userRegisterService = new UserRegisterService({ userRepository });
     const command = new UserRegisterCommand({
       userName: 'TEST',
       mailAddress: 'test@example.com',
@@ -110,7 +110,7 @@ describe('ユーザ新規作成', () => {
       )
     );
 
-    const userRegisterService = new UserRegisterService(userRepository);
+    const userRegisterService = new UserRegisterService({ userRepository });
     const command = new UserRegisterCommand({
       userName: '重複しないユーザーの名前',
       mailAddress: 'test@example.com',

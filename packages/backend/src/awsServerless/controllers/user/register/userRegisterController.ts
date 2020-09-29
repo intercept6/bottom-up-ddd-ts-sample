@@ -8,7 +8,7 @@ import {
 } from '../../../errors/error';
 import { catchErrorDecorator } from '../../../decorators/decorator';
 import { UserDuplicateApplicationError } from '../../../../application/error/error';
-import { bootstrap } from '../../../utils/bootstrap';
+import { Bootstrap } from '../../../utils/bootstrap';
 
 type UserRegisterEvent = {
   body: string;
@@ -50,8 +50,11 @@ export class UserRegisterController {
   }
 }
 
-const { userRepository, rootURI } = bootstrap();
-const userRegisterService = new UserRegisterService(userRepository);
+const bootstrap = new Bootstrap();
+const rootURI = bootstrap.getRootURI();
+const userRegisterService = new UserRegisterService({
+  userRepository: bootstrap.getUserRepository(),
+});
 const userRegisterController = new UserRegisterController(userRegisterService);
 
 export const handle = async (event: UserRegisterEvent) =>

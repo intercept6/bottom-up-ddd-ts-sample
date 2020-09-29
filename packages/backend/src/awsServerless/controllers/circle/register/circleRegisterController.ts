@@ -10,7 +10,7 @@ import { CircleRegisterCommand } from '../../../../application/circle/register/c
 import { catchErrorDecorator } from '../../../decorators/decorator';
 import { APIGatewayProxyResult } from 'aws-lambda';
 import { CircleDuplicateApplicationError } from '../../../../application/error/error';
-import { bootstrap } from '../../../utils/bootstrap';
+import { Bootstrap } from '../../../utils/bootstrap';
 
 type CircleRegisterEvent = {
   body?: string;
@@ -65,17 +65,12 @@ export class CircleRegisterController {
   }
 }
 
-const {
-  circleFactory,
-  circleRepository,
-  userRepository,
-  rootURI,
-} = bootstrap();
-
+const bootstrap = new Bootstrap();
+const rootURI = bootstrap.getRootURI();
 const circleRegisterService = new CircleRegisterService({
-  circleRepository,
-  userRepository,
-  circleFactory,
+  circleRepository: bootstrap.getCircleRepository(),
+  userRepository: bootstrap.getUserRepository(),
+  circleFactory: bootstrap.getCircleFactory(),
 });
 const circleRegisterController = new CircleRegisterController({
   circleRegisterService,

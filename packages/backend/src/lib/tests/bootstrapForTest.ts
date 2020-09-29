@@ -91,25 +91,25 @@ export class BootstrapForTest {
 
   getUserRegisterController(tableName: string) {
     const userRepository = this.getUserRepository(tableName);
-    const userRegisterService = new UserRegisterService(userRepository);
+    const userRegisterService = new UserRegisterService({ userRepository });
     return new UserRegisterController(userRegisterService);
   }
 
   getUserGetController(tableName: string) {
     const userRepository = this.getUserRepository(tableName);
-    const userGetService = new UserGetService(userRepository);
+    const userGetService = new UserGetService({ userRepository });
     return new UserGetController(userGetService);
   }
 
   getUserUpdateController(tableName: string) {
     const userRepository = this.getUserRepository(tableName);
-    const userUpdateService = new UserUpdateService(userRepository);
+    const userUpdateService = new UserUpdateService({ userRepository });
     return new UserUpdateController(userUpdateService);
   }
 
   getUserDeleteController(tableName: string) {
     const userRepository = this.getUserRepository(tableName);
-    const userDeleteService = new UserDeleteService(userRepository);
+    const userDeleteService = new UserDeleteService({ userRepository });
     return new UserDeleteController(userDeleteService);
   }
 

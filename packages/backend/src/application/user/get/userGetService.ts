@@ -12,7 +12,11 @@ import {
 import { UnknownError } from '../../../util/error';
 
 export class UserGetService implements UserGetServiceInterface {
-  constructor(private readonly userRepository: UserRepositoryInterface) {}
+  private readonly userRepository: UserRepositoryInterface;
+
+  constructor(props: { readonly userRepository: UserRepositoryInterface }) {
+    this.userRepository = props.userRepository;
+  }
 
   private static getIdentifier(props: {
     userId?: string;

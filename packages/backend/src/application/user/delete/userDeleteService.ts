@@ -7,7 +7,11 @@ import { UserRepositoryInterface } from '../../../domain/models/user/userReposit
 import { UserDeleteServiceInterface } from './userDeleteServiceInterface';
 
 export class UserDeleteService implements UserDeleteServiceInterface {
-  constructor(private readonly userRepository: UserRepositoryInterface) {}
+  private readonly userRepository: UserRepositoryInterface;
+
+  constructor(props: { readonly userRepository: UserRepositoryInterface }) {
+    this.userRepository = props.userRepository;
+  }
 
   async handle(command: UserDeleteCommand) {
     const targetId = new UserId(command.getUserId());

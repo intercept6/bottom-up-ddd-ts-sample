@@ -16,7 +16,7 @@ describe('ユーザ削除', () => {
         new MailAddress('test@example.com')
       )
     );
-    const userDeleteService = new UserDeleteService(userRepository);
+    const userDeleteService = new UserDeleteService({ userRepository });
     const command = new UserDeleteCommand(
       '203881e1-99f2-4ce6-ab6b-785fcd793c92'
     );
@@ -27,7 +27,7 @@ describe('ユーザ削除', () => {
 
   test('存在しないユーザを削除できる', async () => {
     const userRepository = new InMemoryUserRepository();
-    const userDeleteService = new UserDeleteService(userRepository);
+    const userDeleteService = new UserDeleteService({ userRepository });
     const command = new UserDeleteCommand(
       '203881e1-99f2-4ce6-ab6b-785fcd793c92'
     );

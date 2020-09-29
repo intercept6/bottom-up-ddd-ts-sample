@@ -17,7 +17,7 @@ describe('ユーザー取得', () => {
         new MailAddress('test@example.com')
       )
     );
-    const userGetService = new UserGetService(userRepository);
+    const userGetService = new UserGetService({ userRepository });
     const command = new UserGetCommand({
       userId: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
     });
@@ -37,7 +37,7 @@ describe('ユーザー取得', () => {
         new MailAddress('test@example.com')
       )
     );
-    const userGetService = new UserGetService(userRepository);
+    const userGetService = new UserGetService({ userRepository });
     const command = new UserGetCommand({ mailAddress: 'test@example.com' });
     const response = await userGetService.handle(command);
 
@@ -48,7 +48,7 @@ describe('ユーザー取得', () => {
 
   test('存在しないユーザーIDではユーザーの取得に失敗する', async () => {
     const userRepository = new InMemoryUserRepository();
-    const userGetService = new UserGetService(userRepository);
+    const userGetService = new UserGetService({ userRepository });
     const command = new UserGetCommand({
       userId: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
     });
@@ -63,7 +63,7 @@ describe('ユーザー取得', () => {
 
   test('存在しないメールアドレスではユーザーの取得に失敗する', async () => {
     const userRepository = new InMemoryUserRepository();
-    const userGetService = new UserGetService(userRepository);
+    const userGetService = new UserGetService({ userRepository });
     const command = new UserGetCommand({ mailAddress: 'test@example.com' });
     const getPromise = userGetService.handle(command);
 

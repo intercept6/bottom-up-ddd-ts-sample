@@ -20,7 +20,7 @@ describe('ユーザ更新', () => {
         new MailAddress('test@example.com')
       )
     );
-    const userApplicationService = new UserUpdateService(userRepository);
+    const userApplicationService = new UserUpdateService({ userRepository });
     const command = new UserUpdateCommand({
       id: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
       name: '変更されたテストユーザーの名前',
@@ -40,7 +40,7 @@ describe('ユーザ更新', () => {
         new MailAddress('test@example.com')
       )
     );
-    const userApplicationService = new UserUpdateService(userRepository);
+    const userApplicationService = new UserUpdateService({ userRepository });
     const command = new UserUpdateCommand({
       id: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
       mailAddress: 'changed@example.com',
@@ -60,7 +60,7 @@ describe('ユーザ更新', () => {
         new MailAddress('test@example.com')
       )
     );
-    const userApplicationService = new UserUpdateService(userRepository);
+    const userApplicationService = new UserUpdateService({ userRepository });
     const command = new UserUpdateCommand({
       id: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
       name: 'テス',
@@ -81,7 +81,7 @@ describe('ユーザ更新', () => {
         new MailAddress('test@example.com')
       )
     );
-    const userApplicationService = new UserUpdateService(userRepository);
+    const userApplicationService = new UserUpdateService({ userRepository });
     const command = new UserUpdateCommand({
       id: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
       name: 'テストユーザの名前テストユーザの名前テスト',
@@ -102,7 +102,7 @@ describe('ユーザ更新', () => {
         new MailAddress('test@example.com')
       )
     );
-    const userApplicationService = new UserUpdateService(userRepository);
+    const userApplicationService = new UserUpdateService({ userRepository });
     const command = new UserUpdateCommand({
       id: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
       name: 'test',
@@ -125,7 +125,7 @@ describe('ユーザ更新', () => {
         new MailAddress('test@example.com')
       )
     );
-    const userApplicationService = new UserUpdateService(userRepository);
+    const userApplicationService = new UserUpdateService({ userRepository });
     const command = new UserUpdateCommand({
       id: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
       name: 'TEST',
@@ -156,7 +156,7 @@ describe('ユーザ更新', () => {
       )
     );
 
-    const userApplicationService = new UserUpdateService(userRepository);
+    const userApplicationService = new UserUpdateService({ userRepository });
     const command = new UserUpdateCommand({
       id: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
       mailAddress: 'changed@example.com',

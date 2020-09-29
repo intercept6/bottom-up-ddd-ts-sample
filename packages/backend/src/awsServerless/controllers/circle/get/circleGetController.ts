@@ -7,7 +7,7 @@ import { CircleGetCommand } from '../../../../application/circle/get/circleGetCo
 import { CircleNotFoundApplicationError } from '../../../../application/error/error';
 import { UnknownError } from '../../../../util/error';
 import { catchErrorDecorator } from '../../../decorators/decorator';
-import { bootstrap } from '../../../utils/bootstrap';
+import { Bootstrap } from '../../../utils/bootstrap';
 
 type CircleGetEvent = {
   pathParameters?: { circleId?: string };
@@ -49,8 +49,10 @@ export class CircleGetController {
   }
 }
 
-const { circleRepository } = bootstrap();
-const circleGetService = new CircleGetService({ circleRepository });
+const bootstrap = new Bootstrap();
+const circleGetService = new CircleGetService({
+  circleRepository: bootstrap.getCircleRepository(),
+});
 const circleGetController = new CircleGetController(circleGetService);
 
 export const handle = async (event: CircleGetEvent) =>

@@ -8,7 +8,7 @@ import {
 } from '../../../errors/error';
 import { APIGatewayProxyResult } from 'aws-lambda';
 import { UserNotFoundApplicationError } from '../../../../application/error/error';
-import { bootstrap } from '../../../utils/bootstrap';
+import { Bootstrap } from '../../../utils/bootstrap';
 
 type UserDeleteEvent = {
   pathParameters?: { userId?: string };
@@ -40,8 +40,10 @@ export class UserDeleteController {
   }
 }
 
-const { userRepository } = bootstrap();
-const userDeleteService = new UserDeleteService(userRepository);
+const bootstrap = new Bootstrap();
+const userDeleteService = new UserDeleteService({
+  userRepository: bootstrap.getUserRepository(),
+});
 const userDeleteController = new UserDeleteController(userDeleteService);
 
 export const handle = async (event: UserDeleteEvent) =>

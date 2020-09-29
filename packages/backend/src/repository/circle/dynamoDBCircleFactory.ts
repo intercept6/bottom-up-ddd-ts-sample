@@ -5,17 +5,16 @@ import { CircleName } from '../../domain/models/circle/circleName';
 import { UserId } from '../../domain/models/user/userId';
 import { ArgumentRepositoryError } from '../error/error';
 import { generateUuid } from '../../util/uuid';
-import { DynamoDBUserRepository } from '../user/dynamoDBUserRepository';
-import { DynamoDBCircleRepository } from './dynamoDBCircleRepository';
+import { UserRepositoryInterface } from '../../domain/models/user/userRepositoryInterface';
+import { CircleRepositoryInterface } from '../../domain/models/circle/circleRepositoryInterface';
 
 export class DynamoDBCircleFactory implements CircleFactoryInterface {
-  // Factoryクラスは同一インフラストラクチャーのリポジトリを必ず使用する、なのでInterfacesではなくImplementsに依存させる
-  private readonly userRepository: DynamoDBUserRepository;
-  private readonly circleRepository: DynamoDBCircleRepository;
+  private readonly userRepository: UserRepositoryInterface;
+  private readonly circleRepository: CircleRepositoryInterface;
 
   constructor(props: {
-    userRepository: DynamoDBUserRepository;
-    circleRepository: DynamoDBCircleRepository;
+    userRepository: UserRepositoryInterface;
+    circleRepository: CircleRepositoryInterface;
   }) {
     this.userRepository = props.userRepository;
     this.circleRepository = props.circleRepository;

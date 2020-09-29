@@ -9,10 +9,12 @@ import { UserRegisterServiceInterface } from './userRegisterServiceInterface';
 import { UserData } from '../userData';
 
 export class UserRegisterService implements UserRegisterServiceInterface {
+  private readonly userRepository: UserRepositoryInterface;
   private readonly userService: UserService;
 
-  constructor(private readonly userRepository: UserRepositoryInterface) {
-    this.userService = new UserService(userRepository);
+  constructor(props: { readonly userRepository: UserRepositoryInterface }) {
+    this.userRepository = props.userRepository;
+    this.userService = new UserService(this.userRepository);
   }
 
   async handle(command: UserRegisterCommand) {
