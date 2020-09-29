@@ -1,13 +1,12 @@
 import 'source-map-support/register';
 import { CircleDeleteService } from '../../../../application/circle/delete/circleDeleteService';
-import { catchErrorDecorator } from '../../../decorators/decorator';
-import {
-  BadRequest,
-  InternalServerError,
-  NotFound,
-} from '../../../errors/error';
 import { CircleDeleteCommand } from '../../../../application/circle/delete/circleDeleteCommand';
 import { CircleNotFoundApplicationError } from '../../../../application/error/error';
+import {
+  badRequest,
+  internalServerError,
+  notFound,
+} from '../../../utils/httpResponse';
 
 type CircleDeleteEvent = {
   pathParameters?: { circleId?: string };
@@ -20,11 +19,10 @@ export class CircleDeleteController {
     this.circleDeleteService = props.circleDeleteService;
   }
 
-  @catchErrorDecorator
   async handle(event: CircleDeleteEvent) {
     const circleId = event?.pathParameters?.circleId;
     if (circleId == null) {
-      throw new BadRequest('circle id type is not string');
+      return badRequest('circle id type is not string');
     }
 
     const command = new CircleDeleteCommand(circleId);
@@ -34,9 +32,9 @@ export class CircleDeleteController {
 
     if (error instanceof Error) {
       if (error instanceof CircleNotFoundApplicationError) {
-        throw new NotFound(`circle id: ${circleId} is not found`);
+        return notFound(`circle id: ${circleId} is not found`);
       }
-      throw new InternalServerError('circle delete failed');
+      return internalServerError({ message: 'circle delete failed', error });
     }
 
     return { statusCode: 204, body: JSON.stringify({}) };

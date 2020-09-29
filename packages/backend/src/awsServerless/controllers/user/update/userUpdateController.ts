@@ -1,10 +1,9 @@
 import { UserUpdateService } from '../../../../application/user/update/userUpdateService';
 import { UserUpdateCommand } from '../../../../application/user/update/userUpdateCommand';
 import type { APIGatewayProxyResult } from 'aws-lambda';
-import { BadRequest, InternalServerError } from '../../../errors/error';
-import { catchErrorDecorator } from '../../../decorators/decorator';
 import { UserNotFoundApplicationError } from '../../../../application/error/error';
 import { Bootstrap } from '../../../utils/bootstrap';
+import { badRequest, internalServerError } from '../../../utils/httpResponse';
 
 type UserUpdateEvent = {
   pathParameters: { userId: string };
@@ -14,26 +13,25 @@ type UserUpdateEvent = {
 export class UserUpdateController {
   constructor(private readonly userUpdateService: UserUpdateService) {}
 
-  @catchErrorDecorator
   async handle(event: UserUpdateEvent): Promise<APIGatewayProxyResult> {
     const id = event.pathParameters?.userId;
     if (typeof id !== 'string') {
-      throw new BadRequest('userId type is not string');
+      return badRequest('userId type is not string');
     }
 
     if (event.body == null) {
-      throw new BadRequest('request body is null');
+      return badRequest('request body is null');
     }
 
     const body = JSON.parse(event.body);
     const mailAddress = body.mail_address;
     const name = body.user_name;
     if (name == null && mailAddress == null) {
-      throw new BadRequest('user_name type and mail_address are undefined');
+      return badRequest('user_name type and mail_address are undefined');
     } else if (name != null && typeof name !== 'string') {
-      throw new BadRequest('user_name type is not string');
+      return badRequest('user_name type is not string');
     } else if (mailAddress != null && typeof mailAddress !== 'string') {
-      throw new BadRequest('mail_address type is not string');
+      return badRequest('mail_address type is not string');
     }
 
     const command = new UserUpdateCommand({
@@ -47,9 +45,9 @@ export class UserUpdateController {
 
     if (error instanceof Error) {
       if (error instanceof UserNotFoundApplicationError) {
-        throw new BadRequest(`user id: ${id} is not found`, error);
+        return badRequest(`user id: ${id} is not found`);
       }
-      throw new InternalServerError('user update is failed', error);
+      return internalServerError({ message: 'user update is failed', error });
     }
     return {
       statusCode: 204,

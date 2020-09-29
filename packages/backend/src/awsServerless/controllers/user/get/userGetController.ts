@@ -2,14 +2,13 @@ import { UserGetServiceInterface } from '../../../../application/user/get/userGe
 import { UserGetService } from '../../../../application/user/get/userGetService';
 import { UserGetCommand } from '../../../../application/user/get/userGetCommand';
 import { UserNotFoundApplicationError } from '../../../../application/error/error';
-import { catchErrorDecorator } from '../../../decorators/decorator';
-import {
-  BadRequest,
-  InternalServerError,
-  NotFound,
-} from '../../../errors/error';
 import { APIGatewayProxyResult } from 'aws-lambda';
 import { Bootstrap } from '../../../utils/bootstrap';
+import {
+  badRequest,
+  internalServerError,
+  notFound,
+} from '../../../utils/httpResponse';
 
 type UserGetEvent = {
   pathParameters?: { userId?: string };
@@ -18,11 +17,10 @@ type UserGetEvent = {
 export class UserGetController {
   constructor(private readonly userGetService: UserGetServiceInterface) {}
 
-  @catchErrorDecorator
   async handle(event: UserGetEvent): Promise<APIGatewayProxyResult> {
     const userId = event?.pathParameters?.userId;
     if (typeof userId !== 'string') {
-      throw new BadRequest('user id type is not string');
+      return badRequest('user id type is not string');
     }
 
     const command = new UserGetCommand({ userId });
@@ -33,9 +31,9 @@ export class UserGetController {
     if (userData instanceof Error) {
       const error = userData;
       if (error instanceof UserNotFoundApplicationError) {
-        throw new NotFound(error.message);
+        return notFound(error.message);
       }
-      throw new InternalServerError('user get failed');
+      return internalServerError({ message: 'user get failed', error });
     }
 
     return {

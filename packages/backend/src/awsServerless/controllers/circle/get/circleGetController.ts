@@ -2,12 +2,11 @@ import 'source-map-support/register';
 import { CircleGetService } from '../../../../application/circle/get/circleGetService';
 import { CircleGetServiceInterface } from '../../../../application/circle/get/circleGetServiceInterface';
 import { APIGatewayProxyResult } from 'aws-lambda';
-import { BadRequest, NotFound } from '../../../errors/error';
 import { CircleGetCommand } from '../../../../application/circle/get/circleGetCommand';
 import { CircleNotFoundApplicationError } from '../../../../application/error/error';
 import { UnknownError } from '../../../../util/error';
-import { catchErrorDecorator } from '../../../decorators/decorator';
 import { Bootstrap } from '../../../utils/bootstrap';
+import { badRequest, notFound } from '../../../utils/httpResponse';
 
 type CircleGetEvent = {
   pathParameters?: { circleId?: string };
@@ -16,12 +15,11 @@ type CircleGetEvent = {
 export class CircleGetController {
   constructor(private readonly circleGetService: CircleGetServiceInterface) {}
 
-  @catchErrorDecorator
   async handle(event: CircleGetEvent): Promise<APIGatewayProxyResult> {
     const circleId = event.pathParameters?.circleId;
 
     if (typeof circleId !== 'string') {
-      throw new BadRequest('circle id type is not string');
+      return badRequest('circle id type is not string');
     }
 
     const command = new CircleGetCommand(circleId);
@@ -32,7 +30,7 @@ export class CircleGetController {
     if (response instanceof Error) {
       const error = response;
       if (error instanceof CircleNotFoundApplicationError) {
-        throw new NotFound(`circle id: ${circleId} is notfound`);
+        return notFound(`circle id: ${circleId} is notfound`);
       }
       throw new UnknownError('unknown error', error);
     }

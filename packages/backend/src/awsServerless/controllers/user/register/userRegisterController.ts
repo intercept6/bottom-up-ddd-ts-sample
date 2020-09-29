@@ -1,14 +1,13 @@
 import { UserRegisterService } from '../../../../application/user/register/userRegisterService';
 import { UserRegisterCommand } from '../../../../application/user/register/userRegisterCommand';
 import { APIGatewayProxyResult } from 'aws-lambda';
-import {
-  BadRequest,
-  Conflict,
-  InternalServerError,
-} from '../../../errors/error';
-import { catchErrorDecorator } from '../../../decorators/decorator';
 import { UserDuplicateApplicationError } from '../../../../application/error/error';
 import { Bootstrap } from '../../../utils/bootstrap';
+import {
+  badRequest,
+  conflict,
+  internalServerError,
+} from '../../../utils/httpResponse';
 
 type UserRegisterEvent = {
   body: string;
@@ -17,10 +16,9 @@ type UserRegisterEvent = {
 export class UserRegisterController {
   constructor(private readonly userRegisterService: UserRegisterService) {}
 
-  @catchErrorDecorator
   async handle(event: UserRegisterEvent): Promise<APIGatewayProxyResult> {
     if (event.body == null) {
-      throw new BadRequest('request body is null');
+      return badRequest('request body is null');
     }
 
     const body = JSON.parse(event.body);
@@ -36,9 +34,9 @@ export class UserRegisterController {
       if (userData instanceof Error) {
         const error = userData;
         if (error instanceof UserDuplicateApplicationError) {
-          throw new Conflict(error.message);
+          return conflict(error.message);
         }
-        throw new InternalServerError('user register failed');
+        return internalServerError({ message: 'user register failed', error });
       }
       return {
         statusCode: 201,
@@ -46,7 +44,7 @@ export class UserRegisterController {
         headers: { location: `${rootURI}users/${userData.getId()}` },
       };
     }
-    throw new BadRequest('user_name or mail_address is not string');
+    return badRequest('user_name or mail_address is not string');
   }
 }
 

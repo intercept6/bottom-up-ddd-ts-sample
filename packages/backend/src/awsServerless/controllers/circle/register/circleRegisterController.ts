@@ -1,16 +1,15 @@
 import 'source-map-support/register';
 import { CircleRegisterServiceInterface } from '../../../../application/circle/register/circleRegisterServiceInterface';
 import { CircleRegisterService } from '../../../../application/circle/register/circleRegisterService';
-import {
-  BadRequest,
-  Conflict,
-  InternalServerError,
-} from '../../../errors/error';
 import { CircleRegisterCommand } from '../../../../application/circle/register/circleRegisterCommand';
-import { catchErrorDecorator } from '../../../decorators/decorator';
 import { APIGatewayProxyResult } from 'aws-lambda';
 import { CircleDuplicateApplicationError } from '../../../../application/error/error';
 import { Bootstrap } from '../../../utils/bootstrap';
+import {
+  badRequest,
+  conflict,
+  internalServerError,
+} from '../../../utils/httpResponse';
 
 type CircleRegisterEvent = {
   body?: string;
@@ -25,10 +24,9 @@ export class CircleRegisterController {
     this.circleRegisterService = props.circleRegisterService;
   }
 
-  @catchErrorDecorator
   async handle(event: CircleRegisterEvent): Promise<APIGatewayProxyResult> {
     if (event.body == null) {
-      throw new BadRequest('request body is null');
+      return badRequest('request body is null');
     }
 
     const body = JSON.parse(event.body);
@@ -36,11 +34,11 @@ export class CircleRegisterController {
     const ownerId = body.owner_id;
 
     if (typeof circleName !== 'string') {
-      throw new BadRequest('circle_name should be string type');
+      return badRequest('circle_name should be string type');
     }
 
     if (typeof ownerId !== 'string') {
-      throw new BadRequest('owner_id should be string type');
+      return badRequest('owner_id should be string type');
     }
 
     const command = new CircleRegisterCommand({ ownerId, circleName });
@@ -52,9 +50,9 @@ export class CircleRegisterController {
       const error = response;
 
       if (error instanceof CircleDuplicateApplicationError) {
-        throw new Conflict(`circle_name ${circleName} is already exist`, error);
+        return conflict(`circle_name ${circleName} is already exist`);
       }
-      throw new InternalServerError('circle register failed', error);
+      return internalServerError({ message: 'circle register failed', error });
     }
 
     return {

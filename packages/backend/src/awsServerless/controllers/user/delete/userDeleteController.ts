@@ -1,14 +1,13 @@
 import { UserDeleteService } from '../../../../application/user/delete/userDeleteService';
 import { UserDeleteCommand } from '../../../../application/user/delete/userDeleteCommand';
-import { catchErrorDecorator } from '../../../decorators/decorator';
-import {
-  BadRequest,
-  InternalServerError,
-  NotFound,
-} from '../../../errors/error';
 import { APIGatewayProxyResult } from 'aws-lambda';
 import { UserNotFoundApplicationError } from '../../../../application/error/error';
 import { Bootstrap } from '../../../utils/bootstrap';
+import {
+  badRequest,
+  internalServerError,
+  notFound,
+} from '../../../utils/httpResponse';
 
 type UserDeleteEvent = {
   pathParameters?: { userId?: string };
@@ -17,11 +16,10 @@ type UserDeleteEvent = {
 export class UserDeleteController {
   constructor(private readonly userDeleteService: UserDeleteService) {}
 
-  @catchErrorDecorator
   async handle(event: UserDeleteEvent): Promise<APIGatewayProxyResult> {
     const userId = event?.pathParameters?.userId;
     if (userId == null) {
-      throw new BadRequest('user id type is not string');
+      return badRequest('user id type is not string');
     }
 
     const command = new UserDeleteCommand(userId);
@@ -31,9 +29,9 @@ export class UserDeleteController {
 
     if (error instanceof Error) {
       if (error instanceof UserNotFoundApplicationError) {
-        throw new NotFound(`user id: ${userId} is not found`);
+        return notFound(`user id: ${userId} is not found`);
       }
-      throw new InternalServerError('user gets failed');
+      return internalServerError({ message: 'user gets failed', error });
     }
 
     return { statusCode: 204, body: JSON.stringify({}) };

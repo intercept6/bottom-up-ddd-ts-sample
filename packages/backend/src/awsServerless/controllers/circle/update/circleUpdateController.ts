@@ -3,8 +3,6 @@ import { CircleUpdateServiceInterface } from '../../../../application/circle/upd
 import { APIGatewayProxyResult } from 'aws-lambda';
 import { Bootstrap } from '../../../utils/bootstrap';
 import { CircleUpdateService } from '../../../../application/circle/update/circleUpdateService';
-import { catchErrorDecorator } from '../../../decorators/decorator';
-import { BadRequest, InternalServerError } from '../../../errors/error';
 import { CircleUpdateCommand } from '../../../../application/circle/update/circleUpdateCommand';
 import { isStringArray } from '../../../../util/typeGuard';
 import {
@@ -12,6 +10,7 @@ import {
   MembersNotFoundApplicationError,
   OwnerNotFoundApplicationError,
 } from '../../../../application/error/error';
+import { badRequest, internalServerError } from '../../../utils/httpResponse';
 
 type CircleUpdateEvent = {
   pathParameters?: { circleId?: string };
@@ -27,15 +26,14 @@ export class CircleUpdateController {
     this.circleUpdateService = props.circleUpdateService;
   }
 
-  @catchErrorDecorator
   async handle(event: CircleUpdateEvent): Promise<APIGatewayProxyResult> {
     if (event.body == null) {
-      throw new BadRequest('request body is null');
+      return badRequest('request body is null');
     }
 
     const circleId = event.pathParameters?.circleId;
     if (typeof circleId !== 'string') {
-      throw new BadRequest('circle id type is not string');
+      return badRequest('circle id type is not string');
     }
 
     const body = JSON.parse(event.body);
@@ -44,16 +42,16 @@ export class CircleUpdateController {
     const memberIds = body.member_ids;
 
     if (circleName == null && ownerId == null && memberIds == null) {
-      throw new BadRequest('circle_name, owner_id or member_ids are undefined');
+      return badRequest('circle_name, owner_id or member_ids are undefined');
     }
     if (circleName != null && typeof circleName !== 'string') {
-      throw new BadRequest('circle_name type is not string');
+      return badRequest('circle_name type is not string');
     }
     if (ownerId != null && typeof ownerId !== 'string') {
-      throw new BadRequest('owner_id type is not string');
+      return badRequest('owner_id type is not string');
     }
     if (memberIds != null && !isStringArray(memberIds)) {
-      throw new BadRequest('member_ids type is not string[]');
+      return badRequest('member_ids type is not string[]');
     }
 
     const command = new CircleUpdateCommand({
@@ -69,15 +67,15 @@ export class CircleUpdateController {
 
     if (error instanceof Error) {
       if (error instanceof CircleNotFoundApplicationError) {
-        throw new BadRequest(`circle id: ${circleId} is not found`, error);
+        return badRequest(`circle id: ${circleId} is not found`);
       }
       if (error instanceof OwnerNotFoundApplicationError) {
-        throw new BadRequest(`owner id: ${ownerId} is not found`, error);
+        return badRequest(`owner id: ${ownerId} is not found`);
       }
       if (error instanceof MembersNotFoundApplicationError) {
-        throw new BadRequest(error.message, error);
+        return badRequest(error.message);
       }
-      throw new InternalServerError('circle update is failed', error);
+      return internalServerError({ message: 'circle update is failed', error });
     }
     return {
       statusCode: 204,
