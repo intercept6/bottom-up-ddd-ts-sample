@@ -1,37 +1,29 @@
-import { InMemoryUserRepository } from '../../../repository/user/inMemoryUserRepository';
 import { CircleRegisterCommand } from './circleRegisterCommand';
+import { CircleRegisterService } from './circleRegisterService';
+import { ArgumentApplicationError } from '../../error/error';
+import { MockCircleRepository } from '../../../repository/circle/__mock__/mockCircleRepository';
+import { MockUserRepository } from '../../../repository/user/__mock__/mockUserRepository';
+import { MockCircleFactory } from '../../../repository/circle/__mock__/mockCircleFactory';
 import { User } from '../../../domain/models/user/user';
 import { UserId } from '../../../domain/models/user/userId';
 import { UserName } from '../../../domain/models/user/userName';
 import { MailAddress } from '../../../domain/models/user/mailAddress';
-import { CircleRegisterService } from './circleRegisterService';
-import { InMemoryCircleRepository } from '../../../repository/circle/inMemoryCircleRepository';
-import { ArgumentApplicationError } from '../../error/error';
-import { Circle } from '../../../domain/models/circle/circle';
-import { CircleId } from '../../../domain/models/circle/circleId';
+import { CircleNotFoundRepositoryError } from '../../../repository/error/error';
 import { CircleName } from '../../../domain/models/circle/circleName';
-import { InMemoryCircleFactory } from '../../../repository/circle/inMemoryCircleFactory';
+import { CircleId } from '../../../domain/models/circle/circleId';
+import { Circle } from '../../../domain/models/circle/circle';
 
-const userRepository = new InMemoryUserRepository();
-const circleFactory = new InMemoryCircleFactory();
-const circleRepository = new InMemoryCircleRepository();
+const userRepository = new MockUserRepository();
+const circleFactory = new MockCircleFactory();
+const circleRepository = new MockCircleRepository();
 const circleRegisterService = new CircleRegisterService({
   circleRepository,
   userRepository,
   circleFactory,
 });
 
-beforeAll(() => {
-  userRepository.store.push(
-    new User(
-      new UserId('203881e1-99f2-4ce6-ab6b-785fcd793c92'),
-      new UserName('テストユーザーの名前'),
-      new MailAddress('test@example.com')
-    )
-  );
-});
 afterEach(() => {
-  circleRepository.clear();
+  jest.clearAllMocks();
 });
 
 describe('サークル新規作成', () => {
@@ -40,22 +32,55 @@ describe('サークル新規作成', () => {
     ${'テスト'}
     ${'テストサークル名テストサークル名テストサ'}
   `('サークルを新規作成する', async ({ circleName }) => {
+    jest
+      .spyOn(MockUserRepository.prototype, 'get')
+      .mockResolvedValueOnce(
+        new User(
+          new UserId('203881e1-99f2-4ce6-ab6b-785fcd793c92'),
+          new UserName('モックユーザー名'),
+          new MailAddress('mock@example.com')
+        )
+      );
+    jest
+      .spyOn(MockCircleRepository.prototype, 'get')
+      .mockRejectedValueOnce(
+        new CircleNotFoundRepositoryError(new CircleName('テストサークル名'))
+      );
+    jest
+      .spyOn(MockCircleRepository.prototype, 'create')
+      .mockResolvedValueOnce();
+    jest
+      .spyOn(MockCircleFactory.prototype, 'create')
+      .mockResolvedValueOnce(
+        Circle.create(
+          new CircleId('04c233ed-3d43-41d9-b3a2-2fe77e9e9d66'),
+          new CircleName('テストサークル名'),
+          new UserId('203881e1-99f2-4ce6-ab6b-785fcd793c92'),
+          []
+        )
+      );
+
     const command = new CircleRegisterCommand({
       ownerId: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
       circleName,
     });
     await circleRegisterService.handle(command);
-
-    const head = circleRepository.store[0];
-    expect(head.getCircleName().getValue()).toEqual(circleName);
-    expect(head.getOwnerId().getValue()).toEqual(
-      '203881e1-99f2-4ce6-ab6b-785fcd793c92'
-    );
   });
 
   test('サークル名が3文字未満は作成できない', async () => {
+    const ownerId = '203881e1-99f2-4ce6-ab6b-785fcd793c92';
+    jest
+      .spyOn(MockUserRepository.prototype, 'get')
+      .mockResolvedValueOnce(
+        new User(
+          new UserId(ownerId),
+          new UserName('テストユーザー'),
+          new MailAddress('test@example.com')
+        )
+      );
+
     const command = new CircleRegisterCommand({
-      ownerId: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
+      ownerId,
       circleName: 'テス',
     });
     const registerCirclePromise = circleRegisterService.handle(command);
@@ -66,8 +91,19 @@ describe('サークル新規作成', () => {
   });
 
   test('サークル名が20文字超過は作成できない', async () => {
+    const ownerId = '203881e1-99f2-4ce6-ab6b-785fcd793c92';
+    jest
+      .spyOn(MockUserRepository.prototype, 'get')
+      .mockResolvedValueOnce(
+        new User(
+          new UserId(ownerId),
+          new UserName('テストユーザー'),
+          new MailAddress('test@example.com')
+        )
+      );
+
     const command = new CircleRegisterCommand({
-      ownerId: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
+      ownerId,
       circleName: 'テストサークル名テストサークル名テストサー',
     });
     const registerCirclePromise = circleRegisterService.handle(command);
@@ -78,17 +114,29 @@ describe('サークル新規作成', () => {
   });
 
   test('サークル名は重複できない', async () => {
-    circleRepository.store.push(
-      Circle.create(
-        new CircleId('66d73617-aa4f-46b3-bf7d-9c193f0a08d1'),
-        new CircleName('テストサークル名'),
-        new UserId('203881e1-99f2-4ce6-ab6b-785fcd793c92'),
-        []
-      )
-    );
+    const ownerId = '203881e1-99f2-4ce6-ab6b-785fcd793c92';
+    jest
+      .spyOn(MockUserRepository.prototype, 'get')
+      .mockResolvedValueOnce(
+        new User(
+          new UserId(ownerId),
+          new UserName('テストユーザー'),
+          new MailAddress('test@example.com')
+        )
+      );
+    jest
+      .spyOn(MockCircleRepository.prototype, 'get')
+      .mockResolvedValueOnce(
+        Circle.create(
+          new CircleId('7627d7cd-cf9a-4100-bd49-f2996fd9c403'),
+          new CircleName('テストサークル名'),
+          new UserId(ownerId),
+          []
+        )
+      );
 
     const command = new CircleRegisterCommand({
-      ownerId: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
+      ownerId,
       circleName: 'テストサークル名',
     });
     const registerCirclePromise = circleRegisterService.handle(command);
