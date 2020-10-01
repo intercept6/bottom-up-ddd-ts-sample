@@ -1,7 +1,6 @@
 import { UserRepositoryInterface } from '../../../domain/models/user/userRepositoryInterface';
 import { User } from '../../../domain/models/user/user';
 
-/* eslint-disable no-unreachable */
 export class MockUserRepository implements UserRepositoryInterface {
   async delete() {
     throw new Error('user repository class method delete is not mocked');
@@ -15,13 +14,11 @@ export class MockUserRepository implements UserRepositoryInterface {
     throw new Error('user repository class method update is not mocked');
   }
 
-  async get() {
+  async get(): Promise<User> {
     throw new Error('user repository class method get is not mocked');
-    return {} as User;
   }
 
-  async batchGet() {
+  async batchGet(): Promise<User[]> {
     throw new Error('user repository class method batchGet is not mocked');
-    return [] as User[];
   }
 }

@@ -1,7 +1,6 @@
 import { CircleRepositoryInterface } from '../../../domain/models/circle/circleRepositoryInterface';
 import { Circle } from '../../../domain/models/circle/circle';
 
-/* eslint-disable no-unreachable */
 export class MockCircleRepository implements CircleRepositoryInterface {
   async delete() {
     throw new Error('circle repository class method delete is not mocked');
@@ -15,8 +14,7 @@ export class MockCircleRepository implements CircleRepositoryInterface {
     throw new Error('circle repository class method update is not mocked');
   }
 
-  async get() {
+  async get(): Promise<Circle> {
     throw new Error('circle repository class method get is not mocked');
-    return {} as Circle;
   }
 }
