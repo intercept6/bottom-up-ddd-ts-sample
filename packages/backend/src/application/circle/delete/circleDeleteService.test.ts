@@ -2,12 +2,12 @@ import { CircleId } from '../../../domain/models/circle/circleId';
 import { CircleDeleteCommand } from './circleDeleteCommand';
 import { CircleDeleteService } from './circleDeleteService';
 import { CircleNotFoundRepositoryError } from '../../../repository/error/error';
-import { MockCircleRepository } from '../../../repository/circle/__mock__/mockCircleRepository';
+import { StubCircleRepository } from '../../../repository/circle/stubCircleRepository';
 import { Circle } from '../../../domain/models/circle/circle';
 import { CircleName } from '../../../domain/models/circle/circleName';
 import { UserId } from '../../../domain/models/user/userId';
 
-const circleRepository = new MockCircleRepository();
+const circleRepository = new StubCircleRepository();
 const circleDeleteService = new CircleDeleteService({ circleRepository });
 
 afterEach(() => {
@@ -18,7 +18,7 @@ describe('サークル削除', () => {
   test('サークルを削除する', async () => {
     const circleId = '5cb03388-c6e3-45fb-84a1-3ded1b93c738';
     jest
-      .spyOn(MockCircleRepository.prototype, 'get')
+      .spyOn(StubCircleRepository.prototype, 'get')
       .mockResolvedValueOnce(
         Circle.create(
           new CircleId(circleId),
@@ -28,7 +28,7 @@ describe('サークル削除', () => {
         )
       );
     jest
-      .spyOn(MockCircleRepository.prototype, 'delete')
+      .spyOn(StubCircleRepository.prototype, 'delete')
       .mockResolvedValueOnce();
 
     const command = new CircleDeleteCommand(circleId);
@@ -38,7 +38,7 @@ describe('サークル削除', () => {
   test('存在しないサークルを削除できる', async () => {
     const circleId = '5cb03388-c6e3-45fb-84a1-3ded1b93c738';
     jest
-      .spyOn(MockCircleRepository.prototype, 'get')
+      .spyOn(StubCircleRepository.prototype, 'get')
       .mockRejectedValueOnce(
         new CircleNotFoundRepositoryError(new CircleId(circleId))
       );

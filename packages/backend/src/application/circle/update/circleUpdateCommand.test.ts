@@ -7,8 +7,8 @@ import {
   ArgumentApplicationError,
   CircleMembersAreExceedApplicationError,
 } from '../../error/error';
-import { MockUserRepository } from '../../../repository/user/__mock__/mockUserRepository';
-import { MockCircleRepository } from '../../../repository/circle/__mock__/mockCircleRepository';
+import { StubUserRepository } from '../../../repository/user/stubUserRepository';
+import { StubCircleRepository } from '../../../repository/circle/stubCircleRepository';
 import { CircleNotFoundRepositoryError } from '../../../repository/error/error';
 import { CircleName } from '../../../domain/models/circle/circleName';
 import { Circle } from '../../../domain/models/circle/circle';
@@ -16,8 +16,8 @@ import { User } from '../../../domain/models/user/user';
 import { UserName } from '../../../domain/models/user/userName';
 import { MailAddress } from '../../../domain/models/user/mailAddress';
 
-const userRepository = new MockUserRepository();
-const circleRepository = new MockCircleRepository();
+const userRepository = new StubUserRepository();
+const circleRepository = new StubCircleRepository();
 const circleUpdateService = new CircleUpdateService({
   circleRepository,
   userRepository,
@@ -35,7 +35,7 @@ describe('サークル更新', () => {
   `('サークル名を更新する', async ({ circleName }) => {
     const circleId = '03674c29-2bcc-45f8-ba63-58d1459da863';
     jest
-      .spyOn(MockCircleRepository.prototype, 'get')
+      .spyOn(StubCircleRepository.prototype, 'get')
       .mockResolvedValueOnce(
         Circle.create(
           new CircleId(circleId),
@@ -45,7 +45,7 @@ describe('サークル更新', () => {
         )
       );
     jest
-      .spyOn(MockCircleRepository.prototype, 'get')
+      .spyOn(StubCircleRepository.prototype, 'get')
       .mockRejectedValueOnce(
         new CircleNotFoundRepositoryError(new CircleName(circleName))
       );
@@ -61,7 +61,7 @@ describe('サークル更新', () => {
     const circleId = '0e1e48a0-ec1c-431a-86ab-30a297689a04';
     const newOwnerId = '1948f6ee-fabb-42f6-af96-77e2bc475772';
     jest
-      .spyOn(MockCircleRepository.prototype, 'get')
+      .spyOn(StubCircleRepository.prototype, 'get')
       .mockResolvedValueOnce(
         Circle.create(
           new CircleId(circleId),
@@ -71,7 +71,7 @@ describe('サークル更新', () => {
         )
       );
     jest
-      .spyOn(MockUserRepository.prototype, 'get')
+      .spyOn(StubUserRepository.prototype, 'get')
       .mockResolvedValueOnce(
         new User(
           new UserId(newOwnerId),
@@ -91,7 +91,7 @@ describe('サークル更新', () => {
     const circleId = '939ce578-e3d2-4b45-8fe4-39f837ee99aa';
     const newOwnerId = '484196cc-fe38-4e7b-b4f5-79f0ccb269d8';
     jest
-      .spyOn(MockCircleRepository.prototype, 'get')
+      .spyOn(StubCircleRepository.prototype, 'get')
       .mockResolvedValueOnce(
         Circle.create(
           new CircleId(circleId),
@@ -101,7 +101,7 @@ describe('サークル更新', () => {
         )
       );
     jest
-      .spyOn(MockUserRepository.prototype, 'get')
+      .spyOn(StubUserRepository.prototype, 'get')
       .mockResolvedValueOnce(
         new User(
           new UserId(newOwnerId),
@@ -125,7 +125,7 @@ describe('サークル更新', () => {
     const circleId = 'd161fc1e-aef2-451d-a8ae-712609dcdebc';
     const newOwnerId = 'aaa0b0b4-9cb7-4da9-9f84-8c288e0bcb4b';
     jest
-      .spyOn(MockCircleRepository.prototype, 'get')
+      .spyOn(StubCircleRepository.prototype, 'get')
       .mockResolvedValueOnce(
         Circle.create(
           new CircleId(circleId),
@@ -135,7 +135,7 @@ describe('サークル更新', () => {
         )
       );
     jest
-      .spyOn(MockUserRepository.prototype, 'get')
+      .spyOn(StubUserRepository.prototype, 'get')
       .mockResolvedValueOnce(
         new User(
           new UserId(newOwnerId),
@@ -159,7 +159,7 @@ describe('サークル更新', () => {
     const circleId = '03674c29-2bcc-45f8-ba63-58d1459da863';
     const newOwnerId = 'a046ac45-2788-491c-aa72-80e7e114a369';
     jest
-      .spyOn(MockCircleRepository.prototype, 'get')
+      .spyOn(StubCircleRepository.prototype, 'get')
       .mockResolvedValueOnce(
         Circle.create(
           new CircleId(circleId),
@@ -169,7 +169,7 @@ describe('サークル更新', () => {
         )
       );
     jest
-      .spyOn(MockUserRepository.prototype, 'get')
+      .spyOn(StubUserRepository.prototype, 'get')
       .mockResolvedValueOnce(
         new User(
           new UserId(newOwnerId),
@@ -178,7 +178,7 @@ describe('サークル更新', () => {
         )
       );
     jest
-      .spyOn(MockCircleRepository.prototype, 'get')
+      .spyOn(StubCircleRepository.prototype, 'get')
       .mockResolvedValueOnce(
         Circle.create(
           new CircleId('ce8dcdda-3633-461e-9b72-1e6900386553'),
@@ -210,7 +210,7 @@ describe('サークル更新', () => {
     async ({ memberIds }: { memberIds: string[] }) => {
       const circleId = '66d73617-aa4f-46b3-bf7d-9c193f0a08d1';
       jest
-        .spyOn(MockCircleRepository.prototype, 'get')
+        .spyOn(StubCircleRepository.prototype, 'get')
         .mockResolvedValueOnce(
           Circle.create(
             new CircleId(circleId),
@@ -220,7 +220,7 @@ describe('サークル更新', () => {
           )
         );
       jest
-        .spyOn(MockUserRepository.prototype, 'batchGet')
+        .spyOn(StubUserRepository.prototype, 'batchGet')
         .mockResolvedValueOnce(
           memberIds.map(
             (value, index) =>
@@ -242,7 +242,7 @@ describe('サークル更新', () => {
 
   test('サークルメンバー人数が元々最大で追加できない', async () => {
     const circleId = '66d73617-aa4f-46b3-bf7d-9c193f0a08d1';
-    jest.spyOn(MockCircleRepository.prototype, 'get').mockResolvedValueOnce(
+    jest.spyOn(StubCircleRepository.prototype, 'get').mockResolvedValueOnce(
       Circle.create(
         new CircleId(circleId),
         new CircleName('テストサークル名'),
@@ -256,7 +256,7 @@ describe('サークル更新', () => {
       )
     );
     jest
-      .spyOn(MockUserRepository.prototype, 'batchGet')
+      .spyOn(StubUserRepository.prototype, 'batchGet')
       .mockResolvedValueOnce(
         [...range(1, 30)].map(
           (value, index) =>
@@ -283,7 +283,7 @@ describe('サークル更新', () => {
 
   test('サークルメンバー人数が超過するので追加できない', async () => {
     const circleId = '66d73617-aa4f-46b3-bf7d-9c193f0a08d1';
-    jest.spyOn(MockCircleRepository.prototype, 'get').mockResolvedValueOnce(
+    jest.spyOn(StubCircleRepository.prototype, 'get').mockResolvedValueOnce(
       Circle.create(
         new CircleId(circleId),
         new CircleName('テストサークル名'),
@@ -297,7 +297,7 @@ describe('サークル更新', () => {
       )
     );
     jest
-      .spyOn(MockUserRepository.prototype, 'batchGet')
+      .spyOn(StubUserRepository.prototype, 'batchGet')
       .mockResolvedValueOnce(
         [...range(1, 29)].map(
           (value, index) =>

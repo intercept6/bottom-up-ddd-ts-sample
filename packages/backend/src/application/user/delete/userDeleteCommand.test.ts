@@ -1,38 +1,46 @@
 import { UserDeleteService } from './userDeleteService';
-import { InMemoryUserRepository } from '../../../repository/user/inMemoryUserRepository';
+import { UserDeleteCommand } from './userDeleteCommand';
+import { StubUserRepository } from '../../../repository/user/stubUserRepository';
 import { User } from '../../../domain/models/user/user';
 import { UserId } from '../../../domain/models/user/userId';
 import { UserName } from '../../../domain/models/user/userName';
 import { MailAddress } from '../../../domain/models/user/mailAddress';
-import { UserDeleteCommand } from './userDeleteCommand';
+import { UserNotFoundRepositoryError } from '../../../repository/error/error';
+
+const userRepository = new StubUserRepository();
+const userDeleteService = new UserDeleteService({ userRepository });
+
+beforeEach(() => {
+  jest.clearAllMocks();
+});
 
 describe('ユーザ削除', () => {
   test('ユーザを削除する', async () => {
-    const userRepository = new InMemoryUserRepository();
-    userRepository.store.push(
-      new User(
-        new UserId('203881e1-99f2-4ce6-ab6b-785fcd793c92'),
-        new UserName('テストユーザーの名前'),
-        new MailAddress('test@example.com')
-      )
-    );
-    const userDeleteService = new UserDeleteService({ userRepository });
-    const command = new UserDeleteCommand(
-      '203881e1-99f2-4ce6-ab6b-785fcd793c92'
-    );
-    await userDeleteService.handle(command);
+    const userId = '203881e1-99f2-4ce6-ab6b-785fcd793c92';
+    jest
+      .spyOn(StubUserRepository.prototype, 'get')
+      .mockResolvedValueOnce(
+        new User(
+          new UserId(userId),
+          new UserName('テストユーザー'),
+          new MailAddress('test@example.com')
+        )
+      );
+    jest.spyOn(StubUserRepository.prototype, 'delete').mockResolvedValueOnce();
 
-    expect(userRepository.store).toHaveLength(0);
+    const command = new UserDeleteCommand(userId);
+    await userDeleteService.handle(command);
   });
 
   test('存在しないユーザを削除できる', async () => {
-    const userRepository = new InMemoryUserRepository();
-    const userDeleteService = new UserDeleteService({ userRepository });
-    const command = new UserDeleteCommand(
-      '203881e1-99f2-4ce6-ab6b-785fcd793c92'
-    );
-    await userDeleteService.handle(command);
+    const userId = '203881e1-99f2-4ce6-ab6b-785fcd793c92';
+    jest
+      .spyOn(StubUserRepository.prototype, 'get')
+      .mockRejectedValueOnce(
+        new UserNotFoundRepositoryError(new UserId(userId))
+      );
 
-    expect(userRepository.store).toHaveLength(0);
+    const command = new UserDeleteCommand(userId);
+    await userDeleteService.handle(command);
   });
 });
