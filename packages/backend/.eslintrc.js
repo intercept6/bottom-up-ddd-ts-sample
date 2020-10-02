@@ -16,7 +16,7 @@ module.exports = {
     '@typescript-eslint/no-useless-constructor': 'error',
 
     'no-unused-vars': 'off',
-    '@typescript-eslint/no-unused-vars': 'error',
+    '@typescript-eslint/no-unused-vars': [2, { argsIgnorePattern: '^_' }],
 
     'no-dupe-class-members': 'off',
   },

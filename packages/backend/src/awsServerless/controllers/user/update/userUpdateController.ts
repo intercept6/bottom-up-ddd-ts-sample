@@ -18,8 +18,8 @@ export class UserUpdateController {
   }
 
   async handle(event: UserUpdateEvent): Promise<APIGatewayProxyResult> {
-    const id = event.pathParameters?.userId;
-    if (typeof id !== 'string') {
+    const userId = event.pathParameters?.userId;
+    if (typeof userId !== 'string') {
       return badRequest('userId type is not string');
     }
 
@@ -29,27 +29,23 @@ export class UserUpdateController {
 
     const body = JSON.parse(event.body);
     const mailAddress = body.mail_address;
-    const name = body.user_name;
-    if (name == null && mailAddress == null) {
+    const userName = body.user_name;
+    if (userName == null && mailAddress == null) {
       return badRequest('user_name type and mail_address are undefined');
-    } else if (name != null && typeof name !== 'string') {
+    } else if (userName != null && typeof userName !== 'string') {
       return badRequest('user_name type is not string');
     } else if (mailAddress != null && typeof mailAddress !== 'string') {
       return badRequest('mail_address type is not string');
     }
 
-    const command = new UserUpdateCommand({
-      id,
-      name,
-      mailAddress,
-    });
+    const command = new UserUpdateCommand({ userId, userName, mailAddress });
     const error = await this.userUpdateService
       .handle(command)
       .catch((error: Error) => error);
 
     if (error instanceof Error) {
       if (error instanceof UserNotFoundApplicationError) {
-        return badRequest(`user id: ${id} is not found`);
+        return badRequest(`user id: ${userId} is not found`);
       }
       return internalServerError({
         message: 'user update is failed',

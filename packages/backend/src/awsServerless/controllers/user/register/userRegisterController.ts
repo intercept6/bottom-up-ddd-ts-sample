@@ -45,7 +45,7 @@ export class UserRegisterController {
       return {
         statusCode: 201,
         body: JSON.stringify({}),
-        headers: { location: `${rootURI}users/${userData.getId()}` },
+        headers: { location: `${rootURI}users/${userData.getUserId()}` },
       };
     }
     return badRequest('user_name or mail_address is not string');

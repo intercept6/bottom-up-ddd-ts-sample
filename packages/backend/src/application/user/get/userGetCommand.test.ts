@@ -35,8 +35,8 @@ describe('ユーザー取得', () => {
     });
     const response = await userGetService.handle(command);
 
-    expect(response.getId()).toEqual(userId);
-    expect(response.getName()).toEqual(userName);
+    expect(response.getUserId()).toEqual(userId);
+    expect(response.getUserName()).toEqual(userName);
     expect(response.getMailAddress()).toEqual(mailAddress);
   });
 
@@ -57,8 +57,8 @@ describe('ユーザー取得', () => {
     const command = new UserGetCommand({ mailAddress });
     const response = await userGetService.handle(command);
 
-    expect(response.getId()).toEqual(userId);
-    expect(response.getName()).toEqual(userName);
+    expect(response.getUserId()).toEqual(userId);
+    expect(response.getUserName()).toEqual(userName);
     expect(response.getMailAddress()).toEqual(mailAddress);
   });
 

@@ -42,8 +42,8 @@ export class UserGetController {
     return {
       statusCode: 200,
       body: JSON.stringify({
-        user_id: userData.getId(),
-        user_name: userData.getName(),
+        user_id: userData.getUserId(),
+        user_name: userData.getUserName(),
         mail_address: userData.getMailAddress(),
       }),
     };

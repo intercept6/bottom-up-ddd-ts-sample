@@ -61,7 +61,10 @@ export class DynamoDBCircleRepository implements CircleRepositoryInterface {
           },
         ],
       })
-      .promise();
+      .promise()
+      .catch((error: Error) => {
+        throw error;
+      });
 
     Logger.info(`saved circle ${circle.getCircleName().getValue()}`);
   }
@@ -72,7 +75,10 @@ export class DynamoDBCircleRepository implements CircleRepositoryInterface {
         TableName: this.tableName,
         Key: { pk: circle.getCircleId().getValue() },
       })
-      .promise();
+      .promise()
+      .catch((error: Error) => {
+        throw error;
+      });
 
     const oldCircleName = response.Item?.gsi1pk;
 
@@ -120,7 +126,10 @@ export class DynamoDBCircleRepository implements CircleRepositoryInterface {
             },
           ],
         })
-        .promise();
+        .promise()
+        .catch((error: Error) => {
+          throw error;
+        });
     } else {
       await this.documentClient
         .transactWrite({
@@ -147,7 +156,10 @@ export class DynamoDBCircleRepository implements CircleRepositoryInterface {
             },
           ],
         })
-        .promise();
+        .promise()
+        .catch((error: Error) => {
+          throw error;
+        });
     }
   }
 
@@ -223,7 +235,10 @@ export class DynamoDBCircleRepository implements CircleRepositoryInterface {
           },
           KeyConditionExpression: '#gsi1pk = :gsi1pk',
         })
-        .promise();
+        .promise()
+        .catch((error: Error) => {
+          throw error;
+        });
 
       if (found.Items?.length !== 1) {
         throw new CircleNotFoundRepositoryError(identifier);
@@ -295,7 +310,10 @@ export class DynamoDBCircleRepository implements CircleRepositoryInterface {
           },
         ],
       })
-      .promise();
+      .promise()
+      .catch((error: Error) => {
+        throw error;
+      });
 
     Logger.info(`deleted circle ${circle.getCircleName().getValue()}`);
   }
