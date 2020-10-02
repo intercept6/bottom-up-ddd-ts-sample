@@ -11,7 +11,7 @@ import {
 } from '../../error/error';
 import { UserId } from '../../../domain/models/user/userId';
 import { UserRepositoryInterface } from '../../../domain/models/user/userRepositoryInterface';
-import { UserNotFoundRepositoryError } from '../../../repository/error/error';
+import { UserNotFoundRepositoryError } from '../../../repository/errors/repositoryErrors';
 import { UnknownError } from '../../../util/error';
 
 export class CircleUpdateService implements CircleUpdateServiceInterface {

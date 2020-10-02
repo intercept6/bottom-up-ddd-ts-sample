@@ -1,10 +1,10 @@
 import { DynamoDBCircleRepository } from './dynamoDBCircleRepository';
-import { DynamoDBLocalHelper } from '../../lib/tests/dynamoDBLocalHelper';
-import { Circle } from '../../domain/models/circle/circle';
-import { CircleName } from '../../domain/models/circle/circleName';
-import { UserId } from '../../domain/models/user/userId';
-import { CircleId } from '../../domain/models/circle/circleId';
-import { CircleNotFoundRepositoryError } from '../error/error';
+import { DynamoDBLocalHelper } from '../../../lib/tests/dynamoDBLocalHelper';
+import { Circle } from '../../../domain/models/circle/circle';
+import { CircleName } from '../../../domain/models/circle/circleName';
+import { UserId } from '../../../domain/models/user/userId';
+import { CircleId } from '../../../domain/models/circle/circleId';
+import { CircleNotFoundRepositoryError } from '../../errors/repositoryErrors';
 import { Credentials, DynamoDB } from 'aws-sdk';
 
 /**

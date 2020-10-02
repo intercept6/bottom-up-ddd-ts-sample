@@ -5,11 +5,11 @@ import {
   ArgumentApplicationError,
   UserDuplicateApplicationError,
 } from '../../error/error';
-import { StubUserRepository } from '../../../repository/user/stubUserRepository';
+import { StubUserRepository } from '../../../repository/stub/users/stubUserRepository';
 import { User } from '../../../domain/models/user/user';
 import { UserId } from '../../../domain/models/user/userId';
 import { UserName } from '../../../domain/models/user/userName';
-import { UserNotFoundRepositoryError } from '../../../repository/error/error';
+import { UserNotFoundRepositoryError } from '../../../repository/errors/repositoryErrors';
 
 const userRepository = new StubUserRepository();
 

@@ -2,7 +2,7 @@ import { UserRepositoryInterface } from '../user/userRepositoryInterface';
 import { UnknownError } from '../../../util/error';
 import { UserName } from '../user/userName';
 import { MailAddress } from '../user/mailAddress';
-import { UserNotFoundRepositoryError } from '../../../repository/error/error';
+import { UserNotFoundRepositoryError } from '../../../repository/errors/repositoryErrors';
 
 export class UserService {
   constructor(private readonly userRepository: UserRepositoryInterface) {}

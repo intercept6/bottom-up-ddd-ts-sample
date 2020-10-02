@@ -3,7 +3,7 @@ import { CircleService } from '../../../domain/models/services/circleService';
 import { UserRepositoryInterface } from '../../../domain/models/user/userRepositoryInterface';
 import { CircleRegisterCommand } from './circleRegisterCommand';
 import { UserId } from '../../../domain/models/user/userId';
-import { UserNotFoundRepositoryError } from '../../../repository/error/error';
+import { UserNotFoundRepositoryError } from '../../../repository/errors/repositoryErrors';
 import {
   CircleDuplicateApplicationError,
   UserNotFoundApplicationError,

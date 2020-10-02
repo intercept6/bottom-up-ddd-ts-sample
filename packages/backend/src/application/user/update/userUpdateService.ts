@@ -9,7 +9,7 @@ import {
   UserDuplicateApplicationError,
   UserNotFoundApplicationError,
 } from '../../error/error';
-import { UserNotFoundRepositoryError } from '../../../repository/error/error';
+import { UserNotFoundRepositoryError } from '../../../repository/errors/repositoryErrors';
 import { UnknownError } from '../../../util/error';
 
 export class UserUpdateService implements UserUpdateServiceInterface {

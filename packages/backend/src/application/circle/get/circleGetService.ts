@@ -3,7 +3,7 @@ import { CircleGetCommand } from './circleGetCommand';
 import { CircleData } from '../circleData';
 import { CircleRepositoryInterface } from '../../../domain/models/circle/circleRepositoryInterface';
 import { CircleId } from '../../../domain/models/circle/circleId';
-import { CircleNotFoundRepositoryError } from '../../../repository/error/error';
+import { CircleNotFoundRepositoryError } from '../../../repository/errors/repositoryErrors';
 import { CircleNotFoundApplicationError } from '../../error/error';
 import { UnknownError } from '../../../util/error';
 

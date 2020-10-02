@@ -1,5 +1,5 @@
-import { CircleFactoryInterface } from '../../domain/models/circle/circleFactoryInterface';
-import { Circle } from '../../domain/models/circle/circle';
+import { CircleFactoryInterface } from '../../../domain/models/circle/circleFactoryInterface';
+import { Circle } from '../../../domain/models/circle/circle';
 
 export class StubCircleFactory implements CircleFactoryInterface {
   async create(): Promise<Circle> {

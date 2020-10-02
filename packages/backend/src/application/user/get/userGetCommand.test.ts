@@ -5,8 +5,8 @@ import { UserGetCommand } from './userGetCommand';
 import { UserId } from '../../../domain/models/user/userId';
 import { UserGetService } from './userGetService';
 import { UserNotFoundApplicationError } from '../../error/error';
-import { StubUserRepository } from '../../../repository/user/stubUserRepository';
-import { UserNotFoundRepositoryError } from '../../../repository/error/error';
+import { StubUserRepository } from '../../../repository/stub/users/stubUserRepository';
+import { UserNotFoundRepositoryError } from '../../../repository/errors/repositoryErrors';
 
 const userRepository = new StubUserRepository();
 const userGetService = new UserGetService({ userRepository });

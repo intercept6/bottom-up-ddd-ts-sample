@@ -1,12 +1,12 @@
-import { CircleFactoryInterface } from '../../domain/models/circle/circleFactoryInterface';
-import { Circle } from '../../domain/models/circle/circle';
-import { CircleId } from '../../domain/models/circle/circleId';
-import { CircleName } from '../../domain/models/circle/circleName';
-import { UserId } from '../../domain/models/user/userId';
-import { ArgumentRepositoryError } from '../error/error';
-import { generateUuid } from '../../util/uuid';
-import { UserRepositoryInterface } from '../../domain/models/user/userRepositoryInterface';
-import { CircleRepositoryInterface } from '../../domain/models/circle/circleRepositoryInterface';
+import { CircleFactoryInterface } from '../../../domain/models/circle/circleFactoryInterface';
+import { Circle } from '../../../domain/models/circle/circle';
+import { CircleId } from '../../../domain/models/circle/circleId';
+import { CircleName } from '../../../domain/models/circle/circleName';
+import { UserId } from '../../../domain/models/user/userId';
+import { ArgumentRepositoryError } from '../../errors/repositoryErrors';
+import { generateUuid } from '../../../util/uuid';
+import { UserRepositoryInterface } from '../../../domain/models/user/userRepositoryInterface';
+import { CircleRepositoryInterface } from '../../../domain/models/circle/circleRepositoryInterface';
 
 export class DynamoDBCircleFactory implements CircleFactoryInterface {
   private readonly userRepository: UserRepositoryInterface;

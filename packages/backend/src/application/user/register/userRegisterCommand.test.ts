@@ -8,8 +8,8 @@ import {
   ArgumentApplicationError,
   UserDuplicateApplicationError,
 } from '../../error/error';
-import { StubUserRepository } from '../../../repository/user/stubUserRepository';
-import { UserNotFoundRepositoryError } from '../../../repository/error/error';
+import { StubUserRepository } from '../../../repository/stub/users/stubUserRepository';
+import { UserNotFoundRepositoryError } from '../../../repository/errors/repositoryErrors';
 
 const userRepository = new StubUserRepository();
 const userRegisterService = new UserRegisterService({ userRepository });

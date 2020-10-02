@@ -7,9 +7,9 @@ import {
   ArgumentApplicationError,
   CircleMembersAreExceedApplicationError,
 } from '../../error/error';
-import { StubUserRepository } from '../../../repository/user/stubUserRepository';
-import { StubCircleRepository } from '../../../repository/circle/stubCircleRepository';
-import { CircleNotFoundRepositoryError } from '../../../repository/error/error';
+import { StubUserRepository } from '../../../repository/stub/users/stubUserRepository';
+import { StubCircleRepository } from '../../../repository/stub/circles/stubCircleRepository';
+import { CircleNotFoundRepositoryError } from '../../../repository/errors/repositoryErrors';
 import { CircleName } from '../../../domain/models/circle/circleName';
 import { Circle } from '../../../domain/models/circle/circle';
 import { User } from '../../../domain/models/user/user';

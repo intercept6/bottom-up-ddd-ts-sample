@@ -1,5 +1,5 @@
 import { CircleRepositoryInterface } from '../circle/circleRepositoryInterface';
-import { CircleNotFoundRepositoryError } from '../../../repository/error/error';
+import { CircleNotFoundRepositoryError } from '../../../repository/errors/repositoryErrors';
 import { CircleName } from '../circle/circleName';
 import { UnknownError } from '../../../util/error';
 

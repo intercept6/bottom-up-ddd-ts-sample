@@ -1,8 +1,8 @@
 import { CircleGetService } from './circleGetService';
 import { CircleGetCommand } from './circleGetCommand';
 import { CircleId } from '../../../domain/models/circle/circleId';
-import { CircleNotFoundRepositoryError } from '../../../repository/error/error';
-import { StubCircleRepository } from '../../../repository/circle/stubCircleRepository';
+import { CircleNotFoundRepositoryError } from '../../../repository/errors/repositoryErrors';
+import { StubCircleRepository } from '../../../repository/stub/circles/stubCircleRepository';
 import { Circle } from '../../../domain/models/circle/circle';
 import { CircleName } from '../../../domain/models/circle/circleName';
 import { UserId } from '../../../domain/models/user/userId';

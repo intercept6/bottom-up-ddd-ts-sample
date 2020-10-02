@@ -1,14 +1,14 @@
-import { UserRepositoryInterface } from '../../domain/models/user/userRepositoryInterface';
-import { User } from '../../domain/models/user/user';
-import { UserName } from '../../domain/models/user/userName';
-import { UserId } from '../../domain/models/user/userId';
-import { Logger } from '../../util/logger';
-import { MailAddress } from '../../domain/models/user/mailAddress';
+import { UserRepositoryInterface } from '../../../domain/models/user/userRepositoryInterface';
+import { User } from '../../../domain/models/user/user';
+import { UserName } from '../../../domain/models/user/userName';
+import { UserId } from '../../../domain/models/user/userId';
+import { Logger } from '../../../util/logger';
+import { MailAddress } from '../../../domain/models/user/mailAddress';
 import { DynamoDB } from 'aws-sdk';
 import {
   TypeRepositoryError,
   UserNotFoundRepositoryError,
-} from '../error/error';
+} from '../../errors/repositoryErrors';
 
 export class DynamoDBUserRepository implements UserRepositoryInterface {
   private readonly documentClient: DynamoDB.DocumentClient;

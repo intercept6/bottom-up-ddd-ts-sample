@@ -1,15 +1,15 @@
-import { CircleRepositoryInterface } from '../../domain/models/circle/circleRepositoryInterface';
-import { Circle } from '../../domain/models/circle/circle';
+import { CircleRepositoryInterface } from '../../../domain/models/circle/circleRepositoryInterface';
+import { Circle } from '../../../domain/models/circle/circle';
 import { DynamoDB } from 'aws-sdk';
-import { Logger } from '../../util/logger';
-import { CircleId } from '../../domain/models/circle/circleId';
-import { CircleName } from '../../domain/models/circle/circleName';
+import { Logger } from '../../../util/logger';
+import { CircleId } from '../../../domain/models/circle/circleId';
+import { CircleName } from '../../../domain/models/circle/circleName';
 import {
   CircleNotFoundRepositoryError,
   TypeRepositoryError,
-} from '../error/error';
-import { isStringArray } from '../../util/typeGuard';
-import { UserId } from '../../domain/models/user/userId';
+} from '../../errors/repositoryErrors';
+import { isStringArray } from '../../../util/typeGuard';
+import { UserId } from '../../../domain/models/user/userId';
 
 export class DynamoDBCircleRepository implements CircleRepositoryInterface {
   private readonly documentClient: DynamoDB.DocumentClient;

@@ -1,7 +1,7 @@
 import { DynamoDB } from 'aws-sdk';
-import { DynamoDBUserRepository } from '../../repository/user/dynamoDBUserRepository';
-import { DynamoDBCircleRepository } from '../../repository/circle/dynamoDBCircleRepository';
-import { DynamoDBCircleFactory } from '../../repository/circle/dynamoDBCircleFactory';
+import { DynamoDBUserRepository } from '../../repository/dynamoDB/users/dynamoDBUserRepository';
+import { DynamoDBCircleRepository } from '../../repository/dynamoDB/circles/dynamoDBCircleRepository';
+import { DynamoDBCircleFactory } from '../../repository/dynamoDB/circles/dynamoDBCircleFactory';
 import { UserRepositoryInterface } from '../../domain/models/user/userRepositoryInterface';
 import { CircleRepositoryInterface } from '../../domain/models/circle/circleRepositoryInterface';
 

@@ -4,7 +4,7 @@ import { UserData } from '../userData';
 import { MailAddress } from '../../../domain/models/user/mailAddress';
 import { UserRepositoryInterface } from '../../../domain/models/user/userRepositoryInterface';
 import { UserGetServiceInterface } from './userGetServiceInterface';
-import { UserNotFoundRepositoryError } from '../../../repository/error/error';
+import { UserNotFoundRepositoryError } from '../../../repository/errors/repositoryErrors';
 import {
   ArgumentApplicationError,
   UserNotFoundApplicationError,
