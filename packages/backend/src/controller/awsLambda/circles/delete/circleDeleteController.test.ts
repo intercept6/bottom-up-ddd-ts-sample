@@ -1,5 +1,5 @@
 import { CircleDeleteController } from './circleDeleteController';
-import { StubCircleDeleteService } from '../../../../application/circle/delete/stubCircleDeleteService';
+import { StubCircleDeleteService } from '../../../../application/circles/delete/stubCircleDeleteService';
 
 const circleDeleteService = new StubCircleDeleteService();
 const circleDeleteController = new CircleDeleteController({

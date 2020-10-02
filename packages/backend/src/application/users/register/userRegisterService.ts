@@ -2,7 +2,7 @@ import { UserRegisterCommand } from './userRegisterCommand';
 import { MailAddress } from '../../../domain/models/users/mailAddress';
 import { User } from '../../../domain/models/users/user';
 import { UserName } from '../../../domain/models/users/userName';
-import { UserDuplicateApplicationError } from '../../error/error';
+import { UserDuplicateApplicationError } from '../../errors/applicationErrors';
 import { UserService } from '../../../domain/models/services/userService';
 import { UserRepositoryInterface } from '../../../domain/models/users/userRepositoryInterface';
 import { UserRegisterServiceInterface } from './userRegisterServiceInterface';

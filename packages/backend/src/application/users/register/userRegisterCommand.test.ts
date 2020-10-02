@@ -7,7 +7,7 @@ import { UserRegisterService } from './userRegisterService';
 import {
   ArgumentApplicationError,
   UserDuplicateApplicationError,
-} from '../../error/error';
+} from '../../errors/applicationErrors';
 import { StubUserRepository } from '../../../repository/stub/users/stubUserRepository';
 import { UserNotFoundRepositoryError } from '../../../repository/errors/repositoryErrors';
 

@@ -1,15 +1,15 @@
 import 'source-map-support/register';
-import { CircleUpdateServiceInterface } from '../../../../application/circle/update/circleUpdateServiceInterface';
+import { CircleUpdateServiceInterface } from '../../../../application/circles/update/circleUpdateServiceInterface';
 import { APIGatewayProxyResult } from 'aws-lambda';
 import { Bootstrap } from '../../../utils/bootstrap';
-import { CircleUpdateService } from '../../../../application/circle/update/circleUpdateService';
-import { CircleUpdateCommand } from '../../../../application/circle/update/circleUpdateCommand';
+import { CircleUpdateService } from '../../../../application/circles/update/circleUpdateService';
+import { CircleUpdateCommand } from '../../../../application/circles/update/circleUpdateCommand';
 import { isStringArray } from '../../../../util/typeGuard';
 import {
   CircleNotFoundApplicationError,
   MembersNotFoundApplicationError,
   OwnerNotFoundApplicationError,
-} from '../../../../application/error/error';
+} from '../../../../application/errors/applicationErrors';
 import { badRequest, internalServerError } from '../../../utils/httpResponse';
 
 type CircleUpdateEvent = {

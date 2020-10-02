@@ -1,9 +1,9 @@
 import 'source-map-support/register';
-import { CircleRegisterServiceInterface } from '../../../../application/circle/register/circleRegisterServiceInterface';
-import { CircleRegisterService } from '../../../../application/circle/register/circleRegisterService';
-import { CircleRegisterCommand } from '../../../../application/circle/register/circleRegisterCommand';
+import { CircleRegisterServiceInterface } from '../../../../application/circles/register/circleRegisterServiceInterface';
+import { CircleRegisterService } from '../../../../application/circles/register/circleRegisterService';
+import { CircleRegisterCommand } from '../../../../application/circles/register/circleRegisterCommand';
 import { APIGatewayProxyResult } from 'aws-lambda';
-import { CircleDuplicateApplicationError } from '../../../../application/error/error';
+import { CircleDuplicateApplicationError } from '../../../../application/errors/applicationErrors';
 import { Bootstrap } from '../../../utils/bootstrap';
 import {
   badRequest,

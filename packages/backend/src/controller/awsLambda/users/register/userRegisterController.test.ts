@@ -2,14 +2,14 @@
 const rootUri = 'https://api.example.com/';
 process.env.ROOT_URI = rootUri;
 
-import { UserDuplicateApplicationError } from '../../../../application/error/error';
+import { UserDuplicateApplicationError } from '../../../../application/errors/applicationErrors';
 import { MailAddress } from '../../../../domain/models/users/mailAddress';
 import { User } from '../../../../domain/models/users/user';
-import { StubUserRegisterService } from '../../../../application/user/register/stubUserRegisterService';
+import { StubUserRegisterService } from '../../../../application/users/register/stubUserRegisterService';
 import { UserRegisterController } from './userRegisterController';
 import { UserName } from '../../../../domain/models/users/userName';
 import { UserId } from '../../../../domain/models/users/userId';
-import { UserData } from '../../../../application/user/userData';
+import { UserData } from '../../../../application/users/userData';
 
 const userRegisterService = new StubUserRegisterService();
 const userRegisterController = new UserRegisterController({

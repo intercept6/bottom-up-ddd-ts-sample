@@ -4,7 +4,7 @@ import { CircleData } from '../circleData';
 import { CircleRepositoryInterface } from '../../../domain/models/circles/circleRepositoryInterface';
 import { CircleId } from '../../../domain/models/circles/circleId';
 import { CircleNotFoundRepositoryError } from '../../../repository/errors/repositoryErrors';
-import { CircleNotFoundApplicationError } from '../../error/error';
+import { CircleNotFoundApplicationError } from '../../errors/applicationErrors';
 import { UnknownError } from '../../../util/error';
 
 export class CircleGetService implements CircleGetServiceInterface {

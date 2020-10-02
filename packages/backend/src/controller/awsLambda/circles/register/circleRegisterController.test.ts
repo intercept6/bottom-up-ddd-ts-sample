@@ -2,9 +2,9 @@
 const rootUri = 'https://api.example.com/';
 process.env.ROOT_URI = rootUri;
 
-import { CircleDuplicateApplicationError } from '../../../../application/error/error';
-import { CircleData } from '../../../../application/circle/circleData';
-import { StubCircleRegisterService } from '../../../../application/circle/register/stubCircleRegisterService';
+import { CircleDuplicateApplicationError } from '../../../../application/errors/applicationErrors';
+import { CircleData } from '../../../../application/circles/circleData';
+import { StubCircleRegisterService } from '../../../../application/circles/register/stubCircleRegisterService';
 import { CircleRegisterController } from './circleRegisterController';
 import { Circle } from '../../../../domain/models/circles/circle';
 import { UserId } from '../../../../domain/models/users/userId';

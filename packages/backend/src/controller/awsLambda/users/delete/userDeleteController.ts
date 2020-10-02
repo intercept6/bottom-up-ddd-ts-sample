@@ -1,14 +1,14 @@
-import { UserDeleteService } from '../../../../application/user/delete/userDeleteService';
-import { UserDeleteCommand } from '../../../../application/user/delete/userDeleteCommand';
+import { UserDeleteService } from '../../../../application/users/delete/userDeleteService';
+import { UserDeleteCommand } from '../../../../application/users/delete/userDeleteCommand';
 import { APIGatewayProxyResult } from 'aws-lambda';
-import { UserNotFoundApplicationError } from '../../../../application/error/error';
+import { UserNotFoundApplicationError } from '../../../../application/errors/applicationErrors';
 import { Bootstrap } from '../../../utils/bootstrap';
 import {
   badRequest,
   internalServerError,
   notFound,
 } from '../../../utils/httpResponse';
-import { UserDeleteServiceInterface } from '../../../../application/user/delete/userDeleteServiceInterface';
+import { UserDeleteServiceInterface } from '../../../../application/users/delete/userDeleteServiceInterface';
 
 type UserDeleteEvent = {
   pathParameters?: { userId?: string };

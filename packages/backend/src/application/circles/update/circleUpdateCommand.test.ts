@@ -6,7 +6,7 @@ import { CircleUpdateService } from './circleUpdateService';
 import {
   ArgumentApplicationError,
   CircleMembersAreExceedApplicationError,
-} from '../../error/error';
+} from '../../errors/applicationErrors';
 import { StubUserRepository } from '../../../repository/stub/users/stubUserRepository';
 import { StubCircleRepository } from '../../../repository/stub/circles/stubCircleRepository';
 import { CircleNotFoundRepositoryError } from '../../../repository/errors/repositoryErrors';

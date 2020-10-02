@@ -1,14 +1,14 @@
 import 'source-map-support/register';
-import { CircleDeleteService } from '../../../../application/circle/delete/circleDeleteService';
-import { CircleDeleteCommand } from '../../../../application/circle/delete/circleDeleteCommand';
-import { CircleNotFoundApplicationError } from '../../../../application/error/error';
+import { CircleDeleteService } from '../../../../application/circles/delete/circleDeleteService';
+import { CircleDeleteCommand } from '../../../../application/circles/delete/circleDeleteCommand';
+import { CircleNotFoundApplicationError } from '../../../../application/errors/applicationErrors';
 import {
   badRequest,
   internalServerError,
   notFound,
 } from '../../../utils/httpResponse';
 import { Bootstrap } from '../../../utils/bootstrap';
-import { CircleDeleteServiceInterface } from '../../../../application/circle/delete/circleDeleteServiceInterface';
+import { CircleDeleteServiceInterface } from '../../../../application/circles/delete/circleDeleteServiceInterface';
 
 type CircleDeleteEvent = {
   pathParameters?: { circleId?: string };

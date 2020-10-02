@@ -8,7 +8,7 @@ import { UserUpdateServiceInterface } from './userUpdateServiceInterface';
 import {
   UserDuplicateApplicationError,
   UserNotFoundApplicationError,
-} from '../../error/error';
+} from '../../errors/applicationErrors';
 import { UserNotFoundRepositoryError } from '../../../repository/errors/repositoryErrors';
 import { UnknownError } from '../../../util/error';
 

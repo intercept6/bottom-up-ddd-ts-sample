@@ -7,7 +7,7 @@ import { UserNotFoundRepositoryError } from '../../../repository/errors/reposito
 import {
   CircleDuplicateApplicationError,
   UserNotFoundApplicationError,
-} from '../../error/error';
+} from '../../errors/applicationErrors';
 import { CircleName } from '../../../domain/models/circles/circleName';
 import { CircleRegisterServiceInterface } from './circleRegisterServiceInterface';
 import { CircleFactoryInterface } from '../../../domain/models/circles/circleFactoryInterface';

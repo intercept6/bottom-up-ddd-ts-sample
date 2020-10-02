@@ -8,7 +8,7 @@ import { UserNotFoundRepositoryError } from '../../../repository/errors/reposito
 import {
   ArgumentApplicationError,
   UserNotFoundApplicationError,
-} from '../../error/error';
+} from '../../errors/applicationErrors';
 import { UnknownError } from '../../../util/error';
 
 export class UserGetService implements UserGetServiceInterface {

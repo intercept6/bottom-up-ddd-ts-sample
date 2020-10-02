@@ -4,7 +4,7 @@ import { MailAddress } from '../../../domain/models/users/mailAddress';
 import { UserGetCommand } from './userGetCommand';
 import { UserId } from '../../../domain/models/users/userId';
 import { UserGetService } from './userGetService';
-import { UserNotFoundApplicationError } from '../../error/error';
+import { UserNotFoundApplicationError } from '../../errors/applicationErrors';
 import { StubUserRepository } from '../../../repository/stub/users/stubUserRepository';
 import { UserNotFoundRepositoryError } from '../../../repository/errors/repositoryErrors';
 

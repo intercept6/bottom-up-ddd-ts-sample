@@ -1,9 +1,9 @@
 import { CircleUpdateController } from './circleUpdateController';
-import { StubCircleUpdateService } from '../../../../application/circle/update/stubCircleUpdateService';
+import { StubCircleUpdateService } from '../../../../application/circles/update/stubCircleUpdateService';
 import {
   MembersNotFoundApplicationError,
   OwnerNotFoundApplicationError,
-} from '../../../../application/error/error';
+} from '../../../../application/errors/applicationErrors';
 import { UserId } from '../../../../domain/models/users/userId';
 
 const circleUpdateService = new StubCircleUpdateService();

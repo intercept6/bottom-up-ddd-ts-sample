@@ -8,7 +8,7 @@ import {
   CircleDuplicateApplicationError,
   MembersNotFoundApplicationError,
   OwnerNotFoundApplicationError,
-} from '../../error/error';
+} from '../../errors/applicationErrors';
 import { UserId } from '../../../domain/models/users/userId';
 import { UserRepositoryInterface } from '../../../domain/models/users/userRepositoryInterface';
 import { UserNotFoundRepositoryError } from '../../../repository/errors/repositoryErrors';

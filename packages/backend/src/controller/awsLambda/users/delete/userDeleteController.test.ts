@@ -1,5 +1,5 @@
 import { UserDeleteController } from './userDeleteController';
-import { StubUserDeleteService } from '../../../../application/user/delete/stubUserDeleteService';
+import { StubUserDeleteService } from '../../../../application/users/delete/stubUserDeleteService';
 
 const userDeleteService = new StubUserDeleteService();
 const userDeleteController = new UserDeleteController({ userDeleteService });

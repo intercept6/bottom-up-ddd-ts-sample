@@ -1,6 +1,6 @@
 import { UserUpdateController } from './userUpdateController';
-import { StubUserUpdateService } from '../../../../application/user/update/stubUserUpdateService';
-import { UserNotFoundApplicationError } from '../../../../application/error/error';
+import { StubUserUpdateService } from '../../../../application/users/update/stubUserUpdateService';
+import { UserNotFoundApplicationError } from '../../../../application/errors/applicationErrors';
 import { UserId } from '../../../../domain/models/users/userId';
 
 const userUpdateService = new StubUserUpdateService();

@@ -4,7 +4,7 @@ import { UserUpdateCommand } from './userUpdateCommand';
 import {
   ArgumentApplicationError,
   UserDuplicateApplicationError,
-} from '../../error/error';
+} from '../../errors/applicationErrors';
 import { StubUserRepository } from '../../../repository/stub/users/stubUserRepository';
 import { User } from '../../../domain/models/users/user';
 import { UserId } from '../../../domain/models/users/userId';

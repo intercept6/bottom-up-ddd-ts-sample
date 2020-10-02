@@ -1,6 +1,6 @@
 import { CircleRegisterCommand } from './circleRegisterCommand';
 import { CircleRegisterService } from './circleRegisterService';
-import { ArgumentApplicationError } from '../../error/error';
+import { ArgumentApplicationError } from '../../errors/applicationErrors';
 import { StubCircleRepository } from '../../../repository/stub/circles/stubCircleRepository';
 import { StubUserRepository } from '../../../repository/stub/users/stubUserRepository';
 import { StubCircleFactory } from '../../../repository/stub/circles/stubCircleFactory';

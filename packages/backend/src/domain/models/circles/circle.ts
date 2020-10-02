@@ -1,6 +1,6 @@
 import { CircleId } from './circleId';
 import { CircleName } from './circleName';
-import { CircleMembersAreExceedApplicationError } from '../../../application/error/error';
+import { CircleMembersAreExceedApplicationError } from '../../../application/errors/applicationErrors';
 import { UserId } from '../users/userId';
 
 export class Circle {

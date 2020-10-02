@@ -1,11 +1,11 @@
 import { UserGetController } from './userGetController';
-import { StubUserGetService } from '../../../../application/user/get/stubUserGetService';
+import { StubUserGetService } from '../../../../application/users/get/stubUserGetService';
 import { User } from '../../../../domain/models/users/user';
 import { UserId } from '../../../../domain/models/users/userId';
 import { UserName } from '../../../../domain/models/users/userName';
 import { MailAddress } from '../../../../domain/models/users/mailAddress';
-import { UserData } from '../../../../application/user/userData';
-import { UserNotFoundApplicationError } from '../../../../application/error/error';
+import { UserData } from '../../../../application/users/userData';
+import { UserNotFoundApplicationError } from '../../../../application/errors/applicationErrors';
 
 const userGetService = new StubUserGetService();
 const userGetController = new UserGetController({ userGetService });

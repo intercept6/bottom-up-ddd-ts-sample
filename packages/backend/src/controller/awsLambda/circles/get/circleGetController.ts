@@ -1,9 +1,9 @@
 import 'source-map-support/register';
-import { CircleGetService } from '../../../../application/circle/get/circleGetService';
-import { CircleGetServiceInterface } from '../../../../application/circle/get/circleGetServiceInterface';
+import { CircleGetService } from '../../../../application/circles/get/circleGetService';
+import { CircleGetServiceInterface } from '../../../../application/circles/get/circleGetServiceInterface';
 import { APIGatewayProxyResult } from 'aws-lambda';
-import { CircleGetCommand } from '../../../../application/circle/get/circleGetCommand';
-import { CircleNotFoundApplicationError } from '../../../../application/error/error';
+import { CircleGetCommand } from '../../../../application/circles/get/circleGetCommand';
+import { CircleNotFoundApplicationError } from '../../../../application/errors/applicationErrors';
 import { UnknownError } from '../../../../util/error';
 import { Bootstrap } from '../../../utils/bootstrap';
 import { badRequest, notFound } from '../../../utils/httpResponse';

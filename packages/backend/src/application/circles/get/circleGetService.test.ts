@@ -6,7 +6,7 @@ import { StubCircleRepository } from '../../../repository/stub/circles/stubCircl
 import { Circle } from '../../../domain/models/circles/circle';
 import { CircleName } from '../../../domain/models/circles/circleName';
 import { UserId } from '../../../domain/models/users/userId';
-import { CircleNotFoundApplicationError } from '../../error/error';
+import { CircleNotFoundApplicationError } from '../../errors/applicationErrors';
 
 const circleRepository = new StubCircleRepository();
 const circleGetService = new CircleGetService({ circleRepository });

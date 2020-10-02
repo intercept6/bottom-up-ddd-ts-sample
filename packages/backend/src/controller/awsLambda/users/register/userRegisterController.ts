@@ -1,14 +1,14 @@
-import { UserRegisterService } from '../../../../application/user/register/userRegisterService';
-import { UserRegisterCommand } from '../../../../application/user/register/userRegisterCommand';
+import { UserRegisterService } from '../../../../application/users/register/userRegisterService';
+import { UserRegisterCommand } from '../../../../application/users/register/userRegisterCommand';
 import { APIGatewayProxyResult } from 'aws-lambda';
-import { UserDuplicateApplicationError } from '../../../../application/error/error';
+import { UserDuplicateApplicationError } from '../../../../application/errors/applicationErrors';
 import { Bootstrap } from '../../../utils/bootstrap';
 import {
   badRequest,
   conflict,
   internalServerError,
 } from '../../../utils/httpResponse';
-import { UserRegisterServiceInterface } from '../../../../application/user/register/userRegisterServiceInterface';
+import { UserRegisterServiceInterface } from '../../../../application/users/register/userRegisterServiceInterface';
 
 type UserRegisterEvent = {
   body: string;

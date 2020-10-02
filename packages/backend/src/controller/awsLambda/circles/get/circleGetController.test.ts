@@ -1,11 +1,11 @@
 import { CircleGetController } from './circleGetController';
-import { StubCircleGetService } from '../../../../application/circle/get/stubCircleGetService';
-import { CircleData } from '../../../../application/circle/circleData';
+import { StubCircleGetService } from '../../../../application/circles/get/stubCircleGetService';
+import { CircleData } from '../../../../application/circles/circleData';
 import { Circle } from '../../../../domain/models/circles/circle';
 import { CircleName } from '../../../../domain/models/circles/circleName';
 import { UserId } from '../../../../domain/models/users/userId';
 import { CircleId } from '../../../../domain/models/circles/circleId';
-import { CircleNotFoundApplicationError } from '../../../../application/error/error';
+import { CircleNotFoundApplicationError } from '../../../../application/errors/applicationErrors';
 
 const circleGetService = new StubCircleGetService();
 const circleGetController = new CircleGetController(circleGetService);

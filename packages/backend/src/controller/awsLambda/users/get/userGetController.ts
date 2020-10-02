@@ -1,7 +1,7 @@
-import { UserGetServiceInterface } from '../../../../application/user/get/userGetServiceInterface';
-import { UserGetService } from '../../../../application/user/get/userGetService';
-import { UserGetCommand } from '../../../../application/user/get/userGetCommand';
-import { UserNotFoundApplicationError } from '../../../../application/error/error';
+import { UserGetServiceInterface } from '../../../../application/users/get/userGetServiceInterface';
+import { UserGetService } from '../../../../application/users/get/userGetService';
+import { UserGetCommand } from '../../../../application/users/get/userGetCommand';
+import { UserNotFoundApplicationError } from '../../../../application/errors/applicationErrors';
 import { APIGatewayProxyResult } from 'aws-lambda';
 import { Bootstrap } from '../../../utils/bootstrap';
 import {

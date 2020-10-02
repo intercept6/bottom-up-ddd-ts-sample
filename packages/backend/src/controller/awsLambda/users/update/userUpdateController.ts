@@ -1,10 +1,10 @@
-import { UserUpdateService } from '../../../../application/user/update/userUpdateService';
-import { UserUpdateCommand } from '../../../../application/user/update/userUpdateCommand';
+import { UserUpdateService } from '../../../../application/users/update/userUpdateService';
+import { UserUpdateCommand } from '../../../../application/users/update/userUpdateCommand';
 import type { APIGatewayProxyResult } from 'aws-lambda';
-import { UserNotFoundApplicationError } from '../../../../application/error/error';
+import { UserNotFoundApplicationError } from '../../../../application/errors/applicationErrors';
 import { Bootstrap } from '../../../utils/bootstrap';
 import { badRequest, internalServerError } from '../../../utils/httpResponse';
-import { UserUpdateServiceInterface } from '../../../../application/user/update/userUpdateServiceInterface';
+import { UserUpdateServiceInterface } from '../../../../application/users/update/userUpdateServiceInterface';
 
 type UserUpdateEvent = {
   pathParameters: { userId: string };
