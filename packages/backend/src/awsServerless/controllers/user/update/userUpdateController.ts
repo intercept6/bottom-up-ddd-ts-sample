@@ -4,6 +4,7 @@ import type { APIGatewayProxyResult } from 'aws-lambda';
 import { UserNotFoundApplicationError } from '../../../../application/error/error';
 import { Bootstrap } from '../../../utils/bootstrap';
 import { badRequest, internalServerError } from '../../../utils/httpResponse';
+import { UserUpdateServiceInterface } from '../../../../application/user/update/userUpdateServiceInterface';
 
 type UserUpdateEvent = {
   pathParameters: { userId: string };
@@ -11,7 +12,10 @@ type UserUpdateEvent = {
 };
 
 export class UserUpdateController {
-  constructor(private readonly userUpdateService: UserUpdateService) {}
+  private readonly userUpdateService: UserUpdateServiceInterface;
+  constructor(props: { userUpdateService: UserUpdateServiceInterface }) {
+    this.userUpdateService = props.userUpdateService;
+  }
 
   async handle(event: UserUpdateEvent): Promise<APIGatewayProxyResult> {
     const id = event.pathParameters?.userId;
@@ -47,7 +51,10 @@ export class UserUpdateController {
       if (error instanceof UserNotFoundApplicationError) {
         return badRequest(`user id: ${id} is not found`);
       }
-      return internalServerError({ message: 'user update is failed', error });
+      return internalServerError({
+        message: 'user update is failed',
+        error,
+      });
     }
     return {
       statusCode: 204,
@@ -60,7 +67,7 @@ const bootstrap = new Bootstrap();
 const userUpdateService = new UserUpdateService({
   userRepository: bootstrap.getUserRepository(),
 });
-const userUpdateController = new UserUpdateController(userUpdateService);
+const userUpdateController = new UserUpdateController({ userUpdateService });
 
 export const handle = async (
   event: UserUpdateEvent

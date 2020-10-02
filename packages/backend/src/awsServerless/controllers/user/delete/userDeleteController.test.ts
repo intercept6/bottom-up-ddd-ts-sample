@@ -1,34 +1,19 @@
 import { UserDeleteController } from './userDeleteController';
-import { DynamoDBHelper } from '../../../../lib/tests/dynamoDBHelper';
-import { BootstrapForTest } from '../../../../lib/tests/bootstrapForTest';
+import { StubUserDeleteService } from '../../../../application/user/delete/stubUserDeleteService';
 
-const tableName = 'user-delete-controller-test-table';
+const userDeleteService = new StubUserDeleteService();
+const userDeleteController = new UserDeleteController({ userDeleteService });
 
-let userDeleteController: UserDeleteController;
-let bootstrap: BootstrapForTest;
-let dynamoDBHelper: DynamoDBHelper;
-
-beforeAll(async () => {
-  bootstrap = await BootstrapForTest.create();
-  userDeleteController = bootstrap.getUserDeleteController(tableName);
-  dynamoDBHelper = await DynamoDBHelper.create({
-    tableName,
-    ddb: bootstrap.getDDB(),
-    documentClient: bootstrap.getDocumentClient(),
-  });
-  await dynamoDBHelper.createUser({
-    userId: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
-    userName: 'ユーザー１',
-    mailAddress: 'user1@example.com',
-  });
-});
-
-afterAll(async () => {
-  await dynamoDBHelper.destructor();
+afterEach(() => {
+  jest.clearAllMocks();
 });
 
 describe('ユーザー削除', () => {
   test('ユーザーを削除する', async () => {
+    jest
+      .spyOn(StubUserDeleteService.prototype, 'handle')
+      .mockResolvedValueOnce();
+
     const response = await userDeleteController.handle({
       pathParameters: {
         userId: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
@@ -42,6 +27,10 @@ describe('ユーザー削除', () => {
   });
 
   test('ユーザーが存在しない場合も削除は成功する', async () => {
+    jest
+      .spyOn(StubUserDeleteService.prototype, 'handle')
+      .mockResolvedValueOnce();
+
     const response = await userDeleteController.handle({
       pathParameters: {
         userId: '66d73617-aa4f-46b3-bf7d-9c193f0a08d1',

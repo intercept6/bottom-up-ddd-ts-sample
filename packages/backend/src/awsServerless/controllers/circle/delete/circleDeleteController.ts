@@ -7,15 +7,19 @@ import {
   internalServerError,
   notFound,
 } from '../../../utils/httpResponse';
+import { Bootstrap } from '../../../utils/bootstrap';
+import { CircleDeleteServiceInterface } from '../../../../application/circle/delete/circleDeleteServiceInterface';
 
 type CircleDeleteEvent = {
   pathParameters?: { circleId?: string };
 };
 
 export class CircleDeleteController {
-  private readonly circleDeleteService: CircleDeleteService;
+  private readonly circleDeleteService: CircleDeleteServiceInterface;
 
-  constructor(props: { readonly circleDeleteService: CircleDeleteService }) {
+  constructor(props: {
+    readonly circleDeleteService: CircleDeleteServiceInterface;
+  }) {
     this.circleDeleteService = props.circleDeleteService;
   }
 
@@ -40,3 +44,14 @@ export class CircleDeleteController {
     return { statusCode: 204, body: JSON.stringify({}) };
   }
 }
+
+const bootstrap = new Bootstrap();
+const circleDeleteService = new CircleDeleteService({
+  circleRepository: bootstrap.getCircleRepository(),
+});
+const circleDeleteController = new CircleDeleteController({
+  circleDeleteService,
+});
+
+export const handle = async (event: CircleDeleteEvent) =>
+  await circleDeleteController.handle(event);

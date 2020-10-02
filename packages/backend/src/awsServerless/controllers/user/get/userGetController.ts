@@ -15,7 +15,10 @@ type UserGetEvent = {
 };
 
 export class UserGetController {
-  constructor(private readonly userGetService: UserGetServiceInterface) {}
+  private readonly userGetService: UserGetServiceInterface;
+  constructor(props: { userGetService: UserGetServiceInterface }) {
+    this.userGetService = props.userGetService;
+  }
 
   async handle(event: UserGetEvent): Promise<APIGatewayProxyResult> {
     const userId = event?.pathParameters?.userId;
@@ -51,7 +54,7 @@ const bootstrap = new Bootstrap();
 const userGetService = new UserGetService({
   userRepository: bootstrap.getUserRepository(),
 });
-const userGetController = new UserGetController(userGetService);
+const userGetController = new UserGetController({ userGetService });
 
 export const handle = async (event: UserGetEvent) =>
   await userGetController.handle(event);

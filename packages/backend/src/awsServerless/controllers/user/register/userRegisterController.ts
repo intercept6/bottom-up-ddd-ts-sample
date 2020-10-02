@@ -8,13 +8,17 @@ import {
   conflict,
   internalServerError,
 } from '../../../utils/httpResponse';
+import { UserRegisterServiceInterface } from '../../../../application/user/register/userRegisterServiceInterface';
 
 type UserRegisterEvent = {
   body: string;
 };
 
 export class UserRegisterController {
-  constructor(private readonly userRegisterService: UserRegisterService) {}
+  private readonly userRegisterService: UserRegisterServiceInterface;
+  constructor(props: { userRegisterService: UserRegisterServiceInterface }) {
+    this.userRegisterService = props.userRegisterService;
+  }
 
   async handle(event: UserRegisterEvent): Promise<APIGatewayProxyResult> {
     if (event.body == null) {
@@ -53,7 +57,9 @@ const rootURI = bootstrap.getRootURI();
 const userRegisterService = new UserRegisterService({
   userRepository: bootstrap.getUserRepository(),
 });
-const userRegisterController = new UserRegisterController(userRegisterService);
+const userRegisterController = new UserRegisterController({
+  userRegisterService,
+});
 
 export const handle = async (event: UserRegisterEvent) =>
   await userRegisterController.handle(event);
