@@ -1,0 +1,321 @@
+openapi: 3.0.1
+info:
+  title: Bottom up ddd
+  description: ボトムアップDDDのサンプル実装
+  version: 1.0.0
+servers:
+  - url: 'https://api.example.com'
+paths:
+  /users:
+    get:
+      summary: すべてのユーザーを一覧表示する
+      operationId: listUsers
+      tags:
+        - users
+      parameters:
+        - name: limit
+          in: query
+          description: 一度にレスポンスするアイテムの数（最大100）
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: ページングされたユーザーの配列
+          headers:
+            x-next:
+              description: レスポンスの次のページを取得する為のリンク
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Users'
+        default:
+          description: 予期しないエラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: ユーザーを作成する
+      operationId: createUser
+      tags:
+        - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_name:
+                  type: string
+                mail_address:
+                  type: string
+      responses:
+        '201':
+          description: レスポンス無し
+          headers:
+            location:
+              description: 作成されたユーザーの為のリンク
+              schema:
+                type: string
+        default:
+          description: 予期しないエラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /users/{userId}:
+    get:
+      summary: 特定のユーザーの情報を取得する
+      operationId: getUserbyId
+      tags:
+        - users
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: 取得するユーザーのID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 適切なリクエスト時の応答
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        default:
+          description: 予期しないエラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: 特定のユーザーの情報を更新する
+      operationId: updateUserById
+      tags:
+        - users
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: 更新するユーザーのID
+          schema:
+            type: string
+      responses:
+        '204':
+          description: レスポンス無し
+        default:
+          description: 予期しないエラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: 特定のユーザーを削除する
+      operationId: deleteUserById
+      tags:
+        - users
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: 削除するユーザーのID
+          schema:
+            type: string
+      responses:
+        '204':
+          description: レスポンス無し
+        default:
+          description: 予期しないエラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+
+  /circles:
+    get:
+      summary: すべてのサークルを一覧表示する
+      operationId: listCircles
+      tags:
+        - circles
+      parameters:
+        - name: limit
+          in: query
+          description: 一度にレスポンスするアイテムの数（最大100）
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: ページングされたサークルの配列
+          headers:
+            x-next:
+              description: レスポンスの次のページを取得する為のリンク
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Circles'
+        default:
+          description: 予期しないエラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: サークルを作成する
+      operationId: createCircle
+      tags:
+        - circles
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                circle_name:
+                  type: string
+                mail_address:
+                  type: string
+      responses:
+        '201':
+          description: レスポンス無し
+          headers:
+            location:
+              description: 作成されたサークルの為のリンク
+              schema:
+                type: string
+        default:
+          description: 予期しないエラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /circles/{circleId}:
+    get:
+      summary: 特定のサークルの情報を取得する
+      operationId: getCirclebyId
+      tags:
+        - circles
+      parameters:
+        - name: circleId
+          in: path
+          required: true
+          description: 取得するサークルのID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 適切なリクエスト時の応答
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Circle'
+        default:
+          description: 予期しないエラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: 特定のサークルの情報を更新する
+      operationId: updateCircleById
+      tags:
+        - circles
+      parameters:
+        - name: circleId
+          in: path
+          required: true
+          description: 更新するサークルのID
+          schema:
+            type: string
+      responses:
+        '204':
+          description: レスポンス無し
+        default:
+          description: 予期しないエラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: 特定のサークルを削除する
+      operationId: deleteCircleById
+      tags:
+        - circles
+      parameters:
+        - name: circleId
+          in: path
+          required: true
+          description: 削除するサークルのID
+          schema:
+            type: string
+      responses:
+        '204':
+          description: レスポンス無し
+        default:
+          description: 予期しないエラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - user_id
+        - user_name
+        - mail_address
+      properties:
+        user_id:
+          type: string
+        user_name:
+          type: string
+        mail_address:
+          type: string
+    Users:
+      type: array
+      items:
+        $ref: '#/components/schemas/User'
+    Circle:
+      type: object
+      required:
+        - circle_id
+        - circle_name
+        - ownwer_id
+        - member_ids
+      properties:
+        circle_id:
+          type: string
+        circle_name:
+          type: string
+        owner_id:
+          type: string
+        member_ids:
+          type: array
+          items:
+            type: string
+    Circles:
+      type: array
+      items:
+        $ref: "#/components/schemas/Circle"
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
