@@ -1,8 +1,8 @@
-import { User } from '../../../domain/models/user/user';
-import { UserName } from '../../../domain/models/user/userName';
-import { MailAddress } from '../../../domain/models/user/mailAddress';
+import { User } from '../../../domain/models/users/user';
+import { UserName } from '../../../domain/models/users/userName';
+import { MailAddress } from '../../../domain/models/users/mailAddress';
 import { UserGetCommand } from './userGetCommand';
-import { UserId } from '../../../domain/models/user/userId';
+import { UserId } from '../../../domain/models/users/userId';
 import { UserGetService } from './userGetService';
 import { UserNotFoundApplicationError } from '../../error/error';
 import { StubUserRepository } from '../../../repository/stub/users/stubUserRepository';

@@ -1,8 +1,8 @@
 import { UserGetCommand } from './userGetCommand';
-import { UserId } from '../../../domain/models/user/userId';
+import { UserId } from '../../../domain/models/users/userId';
 import { UserData } from '../userData';
-import { MailAddress } from '../../../domain/models/user/mailAddress';
-import { UserRepositoryInterface } from '../../../domain/models/user/userRepositoryInterface';
+import { MailAddress } from '../../../domain/models/users/mailAddress';
+import { UserRepositoryInterface } from '../../../domain/models/users/userRepositoryInterface';
 import { UserGetServiceInterface } from './userGetServiceInterface';
 import { UserNotFoundRepositoryError } from '../../../repository/errors/repositoryErrors';
 import {

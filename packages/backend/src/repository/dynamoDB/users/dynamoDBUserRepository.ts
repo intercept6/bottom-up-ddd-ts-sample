@@ -1,9 +1,9 @@
-import { UserRepositoryInterface } from '../../../domain/models/user/userRepositoryInterface';
-import { User } from '../../../domain/models/user/user';
-import { UserName } from '../../../domain/models/user/userName';
-import { UserId } from '../../../domain/models/user/userId';
+import { UserRepositoryInterface } from '../../../domain/models/users/userRepositoryInterface';
+import { User } from '../../../domain/models/users/user';
+import { UserName } from '../../../domain/models/users/userName';
+import { UserId } from '../../../domain/models/users/userId';
 import { Logger } from '../../../util/logger';
-import { MailAddress } from '../../../domain/models/user/mailAddress';
+import { MailAddress } from '../../../domain/models/users/mailAddress';
 import { DynamoDB } from 'aws-sdk';
 import {
   TypeRepositoryError,

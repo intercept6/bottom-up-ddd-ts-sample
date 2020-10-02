@@ -1,5 +1,5 @@
-import { UserRepositoryInterface } from '../../../domain/models/user/userRepositoryInterface';
-import { User } from '../../../domain/models/user/user';
+import { UserRepositoryInterface } from '../../../domain/models/users/userRepositoryInterface';
+import { User } from '../../../domain/models/users/user';
 
 export class StubUserRepository implements UserRepositoryInterface {
   async delete() {

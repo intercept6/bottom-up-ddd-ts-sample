@@ -1,11 +1,11 @@
 import { CircleGetService } from './circleGetService';
 import { CircleGetCommand } from './circleGetCommand';
-import { CircleId } from '../../../domain/models/circle/circleId';
+import { CircleId } from '../../../domain/models/circles/circleId';
 import { CircleNotFoundRepositoryError } from '../../../repository/errors/repositoryErrors';
 import { StubCircleRepository } from '../../../repository/stub/circles/stubCircleRepository';
-import { Circle } from '../../../domain/models/circle/circle';
-import { CircleName } from '../../../domain/models/circle/circleName';
-import { UserId } from '../../../domain/models/user/userId';
+import { Circle } from '../../../domain/models/circles/circle';
+import { CircleName } from '../../../domain/models/circles/circleName';
+import { UserId } from '../../../domain/models/users/userId';
 import { CircleNotFoundApplicationError } from '../../error/error';
 
 const circleRepository = new StubCircleRepository();

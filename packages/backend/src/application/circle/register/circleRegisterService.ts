@@ -1,16 +1,16 @@
-import { CircleRepositoryInterface } from '../../../domain/models/circle/circleRepositoryInterface';
+import { CircleRepositoryInterface } from '../../../domain/models/circles/circleRepositoryInterface';
 import { CircleService } from '../../../domain/models/services/circleService';
-import { UserRepositoryInterface } from '../../../domain/models/user/userRepositoryInterface';
+import { UserRepositoryInterface } from '../../../domain/models/users/userRepositoryInterface';
 import { CircleRegisterCommand } from './circleRegisterCommand';
-import { UserId } from '../../../domain/models/user/userId';
+import { UserId } from '../../../domain/models/users/userId';
 import { UserNotFoundRepositoryError } from '../../../repository/errors/repositoryErrors';
 import {
   CircleDuplicateApplicationError,
   UserNotFoundApplicationError,
 } from '../../error/error';
-import { CircleName } from '../../../domain/models/circle/circleName';
+import { CircleName } from '../../../domain/models/circles/circleName';
 import { CircleRegisterServiceInterface } from './circleRegisterServiceInterface';
-import { CircleFactoryInterface } from '../../../domain/models/circle/circleFactoryInterface';
+import { CircleFactoryInterface } from '../../../domain/models/circles/circleFactoryInterface';
 import { UnknownError } from '../../../util/error';
 import { CircleData } from '../circleData';
 

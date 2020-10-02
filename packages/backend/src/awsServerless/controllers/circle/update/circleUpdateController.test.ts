@@ -4,7 +4,7 @@ import {
   MembersNotFoundApplicationError,
   OwnerNotFoundApplicationError,
 } from '../../../../application/error/error';
-import { UserId } from '../../../../domain/models/user/userId';
+import { UserId } from '../../../../domain/models/users/userId';
 
 const circleUpdateService = new StubCircleUpdateService();
 const circleUpdateController = new CircleUpdateController({

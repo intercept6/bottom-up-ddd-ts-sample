@@ -1,4 +1,4 @@
-import { ArgumentDomainError } from '../../error/error';
+import { ArgumentDomainError } from '../../errors/domainErrors';
 
 export class UserName {
   constructor(private readonly value: string) {

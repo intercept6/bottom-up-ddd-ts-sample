@@ -2,8 +2,8 @@ import { DynamoDB } from 'aws-sdk';
 import { DynamoDBUserRepository } from '../../repository/dynamoDB/users/dynamoDBUserRepository';
 import { DynamoDBCircleRepository } from '../../repository/dynamoDB/circles/dynamoDBCircleRepository';
 import { DynamoDBCircleFactory } from '../../repository/dynamoDB/circles/dynamoDBCircleFactory';
-import { UserRepositoryInterface } from '../../domain/models/user/userRepositoryInterface';
-import { CircleRepositoryInterface } from '../../domain/models/circle/circleRepositoryInterface';
+import { UserRepositoryInterface } from '../../domain/models/users/userRepositoryInterface';
+import { CircleRepositoryInterface } from '../../domain/models/circles/circleRepositoryInterface';
 
 export class Bootstrap {
   private readonly tableName: string;

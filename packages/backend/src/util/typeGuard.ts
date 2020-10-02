@@ -1,4 +1,4 @@
-import { User } from '../domain/models/user/user';
+import { User } from '../domain/models/users/user';
 
 function isArray(array: any): array is any[] {
   return Object.prototype.toString.call(array) === '[object Array]';

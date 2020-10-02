@@ -1,5 +1,5 @@
-import { CircleRepositoryInterface } from '../../../domain/models/circle/circleRepositoryInterface';
-import { Circle } from '../../../domain/models/circle/circle';
+import { CircleRepositoryInterface } from '../../../domain/models/circles/circleRepositoryInterface';
+import { Circle } from '../../../domain/models/circles/circle';
 
 export class StubCircleRepository implements CircleRepositoryInterface {
   async delete() {

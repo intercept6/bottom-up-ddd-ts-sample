@@ -1,9 +1,9 @@
 import { ExtendedError } from '../../util/error';
-import { CircleName } from '../../domain/models/circle/circleName';
-import { CircleId } from '../../domain/models/circle/circleId';
-import { UserId } from '../../domain/models/user/userId';
-import { UserName } from '../../domain/models/user/userName';
-import { MailAddress } from '../../domain/models/user/mailAddress';
+import { CircleName } from '../../domain/models/circles/circleName';
+import { CircleId } from '../../domain/models/circles/circleId';
+import { UserId } from '../../domain/models/users/userId';
+import { UserName } from '../../domain/models/users/userName';
+import { MailAddress } from '../../domain/models/users/mailAddress';
 import { isUserArray } from '../../util/typeGuard';
 
 type PrimitiveTypes =

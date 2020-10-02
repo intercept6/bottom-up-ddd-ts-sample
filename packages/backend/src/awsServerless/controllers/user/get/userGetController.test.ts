@@ -1,9 +1,9 @@
 import { UserGetController } from './userGetController';
 import { StubUserGetService } from '../../../../application/user/get/stubUserGetService';
-import { User } from '../../../../domain/models/user/user';
-import { UserId } from '../../../../domain/models/user/userId';
-import { UserName } from '../../../../domain/models/user/userName';
-import { MailAddress } from '../../../../domain/models/user/mailAddress';
+import { User } from '../../../../domain/models/users/user';
+import { UserId } from '../../../../domain/models/users/userId';
+import { UserName } from '../../../../domain/models/users/userName';
+import { MailAddress } from '../../../../domain/models/users/mailAddress';
 import { UserData } from '../../../../application/user/userData';
 import { UserNotFoundApplicationError } from '../../../../application/error/error';
 

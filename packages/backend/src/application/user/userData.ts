@@ -1,4 +1,4 @@
-import { User } from '../../domain/models/user/user';
+import { User } from '../../domain/models/users/user';
 
 export class UserData {
   private readonly userId: string;

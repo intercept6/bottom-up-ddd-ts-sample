@@ -1,9 +1,9 @@
-import { UserName } from '../../../domain/models/user/userName';
+import { UserName } from '../../../domain/models/users/userName';
 import { UserService } from '../../../domain/models/services/userService';
-import { UserRepositoryInterface } from '../../../domain/models/user/userRepositoryInterface';
-import { UserId } from '../../../domain/models/user/userId';
+import { UserRepositoryInterface } from '../../../domain/models/users/userRepositoryInterface';
+import { UserId } from '../../../domain/models/users/userId';
 import { UserUpdateCommand } from './userUpdateCommand';
-import { MailAddress } from '../../../domain/models/user/mailAddress';
+import { MailAddress } from '../../../domain/models/users/mailAddress';
 import { UserUpdateServiceInterface } from './userUpdateServiceInterface';
 import {
   UserDuplicateApplicationError,

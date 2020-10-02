@@ -2,7 +2,7 @@ import { UserId } from './userId';
 import { UserName } from './userName';
 import { generateUuid } from '../../../util/uuid';
 import { MailAddress } from './mailAddress';
-import { ArgumentDomainError } from '../../error/error';
+import { ArgumentDomainError } from '../../errors/domainErrors';
 
 export class User {
   private readonly userId: UserId;

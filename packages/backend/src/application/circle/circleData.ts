@@ -1,4 +1,4 @@
-import { Circle } from '../../domain/models/circle/circle';
+import { Circle } from '../../domain/models/circles/circle';
 
 export class CircleData {
   private readonly circleId: string;

@@ -1,6 +1,6 @@
 import { range } from '../../../util/range';
-import { UserId } from '../../../domain/models/user/userId';
-import { CircleId } from '../../../domain/models/circle/circleId';
+import { UserId } from '../../../domain/models/users/userId';
+import { CircleId } from '../../../domain/models/circles/circleId';
 import { CircleUpdateCommand } from './circleUpdateCommand';
 import { CircleUpdateService } from './circleUpdateService';
 import {
@@ -10,11 +10,11 @@ import {
 import { StubUserRepository } from '../../../repository/stub/users/stubUserRepository';
 import { StubCircleRepository } from '../../../repository/stub/circles/stubCircleRepository';
 import { CircleNotFoundRepositoryError } from '../../../repository/errors/repositoryErrors';
-import { CircleName } from '../../../domain/models/circle/circleName';
-import { Circle } from '../../../domain/models/circle/circle';
-import { User } from '../../../domain/models/user/user';
-import { UserName } from '../../../domain/models/user/userName';
-import { MailAddress } from '../../../domain/models/user/mailAddress';
+import { CircleName } from '../../../domain/models/circles/circleName';
+import { Circle } from '../../../domain/models/circles/circle';
+import { User } from '../../../domain/models/users/user';
+import { UserName } from '../../../domain/models/users/userName';
+import { MailAddress } from '../../../domain/models/users/mailAddress';
 
 const userRepository = new StubUserRepository();
 const circleRepository = new StubCircleRepository();

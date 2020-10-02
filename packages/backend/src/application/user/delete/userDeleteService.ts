@@ -1,9 +1,9 @@
 import { UserDeleteCommand } from './userDeleteCommand';
-import { UserId } from '../../../domain/models/user/userId';
+import { UserId } from '../../../domain/models/users/userId';
 import { UnknownError } from '../../../util/error';
 import { UserNotFoundRepositoryError } from '../../../repository/errors/repositoryErrors';
 import { Logger } from '../../../util/logger';
-import { UserRepositoryInterface } from '../../../domain/models/user/userRepositoryInterface';
+import { UserRepositoryInterface } from '../../../domain/models/users/userRepositoryInterface';
 import { UserDeleteServiceInterface } from './userDeleteServiceInterface';
 
 export class UserDeleteService implements UserDeleteServiceInterface {

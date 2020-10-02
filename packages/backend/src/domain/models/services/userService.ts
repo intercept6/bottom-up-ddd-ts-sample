@@ -1,7 +1,7 @@
-import { UserRepositoryInterface } from '../user/userRepositoryInterface';
+import { UserRepositoryInterface } from '../users/userRepositoryInterface';
 import { UnknownError } from '../../../util/error';
-import { UserName } from '../user/userName';
-import { MailAddress } from '../user/mailAddress';
+import { UserName } from '../users/userName';
+import { MailAddress } from '../users/mailAddress';
 import { UserNotFoundRepositoryError } from '../../../repository/errors/repositoryErrors';
 
 export class UserService {

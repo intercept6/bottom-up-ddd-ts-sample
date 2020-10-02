@@ -1,11 +1,11 @@
-import { CircleId } from '../../../domain/models/circle/circleId';
+import { CircleId } from '../../../domain/models/circles/circleId';
 import { CircleDeleteCommand } from './circleDeleteCommand';
 import { CircleDeleteService } from './circleDeleteService';
 import { CircleNotFoundRepositoryError } from '../../../repository/errors/repositoryErrors';
 import { StubCircleRepository } from '../../../repository/stub/circles/stubCircleRepository';
-import { Circle } from '../../../domain/models/circle/circle';
-import { CircleName } from '../../../domain/models/circle/circleName';
-import { UserId } from '../../../domain/models/user/userId';
+import { Circle } from '../../../domain/models/circles/circle';
+import { CircleName } from '../../../domain/models/circles/circleName';
+import { UserId } from '../../../domain/models/users/userId';
 
 const circleRepository = new StubCircleRepository();
 const circleDeleteService = new CircleDeleteService({ circleRepository });

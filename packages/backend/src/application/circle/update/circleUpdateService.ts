@@ -1,16 +1,16 @@
 import { CircleUpdateServiceInterface } from './circleUpdateServiceInterface';
 import { CircleUpdateCommand } from './circleUpdateCommand';
-import { CircleRepositoryInterface } from '../../../domain/models/circle/circleRepositoryInterface';
-import { CircleId } from '../../../domain/models/circle/circleId';
-import { CircleName } from '../../../domain/models/circle/circleName';
+import { CircleRepositoryInterface } from '../../../domain/models/circles/circleRepositoryInterface';
+import { CircleId } from '../../../domain/models/circles/circleId';
+import { CircleName } from '../../../domain/models/circles/circleName';
 import { CircleService } from '../../../domain/models/services/circleService';
 import {
   CircleDuplicateApplicationError,
   MembersNotFoundApplicationError,
   OwnerNotFoundApplicationError,
 } from '../../error/error';
-import { UserId } from '../../../domain/models/user/userId';
-import { UserRepositoryInterface } from '../../../domain/models/user/userRepositoryInterface';
+import { UserId } from '../../../domain/models/users/userId';
+import { UserRepositoryInterface } from '../../../domain/models/users/userRepositoryInterface';
 import { UserNotFoundRepositoryError } from '../../../repository/errors/repositoryErrors';
 import { UnknownError } from '../../../util/error';
 

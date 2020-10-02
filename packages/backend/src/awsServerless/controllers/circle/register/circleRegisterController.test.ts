@@ -6,10 +6,10 @@ import { CircleDuplicateApplicationError } from '../../../../application/error/e
 import { CircleData } from '../../../../application/circle/circleData';
 import { StubCircleRegisterService } from '../../../../application/circle/register/stubCircleRegisterService';
 import { CircleRegisterController } from './circleRegisterController';
-import { Circle } from '../../../../domain/models/circle/circle';
-import { UserId } from '../../../../domain/models/user/userId';
-import { CircleName } from '../../../../domain/models/circle/circleName';
-import { CircleId } from '../../../../domain/models/circle/circleId';
+import { Circle } from '../../../../domain/models/circles/circle';
+import { UserId } from '../../../../domain/models/users/userId';
+import { CircleName } from '../../../../domain/models/circles/circleName';
+import { CircleId } from '../../../../domain/models/circles/circleId';
 
 const circleRegisterService = new StubCircleRegisterService();
 const circleRegisterController = new CircleRegisterController({

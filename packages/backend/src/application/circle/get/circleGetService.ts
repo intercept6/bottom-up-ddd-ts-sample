@@ -1,8 +1,8 @@
 import { CircleGetServiceInterface } from './circleGetServiceInterface';
 import { CircleGetCommand } from './circleGetCommand';
 import { CircleData } from '../circleData';
-import { CircleRepositoryInterface } from '../../../domain/models/circle/circleRepositoryInterface';
-import { CircleId } from '../../../domain/models/circle/circleId';
+import { CircleRepositoryInterface } from '../../../domain/models/circles/circleRepositoryInterface';
+import { CircleId } from '../../../domain/models/circles/circleId';
 import { CircleNotFoundRepositoryError } from '../../../repository/errors/repositoryErrors';
 import { CircleNotFoundApplicationError } from '../../error/error';
 import { UnknownError } from '../../../util/error';

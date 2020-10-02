@@ -1,11 +1,11 @@
 import { DynamoDBLocalHelper } from '../../../lib/tests/dynamoDBLocalHelper';
-import { UserId } from '../../../domain/models/user/userId';
+import { UserId } from '../../../domain/models/users/userId';
 import { UserNotFoundRepositoryError } from '../../errors/repositoryErrors';
 import { Credentials, DynamoDB } from 'aws-sdk';
 import { DynamoDBUserRepository } from './dynamoDBUserRepository';
-import { User } from '../../../domain/models/user/user';
-import { UserName } from '../../../domain/models/user/userName';
-import { MailAddress } from '../../../domain/models/user/mailAddress';
+import { User } from '../../../domain/models/users/user';
+import { UserName } from '../../../domain/models/users/userName';
+import { MailAddress } from '../../../domain/models/users/mailAddress';
 
 /**
  * AWS SDKによるDynamoDBの操作はKeyConditionExpressionなど型の恩恵を受けられない場合が多い
