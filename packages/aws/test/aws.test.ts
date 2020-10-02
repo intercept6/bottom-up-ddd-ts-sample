@@ -4,7 +4,7 @@ import {
   MatchStyle,
 } from '@aws-cdk/assert';
 import { App } from '@aws-cdk/core';
-import { AwsStack } from '../lib/aws-stack';
+import { AwsStack } from '../lib/awsStack';
 
 test('Empty Stack', () => {
   const app = new App();

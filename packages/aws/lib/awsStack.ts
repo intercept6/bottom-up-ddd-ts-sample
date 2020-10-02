@@ -6,7 +6,7 @@ import {
 } from '@aws-cdk/aws-apigatewayv2';
 import { Code, LayerVersion, Runtime } from '@aws-cdk/aws-lambda';
 import { AttributeType, BillingMode, Table } from '@aws-cdk/aws-dynamodb';
-import { FunctionUtils } from './handler-function';
+import { FunctionUtils } from './handlerFunction';
 
 const layerDir = './bundle/layer';
 const srcDir = '../backend/src';
