@@ -1,22 +1,22 @@
 import { User } from '../../domain/models/user/user';
 
 export class UserData {
-  private readonly id: string;
-  private readonly name: string;
+  private readonly userId: string;
+  private readonly userName: string;
   private readonly mailAddress: string;
 
   constructor(source: User) {
-    this.id = source.getId().getValue();
-    this.name = source.getName().getValue();
+    this.userId = source.getUserId().getValue();
+    this.userName = source.getName().getValue();
     this.mailAddress = source.getMailAddress().getValue();
   }
 
-  getId() {
-    return this.id;
+  getUserId() {
+    return this.userId;
   }
 
-  getName() {
-    return this.name;
+  getUserName() {
+    return this.userName;
   }
 
   getMailAddress() {

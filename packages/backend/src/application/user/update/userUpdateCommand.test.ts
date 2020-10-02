@@ -1,69 +1,96 @@
 import { UserUpdateService } from './userUpdateService';
-import { InMemoryUserRepository } from '../../../repository/user/inMemoryUserRepository';
-import { User } from '../../../domain/models/user/user';
-import { UserId } from '../../../domain/models/user/userId';
-import { UserName } from '../../../domain/models/user/userName';
 import { MailAddress } from '../../../domain/models/user/mailAddress';
 import { UserUpdateCommand } from './userUpdateCommand';
 import {
   ArgumentApplicationError,
   UserDuplicateApplicationError,
 } from '../../error/error';
+import { StubUserRepository } from '../../../repository/user/stubUserRepository';
+import { User } from '../../../domain/models/user/user';
+import { UserId } from '../../../domain/models/user/userId';
+import { UserName } from '../../../domain/models/user/userName';
+import { UserNotFoundRepositoryError } from '../../../repository/error/error';
+
+const userRepository = new StubUserRepository();
+
+afterEach(() => {
+  jest.clearAllMocks();
+});
 
 describe('ユーザ更新', () => {
   test('ユーザ名を更新する', async () => {
-    const userRepository = new InMemoryUserRepository();
-    userRepository.store.push(
-      new User(
-        new UserId('203881e1-99f2-4ce6-ab6b-785fcd793c92'),
-        new UserName('テストユーザーの名前'),
-        new MailAddress('test@example.com')
-      )
-    );
+    const userId = '203881e1-99f2-4ce6-ab6b-785fcd793c92';
+    const userName = 'テストユーザー名';
+    const mailAddress = 'test@example.com';
+    const updatedUserName = '更新されたテストユーザー名';
+    jest
+      .spyOn(StubUserRepository.prototype, 'get')
+      .mockResolvedValueOnce(
+        new User(
+          new UserId(userId),
+          new UserName(userName),
+          new MailAddress(mailAddress)
+        )
+      );
+    jest.spyOn(StubUserRepository.prototype, 'update').mockResolvedValueOnce();
+    jest
+      .spyOn(StubUserRepository.prototype, 'get')
+      .mockRejectedValueOnce(
+        new UserNotFoundRepositoryError(new UserName(updatedUserName))
+      );
     const userApplicationService = new UserUpdateService({ userRepository });
     const command = new UserUpdateCommand({
-      id: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
-      name: '変更されたテストユーザーの名前',
+      userId,
+      userName: updatedUserName,
     });
     await userApplicationService.handle(command);
-
-    const head = userRepository.store[0];
-    expect(head.getName().getValue()).toEqual('変更されたテストユーザーの名前');
   });
 
   test('メールアドレスを更新する', async () => {
-    const userRepository = new InMemoryUserRepository();
-    userRepository.store.push(
-      new User(
-        new UserId('203881e1-99f2-4ce6-ab6b-785fcd793c92'),
-        new UserName('テストユーザーの名前'),
-        new MailAddress('test@example.com')
-      )
-    );
+    const userId = '203881e1-99f2-4ce6-ab6b-785fcd793c92';
+    const userName = 'テストユーザー名';
+    const mailAddress = 'test@example.com';
+    const updatedMailAddress = 'updated@example.com';
+    jest
+      .spyOn(StubUserRepository.prototype, 'get')
+      .mockResolvedValueOnce(
+        new User(
+          new UserId(userId),
+          new UserName(userName),
+          new MailAddress(mailAddress)
+        )
+      );
+    jest.spyOn(StubUserRepository.prototype, 'update').mockResolvedValueOnce();
+    jest
+      .spyOn(StubUserRepository.prototype, 'get')
+      .mockRejectedValueOnce(
+        new UserNotFoundRepositoryError(new MailAddress(updatedMailAddress))
+      );
     const userApplicationService = new UserUpdateService({ userRepository });
     const command = new UserUpdateCommand({
-      id: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
-      mailAddress: 'changed@example.com',
+      userId,
+      mailAddress: updatedMailAddress,
     });
     await userApplicationService.handle(command);
-
-    const head = userRepository.store[0];
-    expect(head.getMailAddress().getValue()).toEqual('changed@example.com');
   });
 
   test('ユーザ名が3文字未満', async () => {
-    const userRepository = new InMemoryUserRepository();
-    userRepository.store.push(
-      new User(
-        new UserId('203881e1-99f2-4ce6-ab6b-785fcd793c92'),
-        new UserName('テストユーザーの名前'),
-        new MailAddress('test@example.com')
-      )
-    );
+    const userId = '203881e1-99f2-4ce6-ab6b-785fcd793c92';
+    const userName = 'テストユーザー名';
+    const mailAddress = 'test@example.com';
+    jest
+      .spyOn(StubUserRepository.prototype, 'get')
+      .mockResolvedValueOnce(
+        new User(
+          new UserId(userId),
+          new UserName(userName),
+          new MailAddress(mailAddress)
+        )
+      );
     const userApplicationService = new UserUpdateService({ userRepository });
     const command = new UserUpdateCommand({
-      id: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
-      name: 'テス',
+      userId,
+      userName: 'テス',
     });
     const updateUserPromise = userApplicationService.handle(command);
 
@@ -73,18 +100,22 @@ describe('ユーザ更新', () => {
   });
 
   test('ユーザ名が20文字超過', async () => {
-    const userRepository = new InMemoryUserRepository();
-    userRepository.store.push(
-      new User(
-        new UserId('203881e1-99f2-4ce6-ab6b-785fcd793c92'),
-        new UserName('テストユーザーの名前'),
-        new MailAddress('test@example.com')
-      )
-    );
+    const userId = '203881e1-99f2-4ce6-ab6b-785fcd793c92';
+    const userName = 'テストユーザー名';
+    const mailAddress = 'test@example.com';
+    jest
+      .spyOn(StubUserRepository.prototype, 'get')
+      .mockResolvedValueOnce(
+        new User(
+          new UserId(userId),
+          new UserName(userName),
+          new MailAddress(mailAddress)
+        )
+      );
     const userApplicationService = new UserUpdateService({ userRepository });
     const command = new UserUpdateCommand({
-      id: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
-      name: 'テストユーザの名前テストユーザの名前テスト',
+      userId,
+      userName: 'テストユーザの名前テストユーザの名前テスト',
     });
     const updateUserPromise = userApplicationService.handle(command);
 
@@ -94,18 +125,22 @@ describe('ユーザ更新', () => {
   });
 
   test('ユーザ名に許可されない英語小文字が使われている', async () => {
-    const userRepository = new InMemoryUserRepository();
-    userRepository.store.push(
-      new User(
-        new UserId('203881e1-99f2-4ce6-ab6b-785fcd793c92'),
-        new UserName('テストユーザーの名前'),
-        new MailAddress('test@example.com')
-      )
-    );
+    const userId = '203881e1-99f2-4ce6-ab6b-785fcd793c92';
+    const userName = 'テストユーザー名';
+    const mailAddress = 'test@example.com';
+    jest
+      .spyOn(StubUserRepository.prototype, 'get')
+      .mockResolvedValueOnce(
+        new User(
+          new UserId(userId),
+          new UserName(userName),
+          new MailAddress(mailAddress)
+        )
+      );
     const userApplicationService = new UserUpdateService({ userRepository });
     const command = new UserUpdateCommand({
-      id: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
-      name: 'test',
+      userId,
+      userName: 'test',
     });
     const updateUserPromise = userApplicationService.handle(command);
 
@@ -117,18 +152,22 @@ describe('ユーザ更新', () => {
   });
 
   test('ユーザ名に許可されない英語大文字が使われている', async () => {
-    const userRepository = new InMemoryUserRepository();
-    userRepository.store.push(
-      new User(
-        new UserId('203881e1-99f2-4ce6-ab6b-785fcd793c92'),
-        new UserName('テストユーザーの名前'),
-        new MailAddress('test@example.com')
-      )
-    );
+    const userId = '203881e1-99f2-4ce6-ab6b-785fcd793c92';
+    const userName = 'テストユーザー名';
+    const mailAddress = 'test@example.com';
+    jest
+      .spyOn(StubUserRepository.prototype, 'get')
+      .mockResolvedValueOnce(
+        new User(
+          new UserId(userId),
+          new UserName(userName),
+          new MailAddress(mailAddress)
+        )
+      );
     const userApplicationService = new UserUpdateService({ userRepository });
     const command = new UserUpdateCommand({
-      id: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
-      name: 'TEST',
+      userId,
+      userName: 'TEST',
     });
     const updateUserPromise = userApplicationService.handle(command);
 
@@ -139,32 +178,75 @@ describe('ユーザ更新', () => {
     );
   });
 
-  test('メールアドレスは重複できない', async () => {
-    const userRepository = new InMemoryUserRepository();
-    userRepository.store.push(
-      new User(
-        new UserId('203881e1-99f2-4ce6-ab6b-785fcd793c92'),
-        new UserName('テストユーザーの名前'),
-        new MailAddress('test@example.com')
-      )
-    );
-    userRepository.store.push(
-      new User(
-        new UserId('35a16ab7-c756-4dce-8810-59f66fc142cc'),
-        new UserName('テストユーザーの名前'),
-        new MailAddress('changed@example.com')
-      )
-    );
-
+  test('ユーザー名は重複できない', async () => {
+    const userId = '203881e1-99f2-4ce6-ab6b-785fcd793c92';
+    const userName = 'テストユーザー名';
+    const mailAddress = 'test@example.com';
+    const updatedUserName = '更新されたユーザー名';
+    jest
+      .spyOn(StubUserRepository.prototype, 'get')
+      .mockResolvedValueOnce(
+        new User(
+          new UserId(userId),
+          new UserName(userName),
+          new MailAddress(mailAddress)
+        )
+      );
+    jest.spyOn(StubUserRepository.prototype, 'update').mockResolvedValueOnce();
+    jest
+      .spyOn(StubUserRepository.prototype, 'get')
+      .mockResolvedValueOnce(
+        new User(
+          new UserId('2ca1bf61-6855-4c89-9ed7-198324e83cc6'),
+          new UserName(updatedUserName),
+          new MailAddress('other@example.com')
+        )
+      );
     const userApplicationService = new UserUpdateService({ userRepository });
     const command = new UserUpdateCommand({
-      id: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
-      mailAddress: 'changed@example.com',
+      userId,
+      userName: updatedUserName,
     });
     const updatePromise = userApplicationService.handle(command);
 
     await expect(updatePromise).rejects.toThrowError(
-      new UserDuplicateApplicationError(new MailAddress('changed@example.com'))
+      new UserDuplicateApplicationError(new UserName(updatedUserName))
+    );
+  });
+
+  test('メールアドレスは重複できない', async () => {
+    const userId = '203881e1-99f2-4ce6-ab6b-785fcd793c92';
+    const userName = 'テストユーザー名';
+    const mailAddress = 'test@example.com';
+    const updatedMailAddress = 'updated@example.com';
+    jest
+      .spyOn(StubUserRepository.prototype, 'get')
+      .mockResolvedValueOnce(
+        new User(
+          new UserId(userId),
+          new UserName(userName),
+          new MailAddress(mailAddress)
+        )
+      );
+    jest.spyOn(StubUserRepository.prototype, 'update').mockResolvedValueOnce();
+    jest
+      .spyOn(StubUserRepository.prototype, 'get')
+      .mockResolvedValueOnce(
+        new User(
+          new UserId('2ca1bf61-6855-4c89-9ed7-198324e83cc6'),
+          new UserName('既存のユーザー名'),
+          new MailAddress(updatedMailAddress)
+        )
+      );
+    const userApplicationService = new UserUpdateService({ userRepository });
+    const command = new UserUpdateCommand({
+      userId,
+      mailAddress: updatedMailAddress,
+    });
+    const updatePromise = userApplicationService.handle(command);
+
+    await expect(updatePromise).rejects.toThrowError(
+      new UserDuplicateApplicationError(new MailAddress(updatedMailAddress))
     );
   });
 });

@@ -1,20 +1,24 @@
 export class UserUpdateCommand {
-  private readonly id: string;
-  private readonly name?: string;
+  private readonly userId: string;
+  private readonly userName?: string;
   private readonly mailAddress?: string;
 
-  constructor(props: { id: string; name?: string; mailAddress?: string }) {
-    this.id = props.id;
-    this.name = props.name;
+  constructor(props: {
+    userId: string;
+    userName?: string;
+    mailAddress?: string;
+  }) {
+    this.userId = props.userId;
+    this.userName = props.userName;
     this.mailAddress = props.mailAddress;
   }
 
   getId() {
-    return this.id;
+    return this.userId;
   }
 
   getName() {
-    return this.name;
+    return this.userName;
   }
 
   getMailAddress() {

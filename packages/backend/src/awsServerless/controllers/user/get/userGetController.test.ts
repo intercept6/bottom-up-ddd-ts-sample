@@ -1,58 +1,62 @@
 import { UserGetController } from './userGetController';
-import { DynamoDBHelper } from '../../../../lib/tests/dynamoDBHelper';
-import { BootstrapForTest } from '../../../../lib/tests/bootstrapForTest';
+import { StubUserGetService } from '../../../../application/user/get/stubUserGetService';
+import { User } from '../../../../domain/models/user/user';
+import { UserId } from '../../../../domain/models/user/userId';
+import { UserName } from '../../../../domain/models/user/userName';
+import { MailAddress } from '../../../../domain/models/user/mailAddress';
+import { UserData } from '../../../../application/user/userData';
+import { UserNotFoundApplicationError } from '../../../../application/error/error';
 
-const tableName = 'user-get-controller-test-table';
-
-let userGetController: UserGetController;
-let bootstrap: BootstrapForTest;
-let dynamoDBHelper: DynamoDBHelper;
-
-beforeAll(async () => {
-  bootstrap = await BootstrapForTest.create();
-  userGetController = bootstrap.getUserGetController(tableName);
-  dynamoDBHelper = await DynamoDBHelper.create({
-    tableName,
-    ddb: bootstrap.getDDB(),
-    documentClient: bootstrap.getDocumentClient(),
-  });
-  await dynamoDBHelper.createUser({
-    userId: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
-    userName: 'ユーザー１',
-    mailAddress: 'user1@example.com',
-  });
-});
-
-afterAll(async () => {
-  await dynamoDBHelper.destructor();
-});
+const userGetService = new StubUserGetService();
+const userGetController = new UserGetController({ userGetService });
 
 describe('ユーザー取得', () => {
   test('ユーザーを取得する', async () => {
+    const userId = '203881e1-99f2-4ce6-ab6b-785fcd793c92';
+    const userName = 'テストユーザー名';
+    const mailAddress = 'user1@example.com';
+    jest
+      .spyOn(StubUserGetService.prototype, 'handle')
+      .mockResolvedValueOnce(
+        new UserData(
+          new User(
+            new UserId(userId),
+            new UserName(userName),
+            new MailAddress(mailAddress)
+          )
+        )
+      );
+
     const response = await userGetController.handle({
-      pathParameters: { userId: '203881e1-99f2-4ce6-ab6b-785fcd793c92' },
+      pathParameters: { userId },
     });
 
     expect(response).toEqual({
       statusCode: 200,
       body: JSON.stringify({
-        user_id: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
-        user_name: 'ユーザー１',
-        mail_address: 'user1@example.com',
+        user_id: userId,
+        user_name: userName,
+        mail_address: mailAddress,
       }),
     });
   });
 
   test('ユーザーが存在しない', async () => {
+    const userId = '66d73617-aa4f-46b3-bf7d-9c193f0a08d1';
+    jest
+      .spyOn(StubUserGetService.prototype, 'handle')
+      .mockRejectedValueOnce(
+        new UserNotFoundApplicationError(new UserId(userId))
+      );
     const response = await userGetController.handle({
-      pathParameters: { userId: '66d73617-aa4f-46b3-bf7d-9c193f0a08d1' },
+      pathParameters: { userId },
     });
 
     expect(response).toEqual({
       statusCode: 404,
       body: JSON.stringify({
         name: 'NotFound',
-        message: 'user id: 66d73617-aa4f-46b3-bf7d-9c193f0a08d1 is not found',
+        message: `user id: ${userId} is not found`,
       }),
     });
   });

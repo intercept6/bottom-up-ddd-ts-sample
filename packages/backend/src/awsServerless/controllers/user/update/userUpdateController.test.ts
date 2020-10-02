@@ -1,34 +1,21 @@
 import { UserUpdateController } from './userUpdateController';
-import { DynamoDBHelper } from '../../../../lib/tests/dynamoDBHelper';
-import { BootstrapForTest } from '../../../../lib/tests/bootstrapForTest';
+import { StubUserUpdateService } from '../../../../application/user/update/stubUserUpdateService';
+import { UserNotFoundApplicationError } from '../../../../application/error/error';
+import { UserId } from '../../../../domain/models/user/userId';
 
-const tableName = 'user-update-controller-test-table';
+const userUpdateService = new StubUserUpdateService();
+const userUpdateController = new UserUpdateController({ userUpdateService });
 
-let userUpdateController: UserUpdateController;
-let bootstrap: BootstrapForTest;
-let dynamoDBHelper: DynamoDBHelper;
-
-beforeEach(async () => {
-  bootstrap = await BootstrapForTest.create();
-  userUpdateController = bootstrap.getUserUpdateController(tableName);
-  dynamoDBHelper = await DynamoDBHelper.create({
-    tableName,
-    ddb: bootstrap.getDDB(),
-    documentClient: bootstrap.getDocumentClient(),
-  });
-  await dynamoDBHelper.createUser({
-    userId: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
-    userName: 'ユーザー1',
-    mailAddress: 'user1@example.com',
-  });
-});
-
-afterEach(async () => {
-  await dynamoDBHelper.destructor();
+afterEach(() => {
+  jest.clearAllMocks();
 });
 
 describe('ユーザー更新', () => {
   test('ユーザー名を更新する', async () => {
+    jest
+      .spyOn(StubUserUpdateService.prototype, 'handle')
+      .mockResolvedValueOnce();
+
     const response = await userUpdateController.handle({
       pathParameters: { userId: '203881e1-99f2-4ce6-ab6b-785fcd793c92' },
       body: JSON.stringify({
@@ -43,6 +30,10 @@ describe('ユーザー更新', () => {
   });
 
   test('メールアドレスを更新する', async () => {
+    jest
+      .spyOn(StubUserUpdateService.prototype, 'handle')
+      .mockResolvedValueOnce();
+
     const response = await userUpdateController.handle({
       pathParameters: { userId: '203881e1-99f2-4ce6-ab6b-785fcd793c92' },
       body: JSON.stringify({
@@ -57,6 +48,10 @@ describe('ユーザー更新', () => {
   });
 
   test('ユーザー名とメールアドレスを更新する', async () => {
+    jest
+      .spyOn(StubUserUpdateService.prototype, 'handle')
+      .mockResolvedValueOnce();
+
     const response = await userUpdateController.handle({
       pathParameters: { userId: '203881e1-99f2-4ce6-ab6b-785fcd793c92' },
       body: JSON.stringify({
@@ -72,8 +67,15 @@ describe('ユーザー更新', () => {
   });
 
   test('ユーザーが存在しない場合は更新に失敗する', async () => {
+    const userId = 'ca00d9c4-eecf-47f4-9e89-be7f9836053f';
+    jest
+      .spyOn(StubUserUpdateService.prototype, 'handle')
+      .mockRejectedValueOnce(
+        new UserNotFoundApplicationError(new UserId(userId))
+      );
+
     const response = await userUpdateController.handle({
-      pathParameters: { userId: 'ca00d9c4-eecf-47f4-9e89-be7f9836053f' },
+      pathParameters: { userId },
       body: JSON.stringify({
         user_name: '更新されたユーザー名',
         mail_address: 'updated@example.com',
@@ -84,7 +86,7 @@ describe('ユーザー更新', () => {
       statusCode: 400,
       body: JSON.stringify({
         name: 'BadRequest',
-        message: 'user id: ca00d9c4-eecf-47f4-9e89-be7f9836053f is not found',
+        message: `user id: ${userId} is not found`,
       }),
     });
   });

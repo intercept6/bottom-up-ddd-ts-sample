@@ -2,40 +2,44 @@
 const rootUri = 'https://api.example.com/';
 process.env.ROOT_URI = rootUri;
 
-import { DynamoDBHelper } from '../../../../lib/tests/dynamoDBHelper';
+import { UserDuplicateApplicationError } from '../../../../application/error/error';
+import { MailAddress } from '../../../../domain/models/user/mailAddress';
+import { User } from '../../../../domain/models/user/user';
+import { StubUserRegisterService } from '../../../../application/user/register/stubUserRegisterService';
 import { UserRegisterController } from './userRegisterController';
-import { BootstrapForTest } from '../../../../lib/tests/bootstrapForTest';
+import { UserName } from '../../../../domain/models/user/userName';
+import { UserId } from '../../../../domain/models/user/userId';
+import { UserData } from '../../../../application/user/userData';
 
-const tableName = 'user-register-controller-test-table';
-
-let userRegisterController: UserRegisterController;
-let bootstrap: BootstrapForTest;
-let dynamoDBHelper: DynamoDBHelper;
-
-beforeEach(async () => {
-  bootstrap = await BootstrapForTest.create();
-  userRegisterController = bootstrap.getUserRegisterController(tableName);
-  dynamoDBHelper = await DynamoDBHelper.create({
-    tableName,
-    ddb: bootstrap.getDDB(),
-    documentClient: bootstrap.getDocumentClient(),
-  });
-  await dynamoDBHelper.createUser({
-    userId: '66d73617-aa4f-46b3-bf7d-9c193f0a08d1',
-    userName: 'ユーザー2',
-    mailAddress: 'user2@example.com',
-  });
+const userRegisterService = new StubUserRegisterService();
+const userRegisterController = new UserRegisterController({
+  userRegisterService,
 });
-afterEach(async () => {
-  await dynamoDBHelper.destructor();
+
+afterEach(() => {
+  jest.clearAllMocks();
 });
 
 describe('ユーザー新規登録', () => {
   test('ユーザーを作成する', async () => {
+    const userId = '83bc2e01-5550-4507-b657-e28a351125df';
+    const userName = 'テストユーザー名';
+    const mailAddress = 'user1@example.com';
+    jest
+      .spyOn(StubUserRegisterService.prototype, 'handle')
+      .mockResolvedValueOnce(
+        new UserData(
+          new User(
+            new UserId(userId),
+            new UserName(userName),
+            new MailAddress(mailAddress)
+          )
+        )
+      );
     const response = await userRegisterController.handle({
       body: JSON.stringify({
-        user_name: 'ユーザー1',
-        mail_address: 'user1@example.com',
+        user_name: userName,
+        mail_address: mailAddress,
       }),
     });
 
@@ -43,18 +47,24 @@ describe('ユーザー新規登録', () => {
       statusCode: 201,
       body: JSON.stringify({}),
       headers: {
-        location: expect.stringMatching(
-          /^https:\/\/api.example.com\/users\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/
-        ),
+        location: `${rootUri}users/${userId}`,
       },
     });
   });
 
   test('ユーザー名が重複するユーザーは作成できない', async () => {
+    const userName = 'テストユーザー名';
+    const mailAddress = 'test@example.com';
+    jest
+      .spyOn(StubUserRegisterService.prototype, 'handle')
+      .mockRejectedValueOnce(
+        new UserDuplicateApplicationError(new UserName(userName))
+      );
+
     const response = await userRegisterController.handle({
       body: JSON.stringify({
-        user_name: 'ユーザー2',
-        mail_address: 'user1@example.com',
+        user_name: userName,
+        mail_address: mailAddress,
       }),
     });
 
@@ -62,16 +72,24 @@ describe('ユーザー新規登録', () => {
       statusCode: 409,
       body: JSON.stringify({
         name: 'Conflict',
-        message: 'user name: ユーザー2 is already exist',
+        message: `user name: ${userName} is already exist`,
       }),
     });
   });
 
   test('メールアドレスが重複するユーザーは作成できない', async () => {
+    const userName = 'テストユーザー名';
+    const mailAddress = 'test@example.com';
+    jest
+      .spyOn(StubUserRegisterService.prototype, 'handle')
+      .mockRejectedValueOnce(
+        new UserDuplicateApplicationError(new MailAddress(mailAddress))
+      );
+
     const response = await userRegisterController.handle({
       body: JSON.stringify({
-        user_name: 'ユーザー1',
-        mail_address: 'user2@example.com',
+        user_name: userName,
+        mail_address: mailAddress,
       }),
     });
 
@@ -79,7 +97,7 @@ describe('ユーザー新規登録', () => {
       statusCode: 409,
       body: JSON.stringify({
         name: 'Conflict',
-        message: 'user mailAddress: user2@example.com is already exist',
+        message: `user mailAddress: ${mailAddress} is already exist`,
       }),
     });
   });

@@ -208,7 +208,7 @@ export class DynamoDBUserRepository implements UserRepositoryInterface {
             Put: {
               TableName: this.tableName,
               Item: {
-                pk: user.getId().getValue(),
+                pk: user.getUserId().getValue(),
                 gsi1pk: user.getName().getValue(),
                 gsi2pk: user.getMailAddress().getValue(),
               },
@@ -246,12 +246,15 @@ export class DynamoDBUserRepository implements UserRepositoryInterface {
       })
       .promise();
 
-    Logger.info(`saved user ${user.getId().getValue()}`);
+    Logger.info(`saved user ${user.getUserId().getValue()}`);
   }
 
   async update(user: User) {
     const response = await this.documentClient
-      .get({ TableName: this.tableName, Key: { pk: user.getId().getValue() } })
+      .get({
+        TableName: this.tableName,
+        Key: { pk: user.getUserId().getValue() },
+      })
       .promise();
 
     const oldName = response.Item?.gsi1pk;
@@ -267,7 +270,7 @@ export class DynamoDBUserRepository implements UserRepositoryInterface {
             {
               Update: {
                 TableName: this.tableName,
-                Key: { pk: user.getId().getValue() },
+                Key: { pk: user.getUserId().getValue() },
                 ExpressionAttributeNames: {
                   '#pk': 'pk',
                   '#gsi1pk': 'gsi1pk',
@@ -327,7 +330,7 @@ export class DynamoDBUserRepository implements UserRepositoryInterface {
             {
               Update: {
                 TableName: this.tableName,
-                Key: { pk: user.getId().getValue() },
+                Key: { pk: user.getUserId().getValue() },
                 ExpressionAttributeNames: {
                   '#pk': 'pk',
                   '#gsi1pk': 'gsi1pk',
@@ -369,7 +372,7 @@ export class DynamoDBUserRepository implements UserRepositoryInterface {
             {
               Update: {
                 TableName: this.tableName,
-                Key: { pk: user.getId().getValue() },
+                Key: { pk: user.getUserId().getValue() },
                 ExpressionAttributeNames: {
                   '#pk': 'pk',
                   '#gsi1pk': 'gsi1pk',
@@ -406,7 +409,7 @@ export class DynamoDBUserRepository implements UserRepositoryInterface {
         .promise();
     }
 
-    Logger.info(`updated user ${user.getId().getValue()}`);
+    Logger.info(`updated user ${user.getUserId().getValue()}`);
   }
 
   async delete(user: User): Promise<void> {
@@ -417,7 +420,7 @@ export class DynamoDBUserRepository implements UserRepositoryInterface {
             Delete: {
               TableName: this.tableName,
               Key: {
-                pk: user.getId().getValue(),
+                pk: user.getUserId().getValue(),
               },
             },
           },
@@ -441,7 +444,7 @@ export class DynamoDBUserRepository implements UserRepositoryInterface {
       })
       .promise();
 
-    Logger.info(`deleted user ${user.getId().getValue()}`);
+    Logger.info(`deleted user ${user.getUserId().getValue()}`);
   }
 
   /**
@@ -458,14 +461,27 @@ export class DynamoDBUserRepository implements UserRepositoryInterface {
           },
         },
       })
-      .promise();
+      .promise()
+      .catch((error: Error) => {
+        throw error;
+      });
+
+    if (responses == null) {
+      throw new UserNotFoundRepositoryError(userIds);
+    }
 
     if (
-      !responses ||
-      !responses[this.tableName] ||
+      responses[this.tableName] != null &&
       responses[this.tableName].length !== userIds.length
     ) {
-      throw new UserNotFoundRepositoryError(userIds);
+      throw new UserNotFoundRepositoryError(
+        userIds.filter(
+          (userId) =>
+            responses[this.tableName]
+              .map((value) => value.pk)
+              .indexOf(userId.getValue()) === -1
+        )
+      );
     }
 
     return responses[this.tableName].map(

@@ -8,13 +8,18 @@ import {
   internalServerError,
   notFound,
 } from '../../../utils/httpResponse';
+import { UserDeleteServiceInterface } from '../../../../application/user/delete/userDeleteServiceInterface';
 
 type UserDeleteEvent = {
   pathParameters?: { userId?: string };
 };
 
 export class UserDeleteController {
-  constructor(private readonly userDeleteService: UserDeleteService) {}
+  private readonly userDeleteService: UserDeleteServiceInterface;
+
+  constructor(props: { userDeleteService: UserDeleteServiceInterface }) {
+    this.userDeleteService = props.userDeleteService;
+  }
 
   async handle(event: UserDeleteEvent): Promise<APIGatewayProxyResult> {
     const userId = event?.pathParameters?.userId;
@@ -42,7 +47,7 @@ const bootstrap = new Bootstrap();
 const userDeleteService = new UserDeleteService({
   userRepository: bootstrap.getUserRepository(),
 });
-const userDeleteController = new UserDeleteController(userDeleteService);
+const userDeleteController = new UserDeleteController({ userDeleteService });
 
 export const handle = async (event: UserDeleteEvent) =>
   await userDeleteController.handle(event);

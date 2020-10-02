@@ -20,8 +20,6 @@ export class DynamoDBCircleFactory implements CircleFactoryInterface {
     this.circleRepository = props.circleRepository;
   }
 
-  async create(circleId: CircleId): Promise<Circle>;
-  async create(circleName: CircleName, owner: UserId): Promise<Circle>;
   async create(arg1: CircleId | CircleName, arg2?: UserId): Promise<Circle> {
     if (arg1 instanceof CircleId && arg2 == null) {
       return await this.circleRepository.get(arg1);
