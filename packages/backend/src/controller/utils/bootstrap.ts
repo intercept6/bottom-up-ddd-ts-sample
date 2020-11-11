@@ -4,6 +4,7 @@ import { DynamodbCircleRepository } from '../../repository/dynamodb/circles/dyna
 import { DynamodbCircleFactory } from '../../repository/dynamodb/circles/dynamodb-circle-factory';
 import { UserRepositoryInterface } from '../../domain/models/users/user-repository-interface';
 import { CircleRepositoryInterface } from '../../domain/models/circles/circle-repository-interface';
+import { getEnvironmentVariable } from '../../util/get-environment';
 
 export class Bootstrap {
   private readonly tableName: string;
@@ -16,12 +17,12 @@ export class Bootstrap {
   private circleRepository?: CircleRepositoryInterface;
 
   constructor() {
-    const region = process.env.AWS_REGION ?? 'ap-northeast-1';
+    const region = getEnvironmentVariable('AWS_REGION');
 
-    this.tableName = process.env.MAIN_TABLE_NAME ?? 'bottom-up-ddd';
-    this.gsi1Name = process.env.MAIL_TABLE_GSI1_NAME ?? 'gsi1';
-    this.gsi2Name = process.env.MAIL_TABLE_GSI2_NAME ?? 'gsi2';
-    this.rootURI = process.env.ROOT_URI! ?? '';
+    this.tableName = getEnvironmentVariable('MAIN_TABLE_NAME');
+    this.gsi1Name = getEnvironmentVariable('MAIL_TABLE_GSI1_NAME');
+    this.gsi2Name = getEnvironmentVariable('MAIL_TABLE_GSI2_NAME');
+    this.rootURI = getEnvironmentVariable('ROOT_URI');
     this.documentClient = new DynamoDB.DocumentClient({
       apiVersion: '2012-08-10',
       region,

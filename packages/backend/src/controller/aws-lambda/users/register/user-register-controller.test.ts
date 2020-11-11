@@ -1,5 +1,9 @@
 /* eslint-disable import/first */
 const rootUri = 'https://api.example.com/';
+process.env.AWS_REGION = 'ap-northeast-1';
+process.env.MAIN_TABLE_NAME = 'test-table';
+process.env.MAIL_TABLE_GSI1_NAME = 'gsi1';
+process.env.MAIL_TABLE_GSI2_NAME = 'gsi2';
 process.env.ROOT_URI = rootUri;
 
 import { UserDuplicateApplicationError } from '../../../../application/errors/application-errors';
