@@ -34,19 +34,19 @@ export class Circle {
     circleName: CircleName,
     owner: UserId,
     members: UserId[]
-  ) {
+  ): Circle {
     return new Circle(circleId, circleName, owner, members);
   }
 
-  getCircleId() {
+  getCircleId(): CircleId {
     return this.circleId;
   }
 
-  getCircleName() {
+  getCircleName(): CircleName {
     return this.circleName;
   }
 
-  getOwnerId() {
+  getOwnerId(): UserId {
     return this.ownerId;
   }
 
@@ -61,26 +61,26 @@ export class Circle {
     return this.countMembers() >= 30;
   }
 
-  joinMembers(userIds: UserId[]) {
+  joinMembers(userIds: UserId[]): void {
     if (this.isFull(userIds.length)) {
       throw new CircleMembersAreExceedApplicationError(this.circleId);
     }
     this.memberIds = this.memberIds.concat(userIds);
   }
 
-  getMemberIds() {
+  getMemberIds(): UserId[] {
     return this.memberIds;
   }
 
-  changeCircleName(newCircleName: CircleName) {
+  changeCircleName(newCircleName: CircleName): void {
     this.circleName = newCircleName;
   }
 
-  changeOwnerId(newOwnerId: UserId) {
+  changeOwnerId(newOwnerId: UserId): void {
     this.ownerId = newOwnerId;
   }
 
-  equals(other: Circle) {
+  equals(other: Circle): boolean {
     return (
       this.getCircleId().equals(other.getCircleId()) &&
       this.getCircleName().equals(other.getCircleName()) &&

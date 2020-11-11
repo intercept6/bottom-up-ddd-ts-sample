@@ -1,4 +1,4 @@
-export const getEnvironmentVariable = (key: string) => {
+export const getEnvironmentVariable = (key: string): string => {
   const value = process.env[key];
   if (value == null || value === '') {
     throw new Error(`Environment Variable ${key} is null or empty`);

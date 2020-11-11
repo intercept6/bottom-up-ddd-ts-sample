@@ -11,15 +11,15 @@ export class UserData {
     this.mailAddress = source.getMailAddress().getValue();
   }
 
-  getUserId() {
+  getUserId(): string {
     return this.userId;
   }
 
-  getUserName() {
+  getUserName(): string {
     return this.userName;
   }
 
-  getMailAddress() {
+  getMailAddress(): string {
     return this.mailAddress;
   }
 }

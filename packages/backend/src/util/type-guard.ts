@@ -1,10 +1,10 @@
 import { User } from '../domain/models/users/user';
 
-function isArray(array: any): array is any[] {
+function isArray(array: unknown): array is unknown[] {
   return Object.prototype.toString.call(array) === '[object Array]';
 }
 
-export function isStringArray(array: any): array is string[] {
+export function isStringArray(array: unknown): array is string[] {
   if (isArray(array)) {
     return array.findIndex((value) => typeof value !== 'string') === -1;
   } else {
@@ -12,7 +12,7 @@ export function isStringArray(array: any): array is string[] {
   }
 }
 
-export function isUserArray(array: any): array is User[] {
+export function isUserArray(array: unknown): array is User[] {
   if (isArray(array)) {
     return array.findIndex((value) => value instanceof User) === -1;
   } else {

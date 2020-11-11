@@ -200,7 +200,7 @@ export class DynamodbUserRepository implements UserRepositoryInterface {
     }
   }
 
-  async create(user: User) {
+  async create(user: User): Promise<void> {
     await this.documentClient
       .transactWrite({
         TransactItems: [
@@ -249,7 +249,7 @@ export class DynamodbUserRepository implements UserRepositoryInterface {
     Logger.info(`saved user ${user.getUserId().getValue()}`);
   }
 
-  async update(user: User) {
+  async update(user: User): Promise<void> {
     const response = await this.documentClient
       .get({
         TableName: this.tableName,

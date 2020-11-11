@@ -2,7 +2,7 @@ import { UserGetServiceInterface } from '../../../../application/users/get/user-
 import { UserGetService } from '../../../../application/users/get/user-get-service';
 import { UserGetCommand } from '../../../../application/users/get/user-get-command';
 import { UserNotFoundApplicationError } from '../../../../application/errors/application-errors';
-import { APIGatewayProxyResult } from 'aws-lambda';
+import { APIGatewayProxyResultV2 } from 'aws-lambda';
 import { Bootstrap } from '../../../utils/bootstrap';
 import {
   badRequest,
@@ -20,7 +20,7 @@ export class UserGetController {
     this.userGetService = props.userGetService;
   }
 
-  async handle(event: UserGetEvent): Promise<APIGatewayProxyResult> {
+  async handle(event: UserGetEvent): Promise<APIGatewayProxyResultV2> {
     const userId = event?.pathParameters?.userId;
     if (typeof userId !== 'string') {
       return badRequest('user id type is not string');
@@ -56,5 +56,6 @@ const userGetService = new UserGetService({
 });
 const userGetController = new UserGetController({ userGetService });
 
-export const handle = async (event: UserGetEvent) =>
-  await userGetController.handle(event);
+export const handle = async (
+  event: UserGetEvent
+): Promise<APIGatewayProxyResultV2> => await userGetController.handle(event);

@@ -91,7 +91,7 @@ describe('サークル取得', () => {
 
   test('サークルIDがstring型ではない場合はBadRequestを返す', async () => {
     const response = await circleGetController.handle({
-      pathParameters: { circleId: 1 } as any,
+      pathParameters: { circleId: 1 } as never,
     });
 
     expect(response).toEqual({

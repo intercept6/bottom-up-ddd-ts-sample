@@ -33,27 +33,27 @@ export class User {
     }
   }
 
-  changeName(name: UserName) {
+  changeName(name: UserName): void {
     this.userName = name;
   }
 
-  changeMailAddress(mailAddress: MailAddress) {
+  changeMailAddress(mailAddress: MailAddress): void {
     this.mailAddress = mailAddress;
   }
 
-  getUserId() {
+  getUserId(): UserId {
     return this.userId;
   }
 
-  getName() {
+  getName(): UserName {
     return this.userName;
   }
 
-  getMailAddress() {
+  getMailAddress(): MailAddress {
     return this.mailAddress;
   }
 
-  equals(other: User) {
+  equals(other: User): boolean {
     return (
       this.userId.equals(other.userId) &&
       this.userName.equals(other.userName) &&

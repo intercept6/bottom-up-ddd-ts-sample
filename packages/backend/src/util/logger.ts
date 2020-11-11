@@ -1,19 +1,17 @@
 export class Logger {
-  private constructor() {}
-
-  static debug(...args: any) {
-    console.debug.apply(null, args);
+  static debug(message?: unknown, ...optionalParams: unknown[]): void {
+    console.debug.apply(null, [message, optionalParams]);
   }
 
-  static info(...args: any) {
-    console.info.apply(null, args);
+  static info(message?: unknown, ...optionalParams: unknown[]): void {
+    console.info.apply(null, [message, optionalParams]);
   }
 
-  static warn(...args: any) {
-    console.warn.apply(null, args);
+  static warn(message?: unknown, ...optionalParams: unknown[]): void {
+    console.warn.apply(null, [message, optionalParams]);
   }
 
-  static error(...args: any) {
-    console.error.apply(null, args);
+  static error(message?: unknown, ...optionalParams: unknown[]): void {
+    console.error.apply(null, [message, optionalParams]);
   }
 }

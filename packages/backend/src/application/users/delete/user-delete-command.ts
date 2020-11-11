@@ -1,7 +1,7 @@
 export class UserDeleteCommand {
   constructor(private readonly userId: string) {}
 
-  getUserId() {
+  getUserId(): string {
     return this.userId;
   }
 }

@@ -5,6 +5,7 @@ import { DynamodbCircleFactory } from '../../repository/dynamodb/circles/dynamod
 import { UserRepositoryInterface } from '../../domain/models/users/user-repository-interface';
 import { CircleRepositoryInterface } from '../../domain/models/circles/circle-repository-interface';
 import { getEnvironmentVariable } from '../../util/get-environment';
+import { CircleFactoryInterface } from '../../domain/models/circles/circle-factory-interface';
 
 export class Bootstrap {
   private readonly tableName: string;
@@ -29,11 +30,11 @@ export class Bootstrap {
     });
   }
 
-  getRootURI() {
+  getRootURI(): string {
     return this.rootURI;
   }
 
-  getUserRepository() {
+  getUserRepository(): UserRepositoryInterface {
     this.userRepository =
       this.userRepository ??
       new DynamodbUserRepository({
@@ -46,7 +47,7 @@ export class Bootstrap {
     return this.userRepository;
   }
 
-  getCircleRepository() {
+  getCircleRepository(): CircleRepositoryInterface {
     this.circleRepository =
       this.circleRepository ??
       new DynamodbCircleRepository({
@@ -58,7 +59,7 @@ export class Bootstrap {
     return this.circleRepository;
   }
 
-  getCircleFactory() {
+  getCircleFactory(): CircleFactoryInterface {
     return new DynamodbCircleFactory({
       userRepository: this.getUserRepository(),
       circleRepository: this.getCircleRepository(),

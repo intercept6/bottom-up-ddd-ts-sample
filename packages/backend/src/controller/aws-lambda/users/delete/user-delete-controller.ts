@@ -1,6 +1,6 @@
 import { UserDeleteService } from '../../../../application/users/delete/user-delete-service';
 import { UserDeleteCommand } from '../../../../application/users/delete/user-delete-command';
-import { APIGatewayProxyResult } from 'aws-lambda';
+import { APIGatewayProxyResultV2 } from 'aws-lambda';
 import { UserNotFoundApplicationError } from '../../../../application/errors/application-errors';
 import { Bootstrap } from '../../../utils/bootstrap';
 import {
@@ -21,7 +21,7 @@ export class UserDeleteController {
     this.userDeleteService = props.userDeleteService;
   }
 
-  async handle(event: UserDeleteEvent): Promise<APIGatewayProxyResult> {
+  async handle(event: UserDeleteEvent): Promise<APIGatewayProxyResultV2> {
     const userId = event?.pathParameters?.userId;
     if (userId == null) {
       return badRequest('user id type is not string');
@@ -49,5 +49,6 @@ const userDeleteService = new UserDeleteService({
 });
 const userDeleteController = new UserDeleteController({ userDeleteService });
 
-export const handle = async (event: UserDeleteEvent) =>
-  await userDeleteController.handle(event);
+export const handle = async (
+  event: UserDeleteEvent
+): Promise<APIGatewayProxyResultV2> => await userDeleteController.handle(event);

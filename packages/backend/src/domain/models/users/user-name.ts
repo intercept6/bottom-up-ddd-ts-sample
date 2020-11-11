@@ -16,11 +16,11 @@ export class UserName {
     }
   }
 
-  getValue() {
+  getValue(): string {
     return this.value;
   }
 
-  equals(other: UserName) {
+  equals(other: UserName): boolean {
     return this.value === other.value;
   }
 }

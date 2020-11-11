@@ -13,7 +13,7 @@ export class UserDeleteService implements UserDeleteServiceInterface {
     this.userRepository = props.userRepository;
   }
 
-  async handle(command: UserDeleteCommand) {
+  async handle(command: UserDeleteCommand): Promise<void> {
     const targetId = new UserId(command.getUserId());
     const response = await this.userRepository
       .get(targetId)

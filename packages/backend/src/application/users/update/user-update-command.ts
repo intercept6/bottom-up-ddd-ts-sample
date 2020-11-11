@@ -13,15 +13,15 @@ export class UserUpdateCommand {
     this.mailAddress = props.mailAddress;
   }
 
-  getId() {
+  getId(): string {
     return this.userId;
   }
 
-  getName() {
+  getName(): string | undefined {
     return this.userName;
   }
 
-  getMailAddress() {
+  getMailAddress(): string | undefined {
     return this.mailAddress;
   }
 }

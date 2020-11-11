@@ -2,15 +2,15 @@ import { UserRepositoryInterface } from '../../../domain/models/users/user-repos
 import { User } from '../../../domain/models/users/user';
 
 export class StubUserRepository implements UserRepositoryInterface {
-  async delete() {
+  async delete(): Promise<void> {
     throw new Error('user repository class method delete is not mocked');
   }
 
-  async create() {
+  async create(): Promise<void> {
     throw new Error('user repository class method create is not mocked');
   }
 
-  async update() {
+  async update(): Promise<void> {
     throw new Error('user repository class method update is not mocked');
   }
 

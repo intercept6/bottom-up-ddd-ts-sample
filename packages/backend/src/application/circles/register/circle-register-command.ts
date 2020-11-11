@@ -10,11 +10,11 @@ export class CircleRegisterCommand {
     this.circleName = props.circleName;
   }
 
-  getUserId() {
+  getUserId(): string {
     return this.ownerId;
   }
 
-  getCircleName() {
+  getCircleName(): string {
     return this.circleName;
   }
 }

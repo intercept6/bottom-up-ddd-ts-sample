@@ -2,15 +2,15 @@ import { CircleRepositoryInterface } from '../../../domain/models/circles/circle
 import { Circle } from '../../../domain/models/circles/circle';
 
 export class StubCircleRepository implements CircleRepositoryInterface {
-  async delete() {
+  async delete(): Promise<void> {
     throw new Error('circle repository class method delete is not mocked');
   }
 
-  async create() {
+  async create(): Promise<void> {
     throw new Error('circle repository class method create is not mocked');
   }
 
-  async update() {
+  async update(): Promise<void> {
     throw new Error('circle repository class method update is not mocked');
   }
 

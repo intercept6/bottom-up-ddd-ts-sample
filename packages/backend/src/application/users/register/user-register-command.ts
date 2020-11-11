@@ -10,11 +10,11 @@ export class UserRegisterCommand {
     this.mailAddress = props.mailAddress;
   }
 
-  getName() {
+  getName(): string {
     return this.userName;
   }
 
-  getMailAddress() {
+  getMailAddress(): string {
     return this.mailAddress;
   }
 }

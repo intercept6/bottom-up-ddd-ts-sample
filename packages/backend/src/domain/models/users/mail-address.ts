@@ -7,11 +7,11 @@ export class MailAddress {
     }
   }
 
-  getValue() {
+  getValue(): string {
     return this.value;
   }
 
-  equals(other: MailAddress) {
+  equals(other: MailAddress): boolean {
     return this.value === other.value;
   }
 }

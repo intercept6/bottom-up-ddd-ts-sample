@@ -13,19 +13,19 @@ export class CircleData {
     this.memberIds = source.getMemberIds().map((value) => value.getValue());
   }
 
-  getCircleId() {
+  getCircleId(): string {
     return this.circleId;
   }
 
-  getCircleName() {
+  getCircleName(): string {
     return this.circleName;
   }
 
-  getOwnerId() {
+  getOwnerId(): string {
     return this.ownerId;
   }
 
-  getMemberIds() {
+  getMemberIds(): readonly string[] {
     return this.memberIds;
   }
 }

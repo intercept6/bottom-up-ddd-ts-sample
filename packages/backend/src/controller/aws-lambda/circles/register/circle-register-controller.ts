@@ -2,7 +2,7 @@ import 'source-map-support/register';
 import { CircleRegisterServiceInterface } from '../../../../application/circles/register/circle-register-service-interface';
 import { CircleRegisterService } from '../../../../application/circles/register/circle-register-service';
 import { CircleRegisterCommand } from '../../../../application/circles/register/circle-register-command';
-import { APIGatewayProxyResult } from 'aws-lambda';
+import { APIGatewayProxyResultV2 } from 'aws-lambda';
 import { CircleDuplicateApplicationError } from '../../../../application/errors/application-errors';
 import { Bootstrap } from '../../../utils/bootstrap';
 import {
@@ -24,7 +24,7 @@ export class CircleRegisterController {
     this.circleRegisterService = props.circleRegisterService;
   }
 
-  async handle(event: CircleRegisterEvent): Promise<APIGatewayProxyResult> {
+  async handle(event: CircleRegisterEvent): Promise<APIGatewayProxyResultV2> {
     if (event.body == null) {
       return badRequest('request body is null');
     }
@@ -74,5 +74,7 @@ const circleRegisterController = new CircleRegisterController({
   circleRegisterService,
 });
 
-export const handle = async (event: CircleRegisterEvent) =>
+export const handle = async (
+  event: CircleRegisterEvent
+): Promise<APIGatewayProxyResultV2> =>
   await circleRegisterController.handle(event);

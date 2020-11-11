@@ -4,7 +4,13 @@ module.exports = {
     node: true,
     jest: true,
   },
-  extends: ['standard', 'eslint:recommended', 'plugin:prettier/recommended'],
+  extends: [
+    'standard',
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:prettier/recommended',
+    'prettier/@typescript-eslint',
+  ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 11,
@@ -14,10 +20,5 @@ module.exports = {
   rules: {
     'no-useless-constructor': 'off',
     '@typescript-eslint/no-useless-constructor': 'error',
-
-    'no-unused-vars': 'off',
-    '@typescript-eslint/no-unused-vars': [2, { argsIgnorePattern: '^_' }],
-
-    'no-dupe-class-members': 'off',
   },
 };

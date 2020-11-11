@@ -7,11 +7,11 @@ export class UserGetCommand {
     this.mailAddress = props.mailAddress;
   }
 
-  getUserId() {
+  getUserId(): string | undefined {
     return this.userId;
   }
 
-  getMailAddress() {
+  getMailAddress(): string | undefined {
     return this.mailAddress;
   }
 }

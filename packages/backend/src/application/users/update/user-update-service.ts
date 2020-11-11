@@ -21,7 +21,7 @@ export class UserUpdateService implements UserUpdateServiceInterface {
     this.userService = new UserService(this.userRepository);
   }
 
-  async handle(command: UserUpdateCommand) {
+  async handle(command: UserUpdateCommand): Promise<void> {
     const targetId = new UserId(command.getId());
     const response = await this.userRepository
       .get(targetId)

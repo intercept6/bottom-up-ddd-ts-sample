@@ -85,7 +85,7 @@ describe('ユーザー取得', () => {
   test('ユーザーIDがstring型ではない', async () => {
     const response = await userGetController.handle({
       pathParameters: { userId: 1 },
-    } as any);
+    } as never);
 
     expect(response).toEqual({
       statusCode: 400,

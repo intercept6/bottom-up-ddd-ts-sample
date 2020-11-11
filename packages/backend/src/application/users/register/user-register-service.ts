@@ -17,7 +17,7 @@ export class UserRegisterService implements UserRegisterServiceInterface {
     this.userService = new UserService(this.userRepository);
   }
 
-  async handle(command: UserRegisterCommand) {
+  async handle(command: UserRegisterCommand): Promise<UserData> {
     const userName = command.getName();
     const mailAddress = command.getMailAddress();
 

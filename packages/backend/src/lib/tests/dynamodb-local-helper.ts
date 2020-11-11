@@ -31,11 +31,11 @@ export class DynamodbLocalHelper {
     return new DynamoDB.DocumentClient(params);
   }
 
-  getDDB() {
+  getDDB(): DynamoDB {
     return this.ddb;
   }
 
-  getDocumentClient() {
+  getDocumentClient(): DynamoDB.DocumentClient {
     return this.documentClient;
   }
 
@@ -76,7 +76,7 @@ export class DynamodbLocalHelper {
     await this.ddb.deleteTable({ TableName: this.tableName }).promise();
   }
 
-  async destructor() {
+  async destructor(): Promise<void> {
     await this.deleteTable();
   }
 
@@ -88,7 +88,7 @@ export class DynamodbLocalHelper {
     readonly tableName: string;
     readonly gsi1Name: string;
     readonly gsi2Name: string;
-  }) {
+  }): Promise<DynamodbLocalHelper> {
     const credentials = new Credentials({
       secretAccessKey: 'dummy',
       accessKeyId: 'dummy',

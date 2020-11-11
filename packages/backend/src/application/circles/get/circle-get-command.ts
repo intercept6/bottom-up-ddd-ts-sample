@@ -1,7 +1,7 @@
 export class CircleGetCommand {
   constructor(private readonly circleId: string) {}
 
-  getCircleId() {
+  getCircleId(): string {
     return this.circleId;
   }
 }

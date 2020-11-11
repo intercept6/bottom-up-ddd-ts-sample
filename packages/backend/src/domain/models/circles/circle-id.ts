@@ -1,11 +1,11 @@
 export class CircleId {
   constructor(private readonly value: string) {}
 
-  getValue() {
+  getValue(): string {
     return this.value;
   }
 
-  equals(other: CircleId) {
+  equals(other: CircleId): boolean {
     return this.value === other.getValue();
   }
 }

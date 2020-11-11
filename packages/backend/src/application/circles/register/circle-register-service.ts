@@ -31,7 +31,7 @@ export class CircleRegisterService implements CircleRegisterServiceInterface {
     this.circleFactory = props.circleFactory;
   }
 
-  async handle(command: CircleRegisterCommand) {
+  async handle(command: CircleRegisterCommand): Promise<CircleData> {
     const ownerId = new UserId(command.getUserId());
     await this.userRepository.get(ownerId).catch((error: Error) => {
       if (error instanceof UserNotFoundRepositoryError) {

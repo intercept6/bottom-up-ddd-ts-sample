@@ -13,11 +13,11 @@ export class CircleName {
     }
   }
 
-  getValue() {
+  getValue(): string {
     return this.value;
   }
 
-  equals(other: CircleName) {
+  equals(other: CircleName): boolean {
     return this.value === other.value;
   }
 }

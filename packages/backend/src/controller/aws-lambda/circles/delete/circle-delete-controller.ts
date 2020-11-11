@@ -9,6 +9,7 @@ import {
 } from '../../../utils/http-response';
 import { Bootstrap } from '../../../utils/bootstrap';
 import { CircleDeleteServiceInterface } from '../../../../application/circles/delete/circleDeleteServiceInterface';
+import { APIGatewayProxyResultV2 } from 'aws-lambda';
 
 type CircleDeleteEvent = {
   pathParameters?: { circleId?: string };
@@ -23,7 +24,7 @@ export class CircleDeleteController {
     this.circleDeleteService = props.circleDeleteService;
   }
 
-  async handle(event: CircleDeleteEvent) {
+  async handle(event: CircleDeleteEvent): Promise<APIGatewayProxyResultV2> {
     const circleId = event?.pathParameters?.circleId;
     if (circleId == null) {
       return badRequest('circle id type is not string');
@@ -53,5 +54,7 @@ const circleDeleteController = new CircleDeleteController({
   circleDeleteService,
 });
 
-export const handle = async (event: CircleDeleteEvent) =>
+export const handle = async (
+  event: CircleDeleteEvent
+): Promise<APIGatewayProxyResultV2> =>
   await circleDeleteController.handle(event);

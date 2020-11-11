@@ -16,19 +16,19 @@ export class CircleUpdateCommand {
     this.memberIds = props.memberIds;
   }
 
-  getCircleId() {
+  getCircleId(): string {
     return this.circleId;
   }
 
-  getOwnerId() {
+  getOwnerId(): string | undefined {
     return this.ownerId;
   }
 
-  getCircleName() {
+  getCircleName(): string | undefined {
     return this.circleName;
   }
 
-  getMemberIds() {
+  getMemberIds(): string[] | undefined {
     return this.memberIds;
   }
 }
