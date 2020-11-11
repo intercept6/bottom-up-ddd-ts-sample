@@ -4,7 +4,7 @@ import { APIGatewayProxyResult } from 'aws-lambda';
 import { Bootstrap } from '../../../utils/bootstrap';
 import { CircleUpdateService } from '../../../../application/circles/update/circle-update-service';
 import { CircleUpdateCommand } from '../../../../application/circles/update/circle-update-command';
-import { isStringArray } from '../../../../util/typeGuard';
+import { isStringArray } from '../../../../util/type-guard';
 import {
   CircleNotFoundApplicationError,
   MembersNotFoundApplicationError,

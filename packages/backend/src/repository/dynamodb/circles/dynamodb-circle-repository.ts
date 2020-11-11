@@ -8,7 +8,7 @@ import {
   CircleNotFoundRepositoryError,
   TypeRepositoryError,
 } from '../../errors/repository-errors';
-import { isStringArray } from '../../../util/typeGuard';
+import { isStringArray } from '../../../util/type-guard';
 import { UserId } from '../../../domain/models/users/user-id';
 
 export class DynamodbCircleRepository implements CircleRepositoryInterface {

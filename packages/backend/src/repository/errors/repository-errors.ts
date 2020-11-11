@@ -4,7 +4,7 @@ import { CircleId } from '../../domain/models/circles/circle-id';
 import { UserId } from '../../domain/models/users/user-id';
 import { UserName } from '../../domain/models/users/user-name';
 import { MailAddress } from '../../domain/models/users/mail-address';
-import { isUserArray } from '../../util/typeGuard';
+import { isUserArray } from '../../util/type-guard';
 
 type PrimitiveTypes =
   | 'undefined'
