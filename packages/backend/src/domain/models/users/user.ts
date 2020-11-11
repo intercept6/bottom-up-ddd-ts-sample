@@ -1,8 +1,8 @@
-import { UserId } from './userId';
-import { UserName } from './userName';
+import { UserId } from './user-id';
+import { UserName } from './user-name';
 import { generateUuid } from '../../../util/uuid';
-import { MailAddress } from './mailAddress';
-import { ArgumentDomainError } from '../../errors/domainErrors';
+import { MailAddress } from './mail-address';
+import { ArgumentDomainError } from '../../errors/domain-errors';
 
 export class User {
   private readonly userId: UserId;

@@ -1,7 +1,7 @@
-import { CircleId } from './circleId';
-import { CircleName } from './circleName';
-import { CircleMembersAreExceedApplicationError } from '../../../application/errors/applicationErrors';
-import { UserId } from '../users/userId';
+import { CircleId } from './circle-id';
+import { CircleName } from './circle-name';
+import { CircleMembersAreExceedApplicationError } from '../../../application/errors/application-errors';
+import { UserId } from '../users/user-id';
 
 export class Circle {
   private readonly circleId: CircleId;

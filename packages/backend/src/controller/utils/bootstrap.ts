@@ -1,9 +1,9 @@
 import { DynamoDB } from 'aws-sdk';
-import { DynamoDBUserRepository } from '../../repository/dynamoDB/users/dynamoDBUserRepository';
-import { DynamoDBCircleRepository } from '../../repository/dynamoDB/circles/dynamoDBCircleRepository';
-import { DynamoDBCircleFactory } from '../../repository/dynamoDB/circles/dynamoDBCircleFactory';
-import { UserRepositoryInterface } from '../../domain/models/users/userRepositoryInterface';
-import { CircleRepositoryInterface } from '../../domain/models/circles/circleRepositoryInterface';
+import { DynamodbUserRepository } from '../../repository/dynamodb/users/dynamodb-user-repository';
+import { DynamodbCircleRepository } from '../../repository/dynamodb/circles/dynamodb-circle-repository';
+import { DynamodbCircleFactory } from '../../repository/dynamodb/circles/dynamodb-circle-factory';
+import { UserRepositoryInterface } from '../../domain/models/users/user-repository-interface';
+import { CircleRepositoryInterface } from '../../domain/models/circles/circle-repository-interface';
 
 export class Bootstrap {
   private readonly tableName: string;
@@ -35,7 +35,7 @@ export class Bootstrap {
   getUserRepository() {
     this.userRepository =
       this.userRepository ??
-      new DynamoDBUserRepository({
+      new DynamodbUserRepository({
         documentClient: this.documentClient,
         tableName: this.tableName,
         gsi1Name: this.gsi1Name,
@@ -48,7 +48,7 @@ export class Bootstrap {
   getCircleRepository() {
     this.circleRepository =
       this.circleRepository ??
-      new DynamoDBCircleRepository({
+      new DynamodbCircleRepository({
         documentClient: this.documentClient,
         tableName: this.tableName,
         gsi1Name: this.gsi1Name,
@@ -58,7 +58,7 @@ export class Bootstrap {
   }
 
   getCircleFactory() {
-    return new DynamoDBCircleFactory({
+    return new DynamodbCircleFactory({
       userRepository: this.getUserRepository(),
       circleRepository: this.getCircleRepository(),
     });
