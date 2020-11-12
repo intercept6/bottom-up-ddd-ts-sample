@@ -6,13 +6,13 @@ import {
 } from '@aws-cdk/aws-apigatewayv2';
 import { Code, LayerVersion, Runtime } from '@aws-cdk/aws-lambda';
 import { AttributeType, BillingMode, Table } from '@aws-cdk/aws-dynamodb';
-import { FunctionUtils } from './handlerFunction';
+import { FunctionUtils } from './handler-function';
 import { resolve } from 'path';
 
 const layerDir = resolve(__dirname, '..', 'bundle', 'layer');
 const srcDir = resolve(__dirname, '..', '..', 'backend', 'src');
 
-export class AwsStack extends Stack {
+export class BackendStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 

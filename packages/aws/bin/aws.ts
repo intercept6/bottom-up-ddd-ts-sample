@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from '@aws-cdk/core';
-import { AwsStack } from '../lib/awsStack';
+import { BackendStack } from '../lib/backend-stack';
 
 export const getEnvironmentVariable = (key: string) => {
   const value = process.env[key];
@@ -16,4 +16,4 @@ const account = getEnvironmentVariable('AWS_ACCOUNT');
 
 const app = new cdk.App();
 // eslint-disable-next-line no-new
-new AwsStack(app, 'AwsStack', { env: { account, region } });
+new BackendStack(app, 'Backend', { env: { account, region } });
