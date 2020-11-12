@@ -1,11 +1,12 @@
 {
   "name": "aws",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "author": "intercept6",
   "private": true,
   "license": "UNLICENSED",
   "devDependencies": {
     "@aws-cdk/assert": "1.73.0",
+    "@aws-cdk/aws-apigatewayv2-integrations": "1.73.0",
     "@babel/plugin-proposal-decorators": "7.10.5",
     "@babel/preset-typescript": "7.10.4",
     "@types/jest": "26.0.10",
@@ -36,11 +37,8 @@
     "source-map-support": "0.5.16"
   },
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc -w",
-    "bundle": "shx mkdir -p bundle/layer/nodejs && shx cp ../backend/package.json bundle/layer/nodejs && yarn --cwd bundle/layer/nodejs --production install",
     "test": "jest",
     "cdk": "cdk",
-    "deploy": "yarn run bundle && cdk deploy"
+    "deploy": "cdk deploy"
   }
 }

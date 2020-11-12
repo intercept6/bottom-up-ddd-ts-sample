@@ -1,16 +1,12 @@
 import { Construct, Duration, Stack, StackProps } from '@aws-cdk/core';
-import {
-  HttpApi,
-  HttpMethod,
-  LambdaProxyIntegration,
-} from '@aws-cdk/aws-apigatewayv2';
+import { HttpApi, HttpMethod } from '@aws-cdk/aws-apigatewayv2';
+import { LambdaProxyIntegration } from '@aws-cdk/aws-apigatewayv2-integrations';
 import { Code, LayerVersion, Runtime } from '@aws-cdk/aws-lambda';
 import { AttributeType, BillingMode, Table } from '@aws-cdk/aws-dynamodb';
 import { FunctionUtils } from './handler-function';
 import { resolve } from 'path';
 
-const layerDir = resolve(__dirname, '..', 'bundle', 'layer');
-const srcDir = resolve(__dirname, '..', '..', 'backend', 'src');
+const rootDir = resolve(__dirname, '..', '..', 'backend');
 
 export class BackendStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -39,10 +35,27 @@ export class BackendStack extends Stack {
     });
 
     // HttpApi
-    const httpApi = new HttpApi(this, 'HttpApi');
+    const httpApi = new HttpApi(this, 'HttpApi', {
+      apiName: 'bottom-up-ddd',
+    });
 
     const modules = new LayerVersion(this, 'ModulesLayer', {
-      code: Code.fromAsset(layerDir),
+      code: Code.fromAsset(rootDir, {
+        bundling: {
+          image: Runtime.NODEJS_12_X.bundlingDockerImage,
+          command: [
+            'bash',
+            '-c',
+            [
+              'npm install -g yarn',
+              'mkdir -p /asset-output/nodejs/',
+              'cp package.json yarn.lock /asset-output/nodejs/',
+              'yarn install --production --cwd /asset-output/nodejs/',
+            ].join(' && '),
+          ],
+          user: 'root',
+        },
+      }),
       compatibleRuntimes: [Runtime.NODEJS_12_X],
       description: 'Node.js modules layer for bottom up ddd',
     });
@@ -61,14 +74,32 @@ export class BackendStack extends Stack {
       },
     });
 
+    const code = Code.fromAsset(rootDir, {
+      bundling: {
+        image: Runtime.NODEJS_12_X.bundlingDockerImage,
+        command: [
+          'bash',
+          '-c',
+          [
+            'cp -au . /tmp',
+            'cd /tmp',
+            'npm install -g yarn',
+            'yarn install',
+            'yarn build --outDir /asset-output',
+          ].join(' && '),
+        ],
+        user: 'root',
+      },
+    });
+
     // User
     // Create
     const registerUserFn = functionUtils.createFunction({
       id: 'RegisterUser',
       props: {
-        code: Code.fromAsset(srcDir),
+        code: code,
         handler:
-          'controller/aws-lambda-with-apigateway-v2/user/register/user-register-controller.handle',
+          'controller/aws-lambda-with-apigateway-v2/users/register/user-register-controller.handle',
       },
     });
     httpApi.addRoutes({
@@ -82,9 +113,9 @@ export class BackendStack extends Stack {
     const getUserFn = functionUtils.createFunction({
       id: 'GetUser',
       props: {
-        code: Code.fromAsset(srcDir),
+        code: code,
         handler:
-          'controller/aws-lambda-with-apigateway-v2/user/get/user-get-controller.handle',
+          'controller/aws-lambda-with-apigateway-v2/users/get/user-get-controller.handle',
       },
     });
     httpApi.addRoutes({
@@ -98,9 +129,9 @@ export class BackendStack extends Stack {
     const updateUserFn = functionUtils.createFunction({
       id: 'UpdateUser',
       props: {
-        code: Code.fromAsset(srcDir),
+        code: code,
         handler:
-          'controller/aws-lambda-with-apigateway-v2/user/update/user-update-controller.handle',
+          'controller/aws-lambda-with-apigateway-v2/users/update/user-update-controller.handle',
       },
     });
     httpApi.addRoutes({
@@ -114,9 +145,9 @@ export class BackendStack extends Stack {
     const deleteUserFn = functionUtils.createFunction({
       id: 'DeleteUser',
       props: {
-        code: Code.fromAsset(srcDir),
+        code: code,
         handler:
-          'controller/aws-lambda-with-apigateway-v2/user/delete/user-delete-controller.handle',
+          'controller/aws-lambda-with-apigateway-v2/users/delete/user-delete-controller.handle',
       },
     });
     httpApi.addRoutes({
@@ -131,9 +162,9 @@ export class BackendStack extends Stack {
     const registerCircleFn = functionUtils.createFunction({
       id: 'RegisterCircle',
       props: {
-        code: Code.fromAsset(srcDir),
+        code: code,
         handler:
-          'controller/aws-lambda-with-apigateway-v2/circle/register/circle-register-controller.handle',
+          'controller/aws-lambda-with-apigateway-v2/circles/register/circle-register-controller.handle',
       },
     });
     httpApi.addRoutes({
@@ -147,9 +178,9 @@ export class BackendStack extends Stack {
     const getCircleFn = functionUtils.createFunction({
       id: 'GetCircle',
       props: {
-        code: Code.fromAsset(srcDir),
+        code: code,
         handler:
-          'controller/aws-lambda-with-apigateway-v2/circle/get/circle-get-controller.handle',
+          'controller/aws-lambda-with-apigateway-v2/circles/get/circle-get-controller.handle',
       },
     });
     httpApi.addRoutes({
@@ -163,9 +194,9 @@ export class BackendStack extends Stack {
     const updateCircleFn = functionUtils.createFunction({
       id: 'UpdateCircle',
       props: {
-        code: Code.fromAsset(srcDir),
+        code: code,
         handler:
-          'controller/aws-lambda-with-apigateway-v2/circle/update/circle-update-controller.handle',
+          'controller/aws-lambda-with-apigateway-v2/circles/update/circle-update-controller.handle',
       },
     });
     httpApi.addRoutes({
@@ -179,9 +210,9 @@ export class BackendStack extends Stack {
     const deleteCircleFn = functionUtils.createFunction({
       id: 'DeleteCircle',
       props: {
-        code: Code.fromAsset(srcDir),
+        code: code,
         handler:
-          'controller/aws-lambda-with-apigateway-v2/circle/delete/circle-delete-controller.handle',
+          'controller/aws-lambda-with-apigateway-v2/circles/delete/circle-delete-controller.handle',
       },
     });
     httpApi.addRoutes({

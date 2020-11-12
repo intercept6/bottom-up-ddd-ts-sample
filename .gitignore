@@ -16,9 +16,6 @@ node_modules
 .cdk.staging
 cdk.out
 
-# CDK bundle
-/packages/aws/bundle/layer/nodejs
-
 # Parcel default cache directory
 .parcel-cache
 

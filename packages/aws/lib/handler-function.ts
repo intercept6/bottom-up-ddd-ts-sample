@@ -1,6 +1,10 @@
-import { Function, ILayerVersion, Runtime } from '@aws-cdk/aws-lambda';
+import {
+  Function,
+  ILayerVersion,
+  Runtime,
+  FunctionProps,
+} from '@aws-cdk/aws-lambda';
 import { Construct } from '@aws-cdk/core';
-import { FunctionProps } from '@aws-cdk/aws-lambda/lib/function';
 
 export class FunctionUtils {
   private readonly scope: Construct;

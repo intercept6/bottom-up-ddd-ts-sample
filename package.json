@@ -12,6 +12,6 @@
   "scripts": {
     "backend:test": "yarn workspace backend run test",
     "ci:test": "yarn workspace backend run ci:test",
-    "deploy": "yarn workspace backend run build && yarn workspace aws run deploy"
+    "deploy": "yarn workspace aws run deploy"
   }
 }
