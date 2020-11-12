@@ -1,4 +1,6 @@
 /* eslint-disable import/first */
+import { generateAPIGatewayProxyEventV2 } from '../../../../lib/tests/apigateway-event-v2-helper';
+
 process.env.AWS_REGION = 'ap-northeast-1';
 process.env.MAIN_TABLE_NAME = 'test-table';
 process.env.MAIL_TABLE_GSI1_NAME = 'gsi1';
@@ -33,6 +35,7 @@ describe('サークル更新', () => {
       body: JSON.stringify({
         circle_name: '更新されたサークル名',
       }),
+      ...generateAPIGatewayProxyEventV2(),
     });
 
     expect(response).toEqual({
@@ -51,6 +54,7 @@ describe('サークル更新', () => {
       body: JSON.stringify({
         owner_id: 'fdc536b3-d792-431f-9ede-0b5973759785',
       }),
+      ...generateAPIGatewayProxyEventV2(),
     });
 
     expect(response).toEqual({
@@ -69,6 +73,7 @@ describe('サークル更新', () => {
       body: JSON.stringify({
         member_ids: ['00fe320d-eb24-4283-ad1b-db7ee3954a7b'],
       }),
+      ...generateAPIGatewayProxyEventV2(),
     });
 
     expect(response).toEqual({
@@ -81,6 +86,7 @@ describe('サークル更新', () => {
     const response = await circleUpdateController.handle({
       pathParameters: { circleId: 'f16dad24-126d-433b-9a54-2df15e2a4b29' },
       body: JSON.stringify({}),
+      ...generateAPIGatewayProxyEventV2(),
     });
 
     expect(response).toEqual({
@@ -105,6 +111,7 @@ describe('サークル更新', () => {
       body: JSON.stringify({
         owner_id: ownerId,
       }),
+      ...generateAPIGatewayProxyEventV2(),
     });
 
     expect(response).toEqual({
@@ -134,6 +141,7 @@ describe('サークル更新', () => {
       body: JSON.stringify({
         member_ids: memberIds,
       }),
+      ...generateAPIGatewayProxyEventV2(),
     });
 
     expect(response).toEqual({

@@ -1,4 +1,6 @@
 /* eslint-disable import/first */
+import { generateAPIGatewayProxyEventV2 } from '../../../../lib/tests/apigateway-event-v2-helper';
+
 process.env.AWS_REGION = 'ap-northeast-1';
 process.env.MAIN_TABLE_NAME = 'test-table';
 process.env.MAIL_TABLE_GSI1_NAME = 'gsi1';
@@ -25,6 +27,7 @@ describe('ユーザー削除', () => {
       pathParameters: {
         userId: '203881e1-99f2-4ce6-ab6b-785fcd793c92',
       },
+      ...generateAPIGatewayProxyEventV2(),
     });
 
     expect(response).toEqual({
@@ -42,6 +45,7 @@ describe('ユーザー削除', () => {
       pathParameters: {
         userId: '66d73617-aa4f-46b3-bf7d-9c193f0a08d1',
       },
+      ...generateAPIGatewayProxyEventV2(),
     });
 
     expect(response).toEqual({

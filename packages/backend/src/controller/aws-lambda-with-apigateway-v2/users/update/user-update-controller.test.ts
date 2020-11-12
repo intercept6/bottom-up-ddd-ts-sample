@@ -1,4 +1,6 @@
 /* eslint-disable import/first */
+import { generateAPIGatewayProxyEventV2 } from '../../../../lib/tests/apigateway-event-v2-helper';
+
 process.env.AWS_REGION = 'ap-northeast-1';
 process.env.MAIN_TABLE_NAME = 'test-table';
 process.env.MAIL_TABLE_GSI1_NAME = 'gsi1';
@@ -28,6 +30,7 @@ describe('ユーザー更新', () => {
       body: JSON.stringify({
         user_name: '更新されたユーザー名',
       }),
+      ...generateAPIGatewayProxyEventV2(),
     });
 
     expect(response).toEqual({
@@ -46,6 +49,7 @@ describe('ユーザー更新', () => {
       body: JSON.stringify({
         mail_address: 'updated@example.com',
       }),
+      ...generateAPIGatewayProxyEventV2(),
     });
 
     expect(response).toEqual({
@@ -65,6 +69,7 @@ describe('ユーザー更新', () => {
         user_name: '更新されたユーザー名',
         mail_address: 'updated@example.com',
       }),
+      ...generateAPIGatewayProxyEventV2(),
     });
 
     expect(response).toEqual({
@@ -87,6 +92,7 @@ describe('ユーザー更新', () => {
         user_name: '更新されたユーザー名',
         mail_address: 'updated@example.com',
       }),
+      ...generateAPIGatewayProxyEventV2(),
     });
 
     expect(response).toEqual({
@@ -102,6 +108,7 @@ describe('ユーザー更新', () => {
     const response = await userUpdateController.handle({
       pathParameters: { userId: '203881e1-99f2-4ce6-ab6b-785fcd793c92' },
       body: JSON.stringify({}),
+      ...generateAPIGatewayProxyEventV2(),
     });
 
     expect(response).toEqual({
@@ -117,6 +124,7 @@ describe('ユーザー更新', () => {
     const response = await userUpdateController.handle({
       pathParameters: { userId: '203881e1-99f2-4ce6-ab6b-785fcd793c92' },
       body: JSON.stringify({ user_name: 1 }),
+      ...generateAPIGatewayProxyEventV2(),
     });
 
     expect(response).toEqual({
@@ -132,6 +140,7 @@ describe('ユーザー更新', () => {
     const response = await userUpdateController.handle({
       pathParameters: { userId: '203881e1-99f2-4ce6-ab6b-785fcd793c92' },
       body: JSON.stringify({ mail_address: 1 }),
+      ...generateAPIGatewayProxyEventV2(),
     });
 
     expect(response).toEqual({
@@ -147,6 +156,7 @@ describe('ユーザー更新', () => {
     const response = await userUpdateController.handle({
       pathParameters: { userId: '203881e1-99f2-4ce6-ab6b-785fcd793c92' },
       body: JSON.stringify({ user_name: 1, mail_address: 1 }),
+      ...generateAPIGatewayProxyEventV2(),
     });
 
     expect(response).toEqual({

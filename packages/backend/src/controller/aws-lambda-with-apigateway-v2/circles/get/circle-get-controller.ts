@@ -1,21 +1,19 @@
 import 'source-map-support/register';
 import { CircleGetService } from '../../../../application/circles/get/circle-get-service';
 import { CircleGetServiceInterface } from '../../../../application/circles/get/circle-get-service-interface';
-import { APIGatewayProxyResultV2 } from 'aws-lambda';
+import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda';
 import { CircleGetCommand } from '../../../../application/circles/get/circle-get-command';
 import { CircleNotFoundApplicationError } from '../../../../application/errors/application-errors';
 import { UnknownError } from '../../../../util/error';
 import { Bootstrap } from '../../../utils/bootstrap';
 import { badRequest, notFound } from '../../../utils/http-response';
 
-type CircleGetEvent = {
-  pathParameters?: { circleId?: string };
-};
-
 export class CircleGetController {
   constructor(private readonly circleGetService: CircleGetServiceInterface) {}
 
-  async handle(event: CircleGetEvent): Promise<APIGatewayProxyResultV2> {
+  async handle(
+    event: APIGatewayProxyEventV2
+  ): Promise<APIGatewayProxyResultV2> {
     const circleId = event.pathParameters?.circleId;
 
     if (typeof circleId !== 'string') {
@@ -54,5 +52,5 @@ const circleGetService = new CircleGetService({
 const circleGetController = new CircleGetController(circleGetService);
 
 export const handle = async (
-  event: CircleGetEvent
+  event: APIGatewayProxyEventV2
 ): Promise<APIGatewayProxyResultV2> => await circleGetController.handle(event);

@@ -1,6 +1,6 @@
 import 'source-map-support/register';
 import { CircleUpdateServiceInterface } from '../../../../application/circles/update/circleUpdateServiceInterface';
-import { APIGatewayProxyResultV2 } from 'aws-lambda';
+import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda';
 import { Bootstrap } from '../../../utils/bootstrap';
 import { CircleUpdateService } from '../../../../application/circles/update/circle-update-service';
 import { CircleUpdateCommand } from '../../../../application/circles/update/circle-update-command';
@@ -12,11 +12,6 @@ import {
 } from '../../../../application/errors/application-errors';
 import { badRequest, internalServerError } from '../../../utils/http-response';
 
-type CircleUpdateEvent = {
-  pathParameters?: { circleId?: string };
-  body?: string;
-};
-
 export class CircleUpdateController {
   private readonly circleUpdateService: CircleUpdateServiceInterface;
 
@@ -26,7 +21,9 @@ export class CircleUpdateController {
     this.circleUpdateService = props.circleUpdateService;
   }
 
-  async handle(event: CircleUpdateEvent): Promise<APIGatewayProxyResultV2> {
+  async handle(
+    event: APIGatewayProxyEventV2
+  ): Promise<APIGatewayProxyResultV2> {
     if (event.body == null) {
       return badRequest('request body is null');
     }
@@ -94,6 +91,6 @@ const circleUpdateController = new CircleUpdateController({
 });
 
 export const handle = async (
-  event: CircleUpdateEvent
+  event: APIGatewayProxyEventV2
 ): Promise<APIGatewayProxyResultV2> =>
   await circleUpdateController.handle(event);

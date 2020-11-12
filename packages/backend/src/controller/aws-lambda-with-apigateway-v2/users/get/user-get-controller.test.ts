@@ -1,4 +1,6 @@
 /* eslint-disable import/first */
+import { generateAPIGatewayProxyEventV2 } from '../../../../lib/tests/apigateway-event-v2-helper';
+
 process.env.AWS_REGION = 'ap-northeast-1';
 process.env.MAIN_TABLE_NAME = 'test-table';
 process.env.MAIL_TABLE_GSI1_NAME = 'gsi1';
@@ -36,6 +38,7 @@ describe('ユーザー取得', () => {
 
     const response = await userGetController.handle({
       pathParameters: { userId },
+      ...generateAPIGatewayProxyEventV2(),
     });
 
     expect(response).toEqual({
@@ -57,6 +60,7 @@ describe('ユーザー取得', () => {
       );
     const response = await userGetController.handle({
       pathParameters: { userId },
+      ...generateAPIGatewayProxyEventV2(),
     });
 
     expect(response).toEqual({
@@ -71,6 +75,7 @@ describe('ユーザー取得', () => {
   test('ユーザーIDが指定されていない', async () => {
     const response = await userGetController.handle({
       pathParameters: {},
+      ...generateAPIGatewayProxyEventV2(),
     });
 
     expect(response).toEqual({

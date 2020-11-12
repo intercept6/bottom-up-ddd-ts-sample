@@ -1,4 +1,6 @@
 /* eslint-disable import/first */
+import { generateAPIGatewayProxyEventV2 } from '../../../../lib/tests/apigateway-event-v2-helper';
+
 const rootUri = 'https://api.example.com/';
 process.env.AWS_REGION = 'ap-northeast-1';
 process.env.MAIN_TABLE_NAME = 'test-table';
@@ -48,6 +50,7 @@ describe('サークル新規登録', () => {
         circle_name: circleName,
         owner_id: ownerId,
       }),
+      ...generateAPIGatewayProxyEventV2(),
     });
 
     expect(response).toEqual({
@@ -71,6 +74,7 @@ describe('サークル新規登録', () => {
         circle_name: circleName,
         owner_id: '206d7414-7072-4a98-9505-c780b5a9bdd1',
       }),
+      ...generateAPIGatewayProxyEventV2(),
     });
 
     expect(response).toEqual({

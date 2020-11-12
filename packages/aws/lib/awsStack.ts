@@ -7,9 +7,10 @@ import {
 import { Code, LayerVersion, Runtime } from '@aws-cdk/aws-lambda';
 import { AttributeType, BillingMode, Table } from '@aws-cdk/aws-dynamodb';
 import { FunctionUtils } from './handlerFunction';
+import { resolve } from 'path';
 
-const layerDir = './bundle/layer';
-const srcDir = '../backend/src';
+const layerDir = resolve(__dirname, '..', 'bundle', 'layer');
+const srcDir = resolve(__dirname, '..', '..', 'backend', 'src');
 
 export class AwsStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -54,7 +55,7 @@ export class AwsStack extends Stack {
           MAIN_TABLE_NAME: table.tableName,
           MAIL_TABLE_GSI1_NAME: 'gsi1',
           MAIL_TABLE_GSI2_NAME: 'gsi2',
-          ROOT_URI: httpApi.url ?? '',
+          ROOT_URI: httpApi.url!,
         },
         timeout: Duration.seconds(10),
       },
@@ -67,7 +68,7 @@ export class AwsStack extends Stack {
       props: {
         code: Code.fromAsset(srcDir),
         handler:
-          'awsServerless/controllers/user/register/userRegisterController.handle',
+          'controller/aws-lambda-with-apigateway-v2/user/register/user-register-controller.handle',
       },
     });
     httpApi.addRoutes({
@@ -82,7 +83,8 @@ export class AwsStack extends Stack {
       id: 'GetUser',
       props: {
         code: Code.fromAsset(srcDir),
-        handler: 'awsServerless/controllers/user/get/userGetController.handle',
+        handler:
+          'controller/aws-lambda-with-apigateway-v2/user/get/user-get-controller.handle',
       },
     });
     httpApi.addRoutes({
@@ -98,7 +100,7 @@ export class AwsStack extends Stack {
       props: {
         code: Code.fromAsset(srcDir),
         handler:
-          'awsServerless/controllers/user/update/userUpdateController.handle',
+          'controller/aws-lambda-with-apigateway-v2/user/update/user-update-controller.handle',
       },
     });
     httpApi.addRoutes({
@@ -114,7 +116,7 @@ export class AwsStack extends Stack {
       props: {
         code: Code.fromAsset(srcDir),
         handler:
-          'awsServerless/controllers/user/delete/userDeleteController.handle',
+          'controller/aws-lambda-with-apigateway-v2/user/delete/user-delete-controller.handle',
       },
     });
     httpApi.addRoutes({
@@ -131,7 +133,7 @@ export class AwsStack extends Stack {
       props: {
         code: Code.fromAsset(srcDir),
         handler:
-          'awsServerless/controllers/circle/register/circleRegisterController.handle',
+          'controller/aws-lambda-with-apigateway-v2/circle/register/circle-register-controller.handle',
       },
     });
     httpApi.addRoutes({
@@ -147,7 +149,7 @@ export class AwsStack extends Stack {
       props: {
         code: Code.fromAsset(srcDir),
         handler:
-          'awsServerless/controllers/circle/get/circleGetController.handle',
+          'controller/aws-lambda-with-apigateway-v2/circle/get/circle-get-controller.handle',
       },
     });
     httpApi.addRoutes({
@@ -163,7 +165,7 @@ export class AwsStack extends Stack {
       props: {
         code: Code.fromAsset(srcDir),
         handler:
-          'awsServerless/controllers/circle/update/circleUpdateController.handle',
+          'controller/aws-lambda-with-apigateway-v2/circle/update/circle-update-controller.handle',
       },
     });
     httpApi.addRoutes({
@@ -179,7 +181,7 @@ export class AwsStack extends Stack {
       props: {
         code: Code.fromAsset(srcDir),
         handler:
-          'awsServerless/controllers/circle/delete/circleDeleteController.handle',
+          'controller/aws-lambda-with-apigateway-v2/circle/delete/circle-delete-controller.handle',
       },
     });
     httpApi.addRoutes({

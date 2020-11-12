@@ -5,6 +5,7 @@ process.env.MAIL_TABLE_GSI1_NAME = 'gsi1';
 process.env.MAIL_TABLE_GSI2_NAME = 'gsi2';
 process.env.ROOT_URI = 'https://api.example.com/';
 
+import { generateAPIGatewayProxyEventV2 } from '../../../../lib/tests/apigateway-event-v2-helper';
 import { CircleGetController } from './circle-get-controller';
 import { StubCircleGetService } from '../../../../application/circles/get/stub-circle-get-service';
 import { CircleData } from '../../../../application/circles/circle-data';
@@ -41,6 +42,7 @@ describe('サークル取得', () => {
       );
     const response = await circleGetController.handle({
       pathParameters: { circleId },
+      ...generateAPIGatewayProxyEventV2(),
     });
 
     expect(response).toEqual({
@@ -64,6 +66,7 @@ describe('サークル取得', () => {
 
     const response = await circleGetController.handle({
       pathParameters: { circleId },
+      ...generateAPIGatewayProxyEventV2(),
     });
 
     expect(response).toEqual({
@@ -78,20 +81,7 @@ describe('サークル取得', () => {
   test('サークルIDが指定されていない場合はBadRequestを返す', async () => {
     const response = await circleGetController.handle({
       pathParameters: {},
-    });
-
-    expect(response).toEqual({
-      statusCode: 400,
-      body: JSON.stringify({
-        name: 'BadRequest',
-        message: 'circle id type is not string',
-      }),
-    });
-  });
-
-  test('サークルIDがstring型ではない場合はBadRequestを返す', async () => {
-    const response = await circleGetController.handle({
-      pathParameters: { circleId: 1 } as never,
+      ...generateAPIGatewayProxyEventV2(),
     });
 
     expect(response).toEqual({

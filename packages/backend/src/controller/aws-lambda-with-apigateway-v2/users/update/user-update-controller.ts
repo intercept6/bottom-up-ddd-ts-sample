@@ -1,15 +1,10 @@
 import { UserUpdateService } from '../../../../application/users/update/user-update-service';
 import { UserUpdateCommand } from '../../../../application/users/update/user-update-command';
-import { APIGatewayProxyResultV2 } from 'aws-lambda';
+import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda';
 import { UserNotFoundApplicationError } from '../../../../application/errors/application-errors';
 import { Bootstrap } from '../../../utils/bootstrap';
 import { badRequest, internalServerError } from '../../../utils/http-response';
 import { UserUpdateServiceInterface } from '../../../../application/users/update/user-update-service-interface';
-
-type UserUpdateEvent = {
-  pathParameters: { userId: string };
-  body: string;
-};
 
 export class UserUpdateController {
   private readonly userUpdateService: UserUpdateServiceInterface;
@@ -17,7 +12,9 @@ export class UserUpdateController {
     this.userUpdateService = props.userUpdateService;
   }
 
-  async handle(event: UserUpdateEvent): Promise<APIGatewayProxyResultV2> {
+  async handle(
+    event: APIGatewayProxyEventV2
+  ): Promise<APIGatewayProxyResultV2> {
     const userId = event.pathParameters?.userId;
     if (typeof userId !== 'string') {
       return badRequest('userId type is not string');
@@ -66,5 +63,5 @@ const userUpdateService = new UserUpdateService({
 const userUpdateController = new UserUpdateController({ userUpdateService });
 
 export const handle = async (
-  event: UserUpdateEvent
+  event: APIGatewayProxyEventV2
 ): Promise<APIGatewayProxyResultV2> => await userUpdateController.handle(event);

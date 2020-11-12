@@ -2,7 +2,7 @@ import { UserGetServiceInterface } from '../../../../application/users/get/user-
 import { UserGetService } from '../../../../application/users/get/user-get-service';
 import { UserGetCommand } from '../../../../application/users/get/user-get-command';
 import { UserNotFoundApplicationError } from '../../../../application/errors/application-errors';
-import { APIGatewayProxyResultV2 } from 'aws-lambda';
+import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda';
 import { Bootstrap } from '../../../utils/bootstrap';
 import {
   badRequest,
@@ -10,17 +10,15 @@ import {
   notFound,
 } from '../../../utils/http-response';
 
-type UserGetEvent = {
-  pathParameters?: { userId?: string };
-};
-
 export class UserGetController {
   private readonly userGetService: UserGetServiceInterface;
   constructor(props: { userGetService: UserGetServiceInterface }) {
     this.userGetService = props.userGetService;
   }
 
-  async handle(event: UserGetEvent): Promise<APIGatewayProxyResultV2> {
+  async handle(
+    event: APIGatewayProxyEventV2
+  ): Promise<APIGatewayProxyResultV2> {
     const userId = event?.pathParameters?.userId;
     if (typeof userId !== 'string') {
       return badRequest('user id type is not string');
@@ -57,5 +55,5 @@ const userGetService = new UserGetService({
 const userGetController = new UserGetController({ userGetService });
 
 export const handle = async (
-  event: UserGetEvent
+  event: APIGatewayProxyEventV2
 ): Promise<APIGatewayProxyResultV2> => await userGetController.handle(event);

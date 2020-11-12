@@ -1,6 +1,6 @@
 import { UserRegisterService } from '../../../../application/users/register/user-register-service';
 import { UserRegisterCommand } from '../../../../application/users/register/user-register-command';
-import { APIGatewayProxyResultV2 } from 'aws-lambda';
+import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda';
 import { UserDuplicateApplicationError } from '../../../../application/errors/application-errors';
 import { Bootstrap } from '../../../utils/bootstrap';
 import {
@@ -10,17 +10,15 @@ import {
 } from '../../../utils/http-response';
 import { UserRegisterServiceInterface } from '../../../../application/users/register/user-register-service-interface';
 
-type UserRegisterEvent = {
-  body: string;
-};
-
 export class UserRegisterController {
   private readonly userRegisterService: UserRegisterServiceInterface;
   constructor(props: { userRegisterService: UserRegisterServiceInterface }) {
     this.userRegisterService = props.userRegisterService;
   }
 
-  async handle(event: UserRegisterEvent): Promise<APIGatewayProxyResultV2> {
+  async handle(
+    event: APIGatewayProxyEventV2
+  ): Promise<APIGatewayProxyResultV2> {
     if (event.body == null) {
       return badRequest('request body is null');
     }
@@ -62,6 +60,6 @@ const userRegisterController = new UserRegisterController({
 });
 
 export const handle = async (
-  event: UserRegisterEvent
+  event: APIGatewayProxyEventV2
 ): Promise<APIGatewayProxyResultV2> =>
   await userRegisterController.handle(event);

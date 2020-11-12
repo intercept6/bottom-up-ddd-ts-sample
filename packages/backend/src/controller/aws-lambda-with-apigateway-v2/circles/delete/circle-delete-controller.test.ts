@@ -7,6 +7,7 @@ process.env.ROOT_URI = 'https://api.example.com/';
 
 import { CircleDeleteController } from './circle-delete-controller';
 import { StubCircleDeleteService } from '../../../../application/circles/delete/stub-circle-delete-service';
+import { generateAPIGatewayProxyEventV2 } from '../../../../lib/tests/apigateway-event-v2-helper';
 
 const circleDeleteService = new StubCircleDeleteService();
 const circleDeleteController = new CircleDeleteController({
@@ -26,6 +27,7 @@ describe('サークル削除', () => {
       pathParameters: {
         circleId: '4ea20e0e-404e-4dc6-8917-a7bb7bf4ebdd',
       },
+      ...generateAPIGatewayProxyEventV2(),
     });
 
     expect(response).toEqual({
@@ -42,6 +44,7 @@ describe('サークル削除', () => {
       pathParameters: {
         circleId: '70856508-f1c0-481b-a16d-93d91e7128c8',
       },
+      ...generateAPIGatewayProxyEventV2(),
     });
 
     expect(response).toEqual({

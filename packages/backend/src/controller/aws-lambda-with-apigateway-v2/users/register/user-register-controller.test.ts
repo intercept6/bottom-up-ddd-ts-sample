@@ -1,4 +1,6 @@
 /* eslint-disable import/first */
+import { generateAPIGatewayProxyEventV2 } from '../../../../lib/tests/apigateway-event-v2-helper';
+
 const rootUri = 'https://api.example.com/';
 process.env.AWS_REGION = 'ap-northeast-1';
 process.env.MAIN_TABLE_NAME = 'test-table';
@@ -45,6 +47,7 @@ describe('ユーザー新規登録', () => {
         user_name: userName,
         mail_address: mailAddress,
       }),
+      ...generateAPIGatewayProxyEventV2(),
     });
 
     expect(response).toEqual({
@@ -70,6 +73,7 @@ describe('ユーザー新規登録', () => {
         user_name: userName,
         mail_address: mailAddress,
       }),
+      ...generateAPIGatewayProxyEventV2(),
     });
 
     expect(response).toEqual({
@@ -95,6 +99,7 @@ describe('ユーザー新規登録', () => {
         user_name: userName,
         mail_address: mailAddress,
       }),
+      ...generateAPIGatewayProxyEventV2(),
     });
 
     expect(response).toEqual({
