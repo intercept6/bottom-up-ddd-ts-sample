@@ -15,6 +15,7 @@ import { MailAddress } from '../../../domain/models/users/mail-address';
 const tableName = 'test-user-repository';
 const gsi1Name = 'gsi1';
 const gsi2Name = 'gsi2';
+const gsi3Name = 'gsi3';
 
 let dynamoDBLocalHelper: DynamodbLocalHelper;
 let dynamoDBUserRepository: DynamodbUserRepository;
@@ -33,6 +34,7 @@ beforeEach(async () => {
     tableName,
     gsi1Name,
     gsi2Name,
+    gsi3Name,
   }).catch((error: Error) => {
     throw error;
   });
@@ -40,6 +42,7 @@ beforeEach(async () => {
     tableName,
     gsi1Name,
     gsi2Name,
+    gsi3Name,
     documentClient: dynamoDBLocalHelper.getDocumentClient(),
   });
 });
@@ -145,6 +148,7 @@ describe('ユーザーリポジトリへのCRUDテスト', () => {
           pk: userId,
           gsi1pk: userName,
           gsi2pk: mailAddress,
+          gsi3pk: 'USER',
         },
       })
       .promise()
@@ -316,5 +320,93 @@ describe('ユーザーリポジトリへのCRUDテスト', () => {
         new MailAddress(mailAddress)
       )
     );
+  });
+
+  test('limitで指定した件数のユーザーを取得する', async () => {
+    const users = [
+      {
+        userId: '8403d7b8-4f7f-413f-b415-77d2b6002575',
+        userName: 'テストユーザー名1',
+        mailAddress: 'test1@example.com',
+      },
+      {
+        userId: '7bec5dca-3d3d-4c5f-8f5d-2ec1a8c34b17',
+        userName: 'テストユーザー名2',
+        mailAddress: 'test2@example.com',
+      },
+      {
+        userId: '66391b02-d24c-4358-956a-80da4ef55701',
+        userName: 'テストユーザー名3',
+        mailAddress: 'test3@example.com',
+      },
+      {
+        userId: '5bd9ba83-507d-4251-90d3-8e2854ad93f7',
+        userName: 'テストユーザー名4',
+        mailAddress: 'test4@example.com',
+      },
+      {
+        userId: 'f52b1b39-d090-4f1d-8598-437a4db47ae3',
+        userName: 'テストユーザー名5',
+        mailAddress: 'test5@example.com',
+      },
+      {
+        userId: 'd03f6406-666f-453c-b29a-db6c71bae94f',
+        userName: 'テストユーザー名6',
+        mailAddress: 'test6@example.com',
+      },
+      {
+        userId: '8d8a202e-0259-40f0-b11f-c270e6c84458',
+        userName: 'テストユーザー名7',
+        mailAddress: 'test7@example.com',
+      },
+      {
+        userId: 'edcb9d14-5a3b-4eff-ae1c-b0b6afdf71e6',
+        userName: 'テストユーザー名8',
+        mailAddress: 'test8@example.com',
+      },
+      {
+        userId: '9c22f8b8-d725-4326-88f8-dc01379a601f',
+        userName: 'テストユーザー名9',
+        mailAddress: 'test9@example.com',
+      },
+      {
+        userId: '9eb1ddf5-1a7c-44a1-b7f8-5da17bf82f04',
+        userName: 'テストユーザー名10',
+        mailAddress: 'test10@example.com',
+      },
+      {
+        userId: 'cb0424e7-28b8-46cc-9c4c-649c496db87c',
+        userName: 'テストユーザー名11',
+        mailAddress: 'test11@example.com',
+      },
+    ];
+
+    await Promise.all(
+      users.map(async ({ userId, userName, mailAddress }) => {
+        await documentClient
+          .put({
+            TableName: tableName,
+            Item: {
+              pk: userId,
+              gsi1pk: userName,
+              gsi2pk: mailAddress,
+              gsi3pk: 'USER',
+            },
+          })
+          .promise()
+          .catch((error: Error) => {
+            throw error;
+          });
+      })
+    );
+
+    const response = await dynamoDBUserRepository
+      .list({ limit: 5 })
+      .catch((error) => {
+        console.error(error);
+        throw error;
+      });
+
+    expect(response).toHaveLength(5);
   });
 });

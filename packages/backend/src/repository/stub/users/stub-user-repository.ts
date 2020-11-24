@@ -18,6 +18,10 @@ export class StubUserRepository implements UserRepositoryInterface {
     throw new Error('user repository class method get is not mocked');
   }
 
+  async list(): Promise<User[]> {
+    throw new Error('user repository class method list is not mocked');
+  }
+
   async batchGet(): Promise<User[]> {
     throw new Error('user repository class method batchGet is not mocked');
   }

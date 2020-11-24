@@ -4,28 +4,48 @@ import { UserName } from '../../../domain/models/users/user-name';
 import { UserId } from '../../../domain/models/users/user-id';
 import { Logger } from '../../../util/logger';
 import { MailAddress } from '../../../domain/models/users/mail-address';
-import { DynamoDB } from 'aws-sdk';
+import { AWSError, DynamoDB } from 'aws-sdk';
 import {
   TypeRepositoryError,
+  TypeRepositoryError2,
   UserNotFoundRepositoryError,
 } from '../../errors/repository-errors';
+import { UnknownError } from '../../../util/error';
+
+type StoredUser = {
+  pk: string;
+  gsi1pk: string;
+  gsi2pk: string;
+  gsi3pk: 'USER'; // objectType
+};
+
+const isStoredUser = (
+  item: DynamoDB.DocumentClient.AttributeMap
+): item is StoredUser =>
+  typeof item.pk === 'string' &&
+  typeof item.gsi1pk === 'string' &&
+  typeof item.gsi2pk === 'string' &&
+  item.gsi3pk === 'USER';
 
 export class DynamodbUserRepository implements UserRepositoryInterface {
   private readonly documentClient: DynamoDB.DocumentClient;
   private readonly tableName: string;
   private readonly gsi1Name: string;
   private readonly gsi2Name: string;
+  private readonly gsi3Name: string;
 
   constructor(props: {
     documentClient: DynamoDB.DocumentClient;
     tableName: string;
     gsi1Name: string;
     gsi2Name: string;
+    gsi3Name: string;
   }) {
     this.documentClient = props.documentClient;
     this.tableName = props.tableName;
     this.gsi1Name = props.gsi1Name;
     this.gsi2Name = props.gsi2Name;
+    this.gsi3Name = props.gsi3Name;
   }
 
   /**
@@ -116,36 +136,17 @@ export class DynamodbUserRepository implements UserRepositoryInterface {
         throw new UserNotFoundRepositoryError(identity);
       }
 
-      const id = found.Items[0].pk;
-      const userName = found.Items[0].gsi1pk;
-      const mailAddress = found.Items[0].gsi2pk;
-
-      if (typeof id !== 'string') {
-        throw new TypeRepositoryError({
-          variableName: 'userId',
-          expected: 'string',
-          got: typeof id,
-        });
-      }
-      if (typeof userName !== 'string') {
-        throw new TypeRepositoryError({
-          variableName: 'userName',
-          expected: 'string',
-          got: typeof userName,
-        });
-      }
-      if (typeof mailAddress !== 'string') {
-        throw new TypeRepositoryError({
-          variableName: 'mailAddress',
-          expected: 'string',
-          got: typeof mailAddress,
-        });
+      const user = found.Items[0];
+      if (!isStoredUser(user)) {
+        throw new TypeRepositoryError2(
+          `Stored users data is invalid. ${JSON.stringify(user)}`
+        );
       }
 
       return new User(
-        new UserId(id),
-        new UserName(userName),
-        new MailAddress(mailAddress)
+        new UserId(user.pk),
+        new UserName(user.gsi1pk),
+        new MailAddress(user.gsi2pk)
       );
     } else {
       const found = await this.documentClient
@@ -200,6 +201,56 @@ export class DynamodbUserRepository implements UserRepositoryInterface {
     }
   }
 
+  async list({
+    limit,
+    nextToken,
+  }: {
+    limit: number;
+    nextToken?: string;
+  }): Promise<User[]> {
+    const users = await this.documentClient
+      .query({
+        TableName: this.tableName,
+        IndexName: this.gsi3Name,
+        ExpressionAttributeNames: {
+          '#gsi3pk': 'gsi3pk',
+        },
+        ExpressionAttributeValues: {
+          ':gsi3pk': 'USER',
+        },
+        KeyConditionExpression: '#gsi3pk = :gsi3pk',
+        Limit: limit,
+        ExclusiveStartKey: nextToken
+          ? {
+              pk: {
+                S: nextToken,
+              },
+            }
+          : undefined,
+      })
+      .promise()
+      .catch((error: AWSError) => {
+        throw new UnknownError('Unknown repository error', error);
+      });
+
+    if (users.Items == null) {
+      return [];
+    }
+
+    return users.Items.map((value) => {
+      if (!isStoredUser(value)) {
+        throw new TypeRepositoryError2(
+          `Stored users data is invalid. ${JSON.stringify(value)}`
+        );
+      }
+      return new User(
+        new UserId(value.pk),
+        new UserName(value.gsi1pk),
+        new MailAddress(value.gsi2pk)
+      );
+    });
+  }
+
   async create(user: User): Promise<void> {
     await this.documentClient
       .transactWrite({
@@ -211,6 +262,7 @@ export class DynamodbUserRepository implements UserRepositoryInterface {
                 pk: user.getUserId().getValue(),
                 gsi1pk: user.getName().getValue(),
                 gsi2pk: user.getMailAddress().getValue(),
+                gsi3pk: 'USER',
               },
               ExpressionAttributeNames: {
                 '#pk': 'pk',

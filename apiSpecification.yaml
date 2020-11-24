@@ -9,7 +9,7 @@ paths:
   /users:
     get:
       summary: すべてのユーザーを一覧表示する
-      operationId: listUsers
+      operationId: listUser
       tags:
         - users
       parameters:
@@ -20,6 +20,12 @@ paths:
           schema:
             type: integer
             format: int32
+        - name: next-token
+          in: query
+          description: 途中からレスポンスを再開するためのトークン
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: ページングされたユーザーの配列

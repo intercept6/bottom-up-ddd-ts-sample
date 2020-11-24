@@ -6,6 +6,7 @@ import { MailAddress } from './mail-address';
 export type UserRepositoryInterface = {
   create: (user: User) => Promise<void>;
   get: (identity: UserId | UserName | MailAddress) => Promise<User>;
+  list: (props: { limit: number; nextToken?: string }) => Promise<User[]>;
   update: (user: User) => Promise<void>;
   delete: (user: User) => Promise<void>;
   batchGet: (userIds: UserId[]) => Promise<User[]>;
