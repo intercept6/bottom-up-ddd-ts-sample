@@ -69,3 +69,5 @@ export class TypeRepositoryError extends RepositoryError {
     super(`${variableName} should be ${expected} type, but it is ${got} type`);
   }
 }
+
+export class TypeRepositoryError2 extends RepositoryError {}

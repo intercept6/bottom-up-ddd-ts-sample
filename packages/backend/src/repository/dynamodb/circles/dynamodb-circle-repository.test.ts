@@ -15,6 +15,7 @@ import { Credentials, DynamoDB } from 'aws-sdk';
 const tableName = 'test-circle-repository';
 const gsi1Name = 'gsi1';
 const gsi2Name = 'gsi2';
+const gsi3Name = 'gsi3';
 
 let dynamoDBLocalHelper: DynamodbLocalHelper;
 let dynamoDBCircleRepository: DynamodbCircleRepository;
@@ -33,6 +34,7 @@ beforeEach(async () => {
     tableName,
     gsi1Name,
     gsi2Name,
+    gsi3Name,
   }).catch((error: Error) => {
     throw error;
   });

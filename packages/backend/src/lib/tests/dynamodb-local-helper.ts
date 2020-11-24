@@ -6,6 +6,7 @@ export class DynamodbLocalHelper {
   private readonly documentClient: DynamoDB.DocumentClient;
   private readonly gsi1Name: string;
   private readonly gsi2Name: string;
+  private readonly gsi3Name: string;
 
   private constructor(props: {
     readonly tableName: string;
@@ -13,12 +14,14 @@ export class DynamodbLocalHelper {
     readonly documentClient: DynamoDB.DocumentClient;
     readonly gsi1Name: string;
     readonly gsi2Name: string;
+    readonly gsi3Name: string;
   }) {
     this.tableName = props.tableName;
     this.ddb = props.ddb;
     this.documentClient = props.documentClient;
     this.gsi1Name = props.gsi1Name;
     this.gsi2Name = props.gsi2Name;
+    this.gsi3Name = props.gsi3Name;
   }
 
   private static createDDB(params: DynamoDB.ClientConfiguration) {
@@ -29,10 +32,6 @@ export class DynamodbLocalHelper {
     params: DynamoDB.DocumentClient.DocumentClientOptions
   ) {
     return new DynamoDB.DocumentClient(params);
-  }
-
-  getDDB(): DynamoDB {
-    return this.ddb;
   }
 
   getDocumentClient(): DynamoDB.DocumentClient {
@@ -52,6 +51,7 @@ export class DynamodbLocalHelper {
           { AttributeName: 'pk', AttributeType: 'S' },
           { AttributeName: 'gsi1pk', AttributeType: 'S' },
           { AttributeName: 'gsi2pk', AttributeType: 'S' },
+          { AttributeName: 'gsi3pk', AttributeType: 'S' },
         ],
         GlobalSecondaryIndexes: [
           {
@@ -62,6 +62,11 @@ export class DynamodbLocalHelper {
           {
             IndexName: 'gsi2',
             KeySchema: [{ AttributeName: 'gsi2pk', KeyType: 'HASH' }],
+            Projection: { ProjectionType: 'ALL' },
+          },
+          {
+            IndexName: 'gsi3',
+            KeySchema: [{ AttributeName: 'gsi3pk', KeyType: 'HASH' }],
             Projection: { ProjectionType: 'ALL' },
           },
         ],
@@ -84,10 +89,12 @@ export class DynamodbLocalHelper {
     tableName,
     gsi1Name,
     gsi2Name,
+    gsi3Name,
   }: {
     readonly tableName: string;
     readonly gsi1Name: string;
     readonly gsi2Name: string;
+    readonly gsi3Name: string;
   }): Promise<DynamodbLocalHelper> {
     const credentials = new Credentials({
       secretAccessKey: 'dummy',
@@ -114,6 +121,7 @@ export class DynamodbLocalHelper {
       documentClient,
       gsi1Name,
       gsi2Name,
+      gsi3Name,
     });
   }
 }

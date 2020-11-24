@@ -1,5 +1,3 @@
-import { Logger } from './logger';
-
 export abstract class ExtendedError extends Error {
   constructor(message: string, error?: Error) {
     super(message);
@@ -30,9 +28,4 @@ export abstract class ExtendedError extends Error {
   }
 }
 
-export class UnknownError extends ExtendedError {
-  constructor(message: string, error?: Error) {
-    Logger.error(error);
-    super(message, error);
-  }
-}
+export class UnknownError extends ExtendedError {}
