@@ -277,9 +277,9 @@ describe('ユーザーリポジトリへのCRUDテスト', () => {
 
   test('存在しないユーザーは取得できない', async () => {
     const userId = 'f1ee26d0-77bd-46f2-8c7f-60c9d617fded';
-    const userGetPromise = dynamoDBUserRepository.get(new UserId(userId));
+    const getUserPromise = dynamoDBUserRepository.get(new UserId(userId));
 
-    await expect(userGetPromise).rejects.toThrowError(
+    await expect(getUserPromise).rejects.toThrowError(
       new UserNotFoundRepositoryError(new UserId(userId))
     );
   });

@@ -189,11 +189,11 @@ describe('サークルリポジトリへのCRUDテスト', () => {
 
   test('存在しないサークルは取得できない', async () => {
     const circleId = 'f1ee26d0-77bd-46f2-8c7f-60c9d617fded';
-    const circleDeletePromise = dynamoDBCircleRepository.get(
+    const deleteCirclePromise = dynamoDBCircleRepository.get(
       new CircleId(circleId)
     );
 
-    await expect(circleDeletePromise).rejects.toThrowError(
+    await expect(deleteCirclePromise).rejects.toThrowError(
       new CircleNotFoundRepositoryError(new CircleId(circleId))
     );
   });
