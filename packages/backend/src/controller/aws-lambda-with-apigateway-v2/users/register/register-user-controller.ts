@@ -38,7 +38,10 @@ export class RegisterUserController {
         if (error instanceof UserDuplicateApplicationError) {
           return conflict(error.message);
         }
-        return internalServerError({ message: 'user register failed', error });
+        return internalServerError({
+          message: 'Failed to register user',
+          error,
+        });
       }
       return {
         statusCode: 201,

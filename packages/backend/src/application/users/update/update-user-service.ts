@@ -6,11 +6,11 @@ import { UpdateUserCommand } from './update-user-command';
 import { MailAddress } from '../../../domain/models/users/mail-address';
 import { UpdateUserServiceInterface } from './update-user-service-interface';
 import {
+  UnknownApplicationError,
   UserDuplicateApplicationError,
   UserNotFoundApplicationError,
 } from '../../errors/application-errors';
 import { UserNotFoundRepositoryError } from '../../../repository/errors/repository-errors';
-import { UnknownError } from '../../../util/error';
 
 export class UpdateUserService implements UpdateUserServiceInterface {
   private readonly userRepository: UserRepositoryInterface;
@@ -23,25 +23,27 @@ export class UpdateUserService implements UpdateUserServiceInterface {
 
   async handle(command: UpdateUserCommand): Promise<void> {
     const targetId = new UserId(command.getId());
-    const response = await this.userRepository
+    const user = await this.userRepository
       .get(targetId)
       .catch((error: Error) => error);
 
-    if (response instanceof Error) {
-      const error = response;
+    if (user instanceof Error) {
+      const error = user;
       if (error instanceof UserNotFoundRepositoryError) {
         throw new UserNotFoundApplicationError(targetId, error);
       }
-      throw new UnknownError('unknown error', error);
+      throw new UnknownApplicationError(error);
     }
-
-    const user = response;
 
     const name = command.getName();
     if (name != null) {
       const newUserName = new UserName(name);
       user.changeName(newUserName);
-      if (await this.userService.unique(newUserName)) {
+      if (
+        await this.userService.unique(newUserName).catch((error: Error) => {
+          throw new UnknownApplicationError(error);
+        })
+      ) {
         throw new UserDuplicateApplicationError(newUserName);
       }
     }
@@ -50,11 +52,17 @@ export class UpdateUserService implements UpdateUserServiceInterface {
     if (mailAddress != null) {
       const newMailAddress = new MailAddress(mailAddress);
       user.changeMailAddress(newMailAddress);
-      if (await this.userService.unique(newMailAddress)) {
+      if (
+        await this.userService.unique(newMailAddress).catch((error: Error) => {
+          throw new UnknownApplicationError(error);
+        })
+      ) {
         throw new UserDuplicateApplicationError(newMailAddress);
       }
     }
 
-    await this.userRepository.update(user);
+    await this.userRepository.update(user).catch((error: Error) => {
+      throw new UnknownApplicationError(error);
+    });
   }
 }

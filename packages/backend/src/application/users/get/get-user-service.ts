@@ -7,9 +7,9 @@ import { GetUserServiceInterface } from './get-user-service-interface';
 import { UserNotFoundRepositoryError } from '../../../repository/errors/repository-errors';
 import {
   ArgumentApplicationError,
+  UnknownApplicationError,
   UserNotFoundApplicationError,
 } from '../../errors/application-errors';
-import { UnknownError } from '../../../util/error';
 
 export class GetUserService implements GetUserServiceInterface {
   private readonly userRepository: UserRepositoryInterface;
@@ -36,16 +36,14 @@ export class GetUserService implements GetUserServiceInterface {
 
     const identifier = GetUserService.getIdentifier({ userId, mailAddress });
 
-    const response = await this.userRepository
+    const user = await this.userRepository
       .get(identifier)
-      .catch((error: Error) => error);
-    if (response instanceof Error) {
-      const error = response;
-      if (error instanceof UserNotFoundRepositoryError) {
-        throw new UserNotFoundApplicationError(identifier, error);
-      }
-      throw new UnknownError('unknown error', error);
-    }
-    return new UserData(response);
+      .catch((error: Error) => {
+        if (error instanceof UserNotFoundRepositoryError) {
+          throw new UserNotFoundApplicationError(identifier, error);
+        }
+        throw new UnknownApplicationError(error);
+      });
+    return new UserData(user);
   }
 }

@@ -2,7 +2,7 @@ import { ListUserCommand } from './list-user-command';
 import { UserData } from '../user-data';
 import { UserRepositoryInterface } from '../../../domain/models/users/user-repository-interface';
 import { ListUserServiceInterface } from './list-user-service-interface';
-import { UnknownError } from '../../../util/error';
+import { UnknownApplicationError } from '../../errors/application-errors';
 
 export class ListUserService implements ListUserServiceInterface {
   private readonly userRepository: UserRepositoryInterface;
@@ -17,10 +17,10 @@ export class ListUserService implements ListUserServiceInterface {
 
     const users = await this.userRepository
       .list({ limit, nextToken })
-      .catch((error: Error) => error);
-    if (users instanceof Error) {
-      throw new UnknownError('unknown error', users);
-    }
+      .catch((error: Error) => {
+        throw new UnknownApplicationError(error);
+      });
+
     return users.map((user) => new UserData(user));
   }
 }

@@ -11,6 +11,7 @@ export class Bootstrap {
   private readonly tableName: string;
   private readonly gsi1Name: string;
   private readonly gsi2Name: string;
+  private readonly gsi3Name: string;
   private readonly rootURI: string;
   private readonly documentClient: DynamoDB.DocumentClient;
 
@@ -21,8 +22,9 @@ export class Bootstrap {
     const region = getEnvironmentVariable('AWS_REGION');
 
     this.tableName = getEnvironmentVariable('MAIN_TABLE_NAME');
-    this.gsi1Name = getEnvironmentVariable('MAIL_TABLE_GSI1_NAME');
-    this.gsi2Name = getEnvironmentVariable('MAIL_TABLE_GSI2_NAME');
+    this.gsi1Name = getEnvironmentVariable('MAIN_TABLE_GSI1_NAME');
+    this.gsi2Name = getEnvironmentVariable('MAIN_TABLE_GSI2_NAME');
+    this.gsi3Name = getEnvironmentVariable('MAIN_TABLE_GSI3_NAME');
     this.rootURI = getEnvironmentVariable('ROOT_URI');
     this.documentClient = new DynamoDB.DocumentClient({
       apiVersion: '2012-08-10',
@@ -42,6 +44,7 @@ export class Bootstrap {
         tableName: this.tableName,
         gsi1Name: this.gsi1Name,
         gsi2Name: this.gsi2Name,
+        gsi3Name: this.gsi3Name,
       });
 
     return this.userRepository;

@@ -5,7 +5,7 @@ import { UserId } from '../../domain/models/users/user-id';
 import { UserName } from '../../domain/models/users/user-name';
 import { MailAddress } from '../../domain/models/users/mail-address';
 
-abstract class ApplicationError extends ExtendedError {}
+export abstract class ApplicationError extends ExtendedError {}
 
 export class ArgumentApplicationError extends ApplicationError {}
 
@@ -67,5 +67,11 @@ export class CircleDuplicateApplicationError extends ApplicationError {
 export class CircleMembersAreExceedApplicationError extends ApplicationError {
   constructor(circleId: CircleId, error?: Error) {
     super(`circle id: ${circleId.getValue()} is full`, error);
+  }
+}
+
+export class UnknownApplicationError extends ApplicationError {
+  constructor(error: Error) {
+    super('unknown application error', error);
   }
 }

@@ -22,16 +22,19 @@ export const conflict = (message: string): APIGatewayProxyResultV2 => {
   };
 };
 
-export const internalServerError = (props: {
+export const internalServerError = ({
+  error,
+  message,
+}: {
   message: string;
   error: Error;
 }): APIGatewayProxyResultV2 => {
-  Logger.error(props.error);
+  Logger.error(error);
   return {
     statusCode: 500,
     body: JSON.stringify({
       name: 'InternalServerError',
-      message: props.message,
+      message,
     }),
   };
 };

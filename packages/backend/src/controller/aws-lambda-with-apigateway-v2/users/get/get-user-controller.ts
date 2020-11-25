@@ -34,7 +34,7 @@ export class GetUserController {
       if (error instanceof UserNotFoundApplicationError) {
         return notFound(error.message);
       }
-      return internalServerError({ message: 'user get failed', error });
+      return internalServerError({ message: 'Failed to get user', error });
     }
 
     return {

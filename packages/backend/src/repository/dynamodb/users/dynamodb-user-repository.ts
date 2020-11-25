@@ -4,13 +4,12 @@ import { UserName } from '../../../domain/models/users/user-name';
 import { UserId } from '../../../domain/models/users/user-id';
 import { Logger } from '../../../util/logger';
 import { MailAddress } from '../../../domain/models/users/mail-address';
-import { AWSError, DynamoDB } from 'aws-sdk';
+import { DynamoDB } from 'aws-sdk';
 import {
   TypeRepositoryError,
   TypeRepositoryError2,
   UserNotFoundRepositoryError,
 } from '../../errors/repository-errors';
-import { UnknownError } from '../../../util/error';
 
 type StoredUser = {
   pk: string;
@@ -228,10 +227,7 @@ export class DynamodbUserRepository implements UserRepositoryInterface {
             }
           : undefined,
       })
-      .promise()
-      .catch((error: AWSError) => {
-        throw new UnknownError('Unknown repository error', error);
-      });
+      .promise();
 
     if (users.Items == null) {
       return [];

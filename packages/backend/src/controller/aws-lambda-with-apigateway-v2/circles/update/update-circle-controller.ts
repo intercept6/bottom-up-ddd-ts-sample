@@ -72,7 +72,7 @@ export class UpdateCircleController {
       if (error instanceof MembersNotFoundApplicationError) {
         return badRequest(error.message);
       }
-      return internalServerError({ message: 'circle update is failed', error });
+      return internalServerError({ message: 'Failed to update circle', error });
     }
     return {
       statusCode: 204,

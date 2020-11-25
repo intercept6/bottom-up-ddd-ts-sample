@@ -4,7 +4,7 @@ import { DeleteCircleCommand } from './delete-circle-command';
 import { CircleId } from '../../../domain/models/circles/circle-id';
 import { Logger } from '../../../util/logger';
 import { CircleNotFoundRepositoryError } from '../../../repository/errors/repository-errors';
-import { UnknownError } from '../../../util/error';
+import { UnknownApplicationError } from '../../errors/application-errors';
 
 export class DeleteCircleService implements DeleteCircleServiceInterface {
   private readonly circleRepository: CircleRepositoryInterface;
@@ -21,13 +21,16 @@ export class DeleteCircleService implements DeleteCircleServiceInterface {
 
     // 対象が見つからなかった場合も削除成功とする
     if (circle instanceof Error) {
-      if (circle instanceof CircleNotFoundRepositoryError) {
-        Logger.debug(circle);
+      const error = circle;
+      if (error instanceof CircleNotFoundRepositoryError) {
+        Logger.debug(error);
         return;
       }
-      throw new UnknownError('unknown error', circle);
+      throw new UnknownApplicationError(error);
     }
 
-    await this.circleRepository.delete(circle);
+    await this.circleRepository.delete(circle).catch((error: Error) => {
+      throw new UnknownApplicationError(error);
+    });
   }
 }

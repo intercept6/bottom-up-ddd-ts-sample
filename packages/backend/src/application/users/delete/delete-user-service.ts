@@ -1,10 +1,10 @@
 import { DeleteUserCommand } from './delete-user-command';
 import { UserId } from '../../../domain/models/users/user-id';
-import { UnknownError } from '../../../util/error';
 import { UserNotFoundRepositoryError } from '../../../repository/errors/repository-errors';
 import { Logger } from '../../../util/logger';
 import { UserRepositoryInterface } from '../../../domain/models/users/user-repository-interface';
 import { DeleteUserServiceInterface } from './delete-user-service-interface';
+import { UnknownApplicationError } from '../../errors/application-errors';
 
 export class DeleteUserService implements DeleteUserServiceInterface {
   private readonly userRepository: UserRepositoryInterface;
@@ -22,14 +22,17 @@ export class DeleteUserService implements DeleteUserServiceInterface {
       });
 
     if (response instanceof Error) {
+      const error = response;
       // 対象が見つからなかった場合も削除成功とする
-      if (response instanceof UserNotFoundRepositoryError) {
-        Logger.debug(response);
+      if (error instanceof UserNotFoundRepositoryError) {
+        Logger.debug(error);
         return;
       }
-      throw new UnknownError('unknown error', response);
+      throw new UnknownApplicationError(error);
     }
 
-    await this.userRepository.delete(response);
+    await this.userRepository.delete(response).catch((error: Error) => {
+      throw new UnknownApplicationError(error);
+    });
   }
 }

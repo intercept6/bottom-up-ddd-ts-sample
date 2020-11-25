@@ -50,7 +50,10 @@ export class RegisterCircleController {
       if (error instanceof CircleDuplicateApplicationError) {
         return conflict(`circle_name ${circleName} is already exist`);
       }
-      return internalServerError({ message: 'circle register failed', error });
+      return internalServerError({
+        message: 'Failed to register circle',
+        error,
+      });
     }
 
     return {

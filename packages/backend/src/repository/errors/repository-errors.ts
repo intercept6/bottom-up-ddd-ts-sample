@@ -18,7 +18,7 @@ type PrimitiveTypes =
   | 'function'
   | 'unknown';
 
-export class RepositoryError extends ExtendedError {}
+export abstract class RepositoryError extends ExtendedError {}
 
 export class UserNotFoundRepositoryError extends RepositoryError {
   constructor(
@@ -71,3 +71,9 @@ export class TypeRepositoryError extends RepositoryError {
 }
 
 export class TypeRepositoryError2 extends RepositoryError {}
+
+export class UnknownRepositoryError extends RepositoryError {
+  constructor(error: Error) {
+    super('unknown repository error', error);
+  }
+}

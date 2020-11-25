@@ -8,11 +8,11 @@ import {
   CircleDuplicateApplicationError,
   MembersNotFoundApplicationError,
   OwnerNotFoundApplicationError,
+  UnknownApplicationError,
 } from '../../errors/application-errors';
 import { UserId } from '../../../domain/models/users/user-id';
 import { UserRepositoryInterface } from '../../../domain/models/users/user-repository-interface';
 import { UserNotFoundRepositoryError } from '../../../repository/errors/repository-errors';
-import { UnknownError } from '../../../util/error';
 
 export class UpdateCircleService implements UpdateCircleServiceInterface {
   private readonly userRepository: UserRepositoryInterface;
@@ -30,13 +30,23 @@ export class UpdateCircleService implements UpdateCircleServiceInterface {
 
   async handle(command: UpdateCircleCommand): Promise<void> {
     const circleId = new CircleId(command.getCircleId());
-    const circle = await this.circleRepository.get(circleId);
+    const circle = await this.circleRepository
+      .get(circleId)
+      .catch((error: Error) => {
+        throw new UnknownApplicationError(error);
+      });
 
     const circleName = command.getCircleName();
     if (circleName != null) {
       const newCircleName = new CircleName(circleName);
       circle.changeCircleName(newCircleName);
-      if (!(await this.circleService.unique(newCircleName))) {
+      if (
+        !(await this.circleService
+          .unique(newCircleName)
+          .catch((error: Error) => {
+            throw new UnknownApplicationError(error);
+          }))
+      ) {
         throw new CircleDuplicateApplicationError(newCircleName);
       }
     }
@@ -48,7 +58,7 @@ export class UpdateCircleService implements UpdateCircleServiceInterface {
         if (error instanceof UserNotFoundRepositoryError) {
           throw new OwnerNotFoundApplicationError(newOwnerId, error);
         }
-        throw new UnknownError('unknown error', error);
+        throw new UnknownApplicationError(error);
       });
       circle.changeOwnerId(newOwnerId);
     }
@@ -60,7 +70,7 @@ export class UpdateCircleService implements UpdateCircleServiceInterface {
         if (error instanceof UserNotFoundRepositoryError) {
           throw new MembersNotFoundApplicationError(newMemberIds, error);
         }
-        throw new UnknownError('unknown error', error);
+        throw new UnknownApplicationError(error);
       });
       circle.joinMembers(newMemberIds);
     }

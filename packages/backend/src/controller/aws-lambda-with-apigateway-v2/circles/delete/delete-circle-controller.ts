@@ -37,7 +37,7 @@ export class DeleteCircleController {
       if (error instanceof CircleNotFoundApplicationError) {
         return notFound(`circle id: ${circleId} is not found`);
       }
-      return internalServerError({ message: 'circle delete failed', error });
+      return internalServerError({ message: 'Failed to delete circle', error });
     }
 
     return { statusCode: 204, body: JSON.stringify({}) };

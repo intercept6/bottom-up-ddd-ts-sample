@@ -1,8 +1,8 @@
 import { UserRepositoryInterface } from '../users/user-repository-interface';
-import { UnknownError } from '../../../util/error';
 import { UserName } from '../users/user-name';
 import { MailAddress } from '../users/mail-address';
 import { UserNotFoundRepositoryError } from '../../../repository/errors/repository-errors';
+import { UnknownDomainError } from '../../errors/domain-errors';
 
 export class UserService {
   constructor(private readonly userRepository: UserRepositoryInterface) {}
@@ -19,7 +19,7 @@ export class UserService {
       if (error instanceof UserNotFoundRepositoryError) {
         return false;
       }
-      throw new UnknownError('unknown error', error);
+      throw new UnknownDomainError(error);
     }
 
     return true;

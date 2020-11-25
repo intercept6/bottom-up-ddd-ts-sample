@@ -4,9 +4,12 @@ import { GetCircleServiceInterface } from '../../../../application/circles/get/g
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda';
 import { GetCircleCommand } from '../../../../application/circles/get/get-circle-command';
 import { CircleNotFoundApplicationError } from '../../../../application/errors/application-errors';
-import { UnknownError } from '../../../../util/error';
 import { Bootstrap } from '../../../utils/bootstrap';
-import { badRequest, notFound } from '../../../utils/http-response';
+import {
+  badRequest,
+  internalServerError,
+  notFound,
+} from '../../../utils/http-response';
 
 export class GetCircleController {
   constructor(private readonly getCircleService: GetCircleServiceInterface) {}
@@ -30,7 +33,10 @@ export class GetCircleController {
       if (error instanceof CircleNotFoundApplicationError) {
         return notFound(`circle id: ${circleId} is notfound`);
       }
-      throw new UnknownError('unknown error', error);
+      return internalServerError({
+        error,
+        message: 'Failed to get the circle',
+      });
     }
 
     return {

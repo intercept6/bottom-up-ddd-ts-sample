@@ -27,5 +27,3 @@ export abstract class ExtendedError extends Error {
     }
   }
 }
-
-export class UnknownError extends ExtendedError {}

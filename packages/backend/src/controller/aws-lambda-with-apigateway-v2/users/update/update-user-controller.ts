@@ -45,7 +45,7 @@ export class UpdateUserController {
         return badRequest(`user id: ${userId} is not found`);
       }
       return internalServerError({
-        message: 'user update is failed',
+        message: 'Failed to update user',
         error,
       });
     }

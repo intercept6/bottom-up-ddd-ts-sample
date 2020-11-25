@@ -34,7 +34,7 @@ export class DeleteUserController {
       if (error instanceof UserNotFoundApplicationError) {
         return notFound(`user id: ${userId} is not found`);
       }
-      return internalServerError({ message: 'user gets failed', error });
+      return internalServerError({ message: 'Failed to get user', error });
     }
 
     return { statusCode: 204, body: JSON.stringify({}) };

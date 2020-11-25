@@ -33,8 +33,7 @@ export class ListUserController {
 
     if (users instanceof Error) {
       const error = users;
-      Logger.error(error);
-      return internalServerError({ message: 'list user failed', error });
+      return internalServerError({ message: 'Failed to list user', error });
     }
 
     return {

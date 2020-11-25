@@ -1,8 +1,9 @@
 /* eslint-disable import/first */
 process.env.AWS_REGION = 'ap-northeast-1';
 process.env.MAIN_TABLE_NAME = 'test-table';
-process.env.MAIL_TABLE_GSI1_NAME = 'gsi1';
-process.env.MAIL_TABLE_GSI2_NAME = 'gsi2';
+process.env.MAIN_TABLE_GSI1_NAME = 'gsi1';
+process.env.MAIN_TABLE_GSI2_NAME = 'gsi2';
+process.env.MAIN_TABLE_GSI3_NAME = 'gsi3';
 process.env.ROOT_URI = 'https://api.example.com/';
 
 import { generateAPIGatewayProxyEventV2 } from '../../../../lib/tests/apigateway-event-v2-helper';

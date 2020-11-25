@@ -66,8 +66,9 @@ export class BackendStack extends Stack {
       fnProps: {
         environment: {
           MAIN_TABLE_NAME: table.tableName,
-          MAIL_TABLE_GSI1_NAME: 'gsi1',
-          MAIL_TABLE_GSI2_NAME: 'gsi2',
+          MAIN_TABLE_GSI1_NAME: 'gsi1',
+          MAIN_TABLE_GSI2_NAME: 'gsi2',
+          MAIN_TABLE_GSI3_NAME: 'gsi3',
           ROOT_URI: httpApi.url!,
         },
         timeout: Duration.seconds(10),

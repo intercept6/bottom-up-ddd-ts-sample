@@ -1,7 +1,7 @@
 import { CircleRepositoryInterface } from '../circles/circle-repository-interface';
 import { CircleNotFoundRepositoryError } from '../../../repository/errors/repository-errors';
 import { CircleName } from '../circles/circle-name';
-import { UnknownError } from '../../../util/error';
+import { UnknownDomainError } from '../../errors/domain-errors';
 
 export class CircleService {
   constructor(private readonly circleRepository: CircleRepositoryInterface) {}
@@ -16,7 +16,7 @@ export class CircleService {
       if (error instanceof CircleNotFoundRepositoryError) {
         return true;
       }
-      throw new UnknownError('Failed to check duplicate user name', error);
+      throw new UnknownDomainError(error);
     }
 
     return false;
