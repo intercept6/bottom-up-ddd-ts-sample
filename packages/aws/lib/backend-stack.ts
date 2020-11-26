@@ -1,4 +1,5 @@
 import {
+  AssetHashType,
   CfnOutput,
   Construct,
   Duration,
@@ -52,6 +53,7 @@ export class BackendStack extends Stack {
 
     const layers = new LayerVersion(this, 'ModulesLayer', {
       code: Code.fromAsset(rootDir, {
+        assetHashType: AssetHashType.OUTPUT,
         bundling: {
           image: Runtime.NODEJS_12_X.bundlingDockerImage,
           command: [
@@ -68,10 +70,11 @@ export class BackendStack extends Stack {
         },
       }),
       compatibleRuntimes: [Runtime.NODEJS_12_X],
-      description: 'Node.js modules layer for bottom up ddd',
+      description: 'Node.js modules layer',
     });
 
     const code = Code.fromAsset(rootDir, {
+      assetHashType: AssetHashType.OUTPUT,
       bundling: {
         image: Runtime.NODEJS_12_X.bundlingDockerImage,
         command: [
