@@ -10,10 +10,7 @@ export abstract class ExtendedError extends Error {
       writable: true,
     });
 
-    // エラーがスローされた場所の適切なスタックトレースを維持する（V8エンジニアでのみ使用可能な為、if文でケアする）
-    if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, this.constructor);
-    } else if (error != null) {
+    if (error != null) {
       const messageLines = (this.message.match(/\n/g) || []).length + 1;
       if (this.stack) {
         this.stack =
