@@ -15,5 +15,4 @@ const region = getEnvironmentVariable('AWS_REGION');
 const account = getEnvironmentVariable('AWS_ACCOUNT');
 
 const app = new cdk.App();
-// eslint-disable-next-line no-new
 new BackendStack(app, 'Backend', { env: { account, region } });

@@ -1,10 +1,17 @@
-import { Construct, Duration, Stack, StackProps } from '@aws-cdk/core';
-import { HttpApi, HttpMethod } from '@aws-cdk/aws-apigatewayv2';
-import { LambdaProxyIntegration } from '@aws-cdk/aws-apigatewayv2-integrations';
+import {
+  CfnOutput,
+  Construct,
+  Duration,
+  Stack,
+  StackProps,
+} from '@aws-cdk/core';
+import { HttpApi } from '@aws-cdk/aws-apigatewayv2';
 import { Code, LayerVersion, Runtime } from '@aws-cdk/aws-lambda';
 import { AttributeType, BillingMode, Table } from '@aws-cdk/aws-dynamodb';
-import { FunctionUtils } from './handler-function';
 import { resolve } from 'path';
+import { Users } from './api-resources/users';
+import { Circles } from './api-resources/circles';
+import { CommonFunctionProps } from './types';
 
 const rootDir = resolve(__dirname, '..', '..', 'backend');
 
@@ -19,27 +26,31 @@ export class BackendStack extends Stack {
         type: AttributeType.STRING,
       },
     });
-    table.addGlobalSecondaryIndex({
-      indexName: 'gsi1',
-      partitionKey: {
-        name: 'gsi1pk',
-        type: AttributeType.STRING,
-      },
-    });
-    table.addGlobalSecondaryIndex({
-      indexName: 'gsi2',
-      partitionKey: {
-        name: 'gsi2pk',
-        type: AttributeType.STRING,
-      },
+    ['gsi1', 'gsi2', 'gsi3'].map((name) => {
+      table.addGlobalSecondaryIndex({
+        indexName: name,
+        partitionKey: {
+          name: `${name}pk`,
+          type: AttributeType.STRING,
+        },
+      });
     });
 
-    // HttpApi
+    new CfnOutput(this, 'TableName', {
+      value: table.tableName!,
+      description: 'Table Name',
+    });
+
     const httpApi = new HttpApi(this, 'HttpApi', {
       apiName: 'bottom-up-ddd',
     });
 
-    const modules = new LayerVersion(this, 'ModulesLayer', {
+    new CfnOutput(this, 'ApiUrl', {
+      value: httpApi.url!,
+      description: 'API URL',
+    });
+
+    const layers = new LayerVersion(this, 'ModulesLayer', {
       code: Code.fromAsset(rootDir, {
         bundling: {
           image: Runtime.NODEJS_12_X.bundlingDockerImage,
@@ -60,21 +71,6 @@ export class BackendStack extends Stack {
       description: 'Node.js modules layer for bottom up ddd',
     });
 
-    const functionUtils = new FunctionUtils({
-      scope: this,
-      layers: [modules],
-      fnProps: {
-        environment: {
-          MAIN_TABLE_NAME: table.tableName,
-          MAIN_TABLE_GSI1_NAME: 'gsi1',
-          MAIN_TABLE_GSI2_NAME: 'gsi2',
-          MAIN_TABLE_GSI3_NAME: 'gsi3',
-          ROOT_URI: httpApi.url!,
-        },
-        timeout: Duration.seconds(10),
-      },
-    });
-
     const code = Code.fromAsset(rootDir, {
       bundling: {
         image: Runtime.NODEJS_12_X.bundlingDockerImage,
@@ -93,134 +89,20 @@ export class BackendStack extends Stack {
       },
     });
 
-    // User
-    // Create
-    const registerUserFn = functionUtils.createFunction({
-      id: 'RegisterUser',
-      props: {
-        code: code,
-        handler:
-          'controller/aws-lambda-with-apigateway-v2/users/register/user-register-controller.handle',
+    const commonFunctionProps: CommonFunctionProps = {
+      runtime: Runtime.NODEJS_12_X,
+      layers: [layers],
+      code,
+      environment: {
+        MAIN_TABLE_NAME: table.tableName,
+        MAIN_TABLE_GSI1_NAME: 'gsi1',
+        MAIN_TABLE_GSI2_NAME: 'gsi2',
+        MAIN_TABLE_GSI3_NAME: 'gsi3',
+        ROOT_URI: httpApi.url!,
       },
-    });
-    httpApi.addRoutes({
-      path: '/users',
-      methods: [HttpMethod.POST],
-      integration: new LambdaProxyIntegration({ handler: registerUserFn }),
-    });
-    table.grantReadWriteData(registerUserFn);
-
-    // Read
-    const getUserFn = functionUtils.createFunction({
-      id: 'GetUser',
-      props: {
-        code: code,
-        handler:
-          'controller/aws-lambda-with-apigateway-v2/users/get/user-get-controller.handle',
-      },
-    });
-    httpApi.addRoutes({
-      path: '/users/{userId}',
-      methods: [HttpMethod.GET],
-      integration: new LambdaProxyIntegration({ handler: getUserFn }),
-    });
-    table.grantReadWriteData(getUserFn);
-
-    // Update
-    const updateUserFn = functionUtils.createFunction({
-      id: 'UpdateUser',
-      props: {
-        code: code,
-        handler:
-          'controller/aws-lambda-with-apigateway-v2/users/update/user-update-controller.handle',
-      },
-    });
-    httpApi.addRoutes({
-      path: '/users/{userId}',
-      methods: [HttpMethod.POST],
-      integration: new LambdaProxyIntegration({ handler: updateUserFn }),
-    });
-    table.grantReadWriteData(updateUserFn);
-
-    // Delete
-    const deleteUserFn = functionUtils.createFunction({
-      id: 'DeleteUser',
-      props: {
-        code: code,
-        handler:
-          'controller/aws-lambda-with-apigateway-v2/users/delete/user-delete-controller.handle',
-      },
-    });
-    httpApi.addRoutes({
-      path: '/users/{userId}',
-      methods: [HttpMethod.DELETE],
-      integration: new LambdaProxyIntegration({ handler: deleteUserFn }),
-    });
-    table.grantReadWriteData(deleteUserFn);
-
-    // Circle
-    // Create
-    const registerCircleFn = functionUtils.createFunction({
-      id: 'RegisterCircle',
-      props: {
-        code: code,
-        handler:
-          'controller/aws-lambda-with-apigateway-v2/circles/register/circle-register-controller.handle',
-      },
-    });
-    httpApi.addRoutes({
-      path: '/circles',
-      methods: [HttpMethod.POST],
-      integration: new LambdaProxyIntegration({ handler: registerCircleFn }),
-    });
-    table.grantReadWriteData(registerCircleFn);
-
-    // Read
-    const getCircleFn = functionUtils.createFunction({
-      id: 'GetCircle',
-      props: {
-        code: code,
-        handler:
-          'controller/aws-lambda-with-apigateway-v2/circles/get/circle-get-controller.handle',
-      },
-    });
-    httpApi.addRoutes({
-      path: '/circles/{circleId}',
-      methods: [HttpMethod.GET],
-      integration: new LambdaProxyIntegration({ handler: getCircleFn }),
-    });
-    table.grantReadWriteData(getCircleFn);
-
-    // Update
-    const updateCircleFn = functionUtils.createFunction({
-      id: 'UpdateCircle',
-      props: {
-        code: code,
-        handler:
-          'controller/aws-lambda-with-apigateway-v2/circles/update/circle-update-controller.handle',
-      },
-    });
-    httpApi.addRoutes({
-      path: '/circles/{circleId}',
-      methods: [HttpMethod.POST],
-      integration: new LambdaProxyIntegration({ handler: updateCircleFn }),
-    });
-    table.grantReadWriteData(updateCircleFn);
-
-    // Delete
-    const deleteCircleFn = functionUtils.createFunction({
-      id: 'DeleteCircle',
-      props: {
-        code: code,
-        handler:
-          'controller/aws-lambda-with-apigateway-v2/circles/delete/circle-delete-controller.handle',
-      },
-    });
-    httpApi.addRoutes({
-      path: '/circles/{circleId}',
-      methods: [HttpMethod.DELETE],
-      integration: new LambdaProxyIntegration({ handler: deleteCircleFn }),
-    });
-    table.grantReadWriteData(deleteCircleFn);
+      timeout: Duration.seconds(10),
+    };
+    new Users(this, 'Users', { commonFunctionProps, table, httpApi });
+    new Circles(this, 'Circles', { commonFunctionProps, table, httpApi });
   }
 }
