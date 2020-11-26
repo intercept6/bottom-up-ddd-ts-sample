@@ -400,13 +400,14 @@ describe('ユーザーリポジトリへのCRUDテスト', () => {
       })
     );
 
-    const response = await dynamoDBUserRepository
-      .list({ limit: 5 })
-      .catch((error) => {
-        console.error(error);
-        throw error;
-      });
+    const response = await dynamoDBUserRepository.list({ limit: 5 });
 
     expect(response).toHaveLength(5);
+  });
+
+  test('0件のユーザーを取得する', async () => {
+    const response = await dynamoDBUserRepository.list({ limit: 5 });
+
+    expect(response).toHaveLength(0);
   });
 });

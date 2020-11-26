@@ -13,8 +13,8 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-describe('ユーザー取得', () => {
-  test('ユーザーを取得する', async () => {
+describe('ユーザー一覧取得', () => {
+  test('ユーザーを複数件取得する', async () => {
     const userId = '203881e1-99f2-4ce6-ab6b-785fcd793c92';
     const userName = 'テストユーザーの名前';
     const mailAddress = 'test@example.com';
@@ -34,5 +34,14 @@ describe('ユーザー取得', () => {
     expect(response[0].getUserId()).toEqual(userId);
     expect(response[0].getUserName()).toEqual(userName);
     expect(response[0].getMailAddress()).toEqual(mailAddress);
+  });
+
+  test('ユーザーを0件取得する', async () => {
+    jest.spyOn(UserRepositoryStub.prototype, 'list').mockResolvedValueOnce([]);
+
+    const command = new ListUserCommand();
+    const response = await listUserService.handle(command);
+
+    expect(response).toHaveLength(0);
   });
 });

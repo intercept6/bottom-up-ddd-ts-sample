@@ -4,7 +4,6 @@ import { ListUserCommand } from '../../../../application/users/list/list-user-co
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda';
 import { Bootstrap } from '../../../utils/bootstrap';
 import { badRequest, internalServerError } from '../../../utils/http-response';
-import { Logger } from '../../../../util/logger';
 
 export class ListUserController {
   private readonly listUserService: ListUserServiceInterface;

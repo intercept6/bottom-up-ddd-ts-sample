@@ -52,6 +52,21 @@ describe('ユーザー一覧取得', () => {
     });
   });
 
+  test('0件のユーザーを取得できる', async () => {
+    jest
+      .spyOn(ListUserServiceStub.prototype, 'handle')
+      .mockResolvedValueOnce([]);
+
+    const response = await listUserController.handle({
+      ...generateAPIGatewayProxyEventV2(),
+    });
+
+    expect(response).toEqual({
+      statusCode: 200,
+      body: JSON.stringify([]),
+    });
+  });
+
   test('limitにnumber型に変換できない値が設定されているとBadRequestを返す', async () => {
     jest.spyOn(ListUserServiceStub.prototype, 'handle');
 
