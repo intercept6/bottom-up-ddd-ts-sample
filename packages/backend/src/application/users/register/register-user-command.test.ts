@@ -28,7 +28,9 @@ describe('ユーザ新規作成', () => {
       .mockRejectedValueOnce(
         new UserNotFoundRepositoryError(new MailAddress(mailAddress))
       );
-    jest.spyOn(UserRepositoryStub.prototype, 'create').mockResolvedValueOnce();
+    jest
+      .spyOn(UserRepositoryStub.prototype, 'register')
+      .mockResolvedValueOnce();
 
     const command = new RegisterUserCommand({ userName, mailAddress });
     await registerUserService.handle(command);
@@ -39,9 +41,9 @@ describe('ユーザ新規作成', () => {
       userName: 'テス',
       mailAddress: 'test@example.com',
     });
-    const createUserPromise = registerUserService.handle(command);
+    const registerUserPromise = registerUserService.handle(command);
 
-    await expect(createUserPromise).rejects.toThrowError(
+    await expect(registerUserPromise).rejects.toThrowError(
       new ArgumentApplicationError('ユーザ名は3文字以上です')
     );
   });
@@ -51,9 +53,9 @@ describe('ユーザ新規作成', () => {
       userName: 'テストユーザの名前テストユーザの名前テスト',
       mailAddress: 'test@example.com',
     });
-    const createUserPromise = registerUserService.handle(command);
+    const registerUserPromise = registerUserService.handle(command);
 
-    await expect(createUserPromise).rejects.toThrowError(
+    await expect(registerUserPromise).rejects.toThrowError(
       new ArgumentApplicationError('ユーザ名は20文字以下です')
     );
   });
@@ -63,9 +65,9 @@ describe('ユーザ新規作成', () => {
       userName: 'test',
       mailAddress: 'test@example.com',
     });
-    const createUserPromise = registerUserService.handle(command);
+    const registerUserPromise = registerUserService.handle(command);
 
-    await expect(createUserPromise).rejects.toThrowError(
+    await expect(registerUserPromise).rejects.toThrowError(
       new ArgumentApplicationError(
         '許可されていない文字 test が使われています。'
       )
@@ -77,9 +79,9 @@ describe('ユーザ新規作成', () => {
       userName: 'TEST',
       mailAddress: 'test@example.com',
     });
-    const createUserPromise = registerUserService.handle(command);
+    const registerUserPromise = registerUserService.handle(command);
 
-    await expect(createUserPromise).rejects.toThrowError(
+    await expect(registerUserPromise).rejects.toThrowError(
       new ArgumentApplicationError(
         '許可されていない文字 TEST が使われています。'
       )
@@ -91,9 +93,9 @@ describe('ユーザ新規作成', () => {
       userName: 'TEST',
       mailAddress: 'test@example.com',
     });
-    const createUserPromise = registerUserService.handle(command);
+    const registerUserPromise = registerUserService.handle(command);
 
-    await expect(createUserPromise).rejects.toThrowError(
+    await expect(registerUserPromise).rejects.toThrowError(
       new ArgumentApplicationError(
         '許可されていない文字 TEST が使われています。'
       )

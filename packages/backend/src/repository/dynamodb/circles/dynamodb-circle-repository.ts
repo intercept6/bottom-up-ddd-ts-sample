@@ -26,7 +26,7 @@ export class DynamodbCircleRepository implements CircleRepositoryInterface {
     this.gsi1Name = props.gsi1Name;
   }
 
-  async create(circle: Circle): Promise<void> {
+  async register(circle: Circle): Promise<void> {
     await this.documentClient
       .transactWrite({
         TransactItems: [

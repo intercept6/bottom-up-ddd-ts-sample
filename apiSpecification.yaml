@@ -45,8 +45,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
     post:
-      summary: ユーザーを作成する
-      operationId: createUser
+      summary: ユーザーを登録する
+      operationId: registerUser
       tags:
         - users
       requestBody:
@@ -176,8 +176,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
     post:
-      summary: サークルを作成する
-      operationId: createCircle
+      summary: サークルを登録する
+      operationId: registerCircle
       tags:
         - circles
       requestBody:

@@ -247,7 +247,7 @@ export class DynamodbUserRepository implements UserRepositoryInterface {
     });
   }
 
-  async create(user: User): Promise<void> {
+  async register(user: User): Promise<void> {
     await this.documentClient
       .transactWrite({
         TransactItems: [

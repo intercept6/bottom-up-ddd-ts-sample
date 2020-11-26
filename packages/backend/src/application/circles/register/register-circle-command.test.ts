@@ -47,7 +47,7 @@ describe('サークル新規作成', () => {
         new CircleNotFoundRepositoryError(new CircleName('テストサークル名'))
       );
     jest
-      .spyOn(CircleRepositoryStub.prototype, 'create')
+      .spyOn(CircleRepositoryStub.prototype, 'register')
       .mockResolvedValueOnce();
     jest
       .spyOn(CircleFactoryStub.prototype, 'create')

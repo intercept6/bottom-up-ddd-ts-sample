@@ -56,7 +56,7 @@ describe('ユーザーリポジトリへのCRUDテスト', () => {
     const userId = '8403d7b8-4f7f-413f-b415-77d2b6002575';
     const userName = 'テストユーザー名';
     const mailAddress = 'test@example.com';
-    await dynamoDBUserRepository.create(
+    await dynamoDBUserRepository.register(
       new User(
         new UserId(userId),
         new UserName(userName),

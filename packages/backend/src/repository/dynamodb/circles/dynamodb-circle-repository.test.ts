@@ -55,7 +55,7 @@ describe('サークルリポジトリへのCRUDテスト', () => {
     const circleName = 'テストサークル名';
     const ownerId = '78725398-93de-4caa-af55-68a4888416ec';
     const memberIds = ['f4ecef9c-afc3-45ba-9262-58af2f5e9958'];
-    await dynamoDBCircleRepository.create(
+    await dynamoDBCircleRepository.register(
       Circle.create(
         new CircleId(circleId),
         new CircleName(circleName),

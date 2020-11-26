@@ -53,7 +53,7 @@ export class RegisterCircleService implements RegisterCircleServiceInterface {
       .catch((error: Error) => {
         throw new UnknownApplicationError(error);
       });
-    await this.circleRepository.create(circle).catch((error: Error) => {
+    await this.circleRepository.register(circle).catch((error: Error) => {
       throw new UnknownApplicationError(error);
     });
 

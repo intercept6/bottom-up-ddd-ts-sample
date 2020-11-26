@@ -6,8 +6,8 @@ export class CircleRepositoryStub implements CircleRepositoryInterface {
     throw new Error('circle repository class method delete is not mocked');
   }
 
-  async create(): Promise<void> {
-    throw new Error('circle repository class method create is not mocked');
+  async register(): Promise<void> {
+    throw new Error('circle repository class method register is not mocked');
   }
 
   async update(): Promise<void> {

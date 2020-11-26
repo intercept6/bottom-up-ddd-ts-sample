@@ -44,7 +44,7 @@ export class RegisterUserService implements RegisterUserServiceInterface {
 
     const user = new User(newUserName, newMailAddress);
 
-    await this.userRepository.create(user).catch((error: Error) => {
+    await this.userRepository.register(user).catch((error: Error) => {
       throw new UnknownApplicationError(error);
     });
     return new UserData(user);
