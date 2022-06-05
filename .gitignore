@@ -21,3 +21,4 @@ cdk.out
 
 # etc
 .envrc
+.DS_Store
